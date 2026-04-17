@@ -3,143 +3,97 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Games</title>
+<title>JetX Games</title>
 
 <style>
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f0f0f;
-    color: white;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0b12;
+  color: white;
 }
 
-/* ===== TOP BAR ===== */
-.topbar {
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    background: #0b0b0b;
-    border-bottom: 1px solid #222;
+/* HEADER */
+.header {
+  text-align: center;
+  padding: 20px 10px;
 }
 
-/* ===== JETX LOGO (WHITE → PURPLE GLOW) ===== */
-.logo {
-    font-size: 28px;
-    font-weight: bold;
-
-    background: linear-gradient(90deg, white, #6d28d9);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-
-    text-shadow: 0 0 20px rgba(109,40,217,0.6);
-    filter: drop-shadow(0 0 10px rgba(109,40,217,0.5))
-            drop-shadow(0 0 18px rgba(255,255,255,0.15));
-
-    animation: glowPulse 2.5s infinite ease-in-out;
-}
-
-/* pulse glow */
-@keyframes glowPulse {
-    0% {
-        filter: drop-shadow(0 0 8px rgba(109,40,217,0.4));
-    }
-    50% {
-        filter: drop-shadow(0 0 18px rgba(109,40,217,0.8));
-    }
-    100% {
-        filter: drop-shadow(0 0 8px rgba(109,40,217,0.4));
-    }
-}
-
-/* HOME BUTTON */
-.home-btn {
-    background: #1f1f1f;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 13px;
-    transition: 0.2s;
-}
-
-.home-btn:hover {
-    background: #333;
-}
-
-/* SEARCH */
-header {
-    text-align: center;
-    padding: 10px;
-}
-
-#searchBar {
-    width: 90%;
-    max-width: 500px;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    margin-top: 10px;
+/* LOGO BUTTON */
+.logo-btn {
+  font-size: 100px;
+  font-weight: bold;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(109,40,217,0.6);
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
 }
 
 /* GRID */
-#grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
-    padding: 20px;
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+  padding: 20px;
 }
 
 /* GAME CARD */
-.card {
-    background: #1a1a1a;
-    border-radius: 12px;
-    overflow: hidden;
-    text-decoration: none;
-    color: white;
-    transition: 0.2s;
-    border: 1px solid #222;
+.game {
+  background: #141424;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 0.2s ease;
+  position: relative;
 }
 
-.card:hover {
-    transform: scale(1.05);
-    border-color: #555;
+.game:hover {
+  transform: scale(1.05);
 }
 
-.thumb {
-    height: 110px;
-    background: #222;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    color: #aaa;
+.game img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
 }
 
-.name {
-    padding: 10px;
-    font-size: 13px;
-    text-align: center;
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 6px;
+  background: rgba(0,0,0,0.6);
+  text-align: center;
+  font-size: 14px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.new-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: #6d28d9;
+  padding: 3px 6px;
+  font-size: 11px;
+  border-radius: 6px;
 }
 </style>
+
 </head>
 
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-    <div class="logo">JetX</div>
-    <a class="home-btn" href="/">Home</a>
+<div class="header">
+  <button class="logo-btn" onclick="window.location.href='index.html'">
+    JetX
+  </button>
 </div>
-
-<header>
-    <input id="searchBar" placeholder="Search games..." />
-</header>
 
 <div id="grid"></div>
 
