@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JetX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- TOP CENTER: CLOCK -->
+  <div id="clock">
+    <div id="time">--:--</div>
+    <div id="date">Loading date...</div>
+  </div>
+
+  <!-- TOP RIGHT: SETTINGS + LOGIN -->
+  <div id="top-right">
+    <button onclick="openSettings()">⚙</button>
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- CENTER -->
+  <div class="hero">
+    <img src="assets/jet.png" id="jet">
+    <h1 class="logo">JetX</h1>
+  </div>
+
+  <!-- BOTTOM CENTER: VERSION -->
+  <div id="version">
+    <button onclick="showUpdates()">v1.0</button>
+  </div>
+
+  <!-- BOTTOM LEFT: MENU -->
+  <button id="menu" onclick="toggleMenu()">☰</button>
+
+  <!-- MENU PANEL -->
+  <div id="side-menu" class="hidden">
+    <h3>Menu</h3>
+    <button>Home</button>
+    <button>Games</button>
+    <button>Watch</button>
+    <button>AI</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
