@@ -1,5 +1,3 @@
-<!---credits to pizzaedition for imgs--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,7 +48,6 @@ body {
   text-decoration: none;
   color: white;
   transition: 0.2s;
-  position: relative;
 }
 
 .card:hover {
@@ -316,10 +313,9 @@ function slugify(text){
   return text.toLowerCase().replace(/[^a-z0-9]+/g,"");
 }
 
-/* IMAGE FALLBACK SYSTEM */
+/* IMAGE WITH FALLBACKS */
 function makeImage(name){
   const base = "https://pizzaedition.win/avifgames/";
-
   const slug = slugify(name);
 
   const img = document.createElement("img");
@@ -331,13 +327,14 @@ function makeImage(name){
   ];
 
   let i = 0;
-
   img.src = sources[i];
 
   img.onerror = () => {
     i++;
     if(i < sources.length){
       img.src = sources[i];
+    } else {
+      img.src = "https://via.placeholder.com/300x200?text=No+Image";
     }
   };
 
@@ -351,7 +348,9 @@ function render(){
   games.forEach(name => {
     const a = document.createElement("a");
     a.className = "card";
-    a.href = "/g/" + slugify(name) + ".html";
+
+    // FIXED: now uses your new system
+    a.href = "game.html?game=" + slugify(name);
 
     const img = makeImage(name);
 
