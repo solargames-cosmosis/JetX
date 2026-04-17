@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<!-- Ultimate Game Stash file-->
+
+<html>
+<head>
+<meta charset="utf-8" />
+
+<link href="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/style/main.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/style/ai.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  background: #0b0b12;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.topbar {
+  text-align: center;
+  padding: 10px;
+}
+
+/* JETX LOGO */
+.logo-btn {
+  font-size: 60px;
+  font-weight: bold;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(109,40,217,0.6);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* FULLSCREEN BUTTON */
+.fullscreen-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: #141424;
+  border: 1px solid #6d28d9;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.fullscreen-btn:hover {
+  background: #6d28d9;
+}
+
+/* CENTER GAME */
+.container {
+  margin-top: 20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <button class="logo-btn" onclick="window.location.href='../index.html'">
+    JetX
+  </button>
+</div>
+
+<!-- FULLSCREEN BUTTON -->
+<button class="fullscreen-btn" onclick="toggleFullscreen()">
+  Fullscreen
+</button>
+
+<!-- ORIGINAL GAME -->
+<div class="container">
+  <div class="heading">
+    <h1 class="title">2048</h1>
+    <div class="score-container">0</div>
+  </div>
+
+  <div class="controls">
+    <div id="hint-button-container">
+      <button id="hint-button" class="ai-button">Get Hint</button>
+    </div>
+    <div id="feedback-container"></div>
+    <div id="run-button-container">
+      <button id="run-button" class="ai-button">Auto-run</button>
+    </div>
+  </div>
+
+  <div class="game-container">
+    <div class="game-message">
+      <p></p>
+      <div class="lower">
+        <a class="retry-button">Try again</a>
+      </div>
+    </div>
+
+    <div class="grid-container">
+      <div class="grid-row">
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      </div>
+    </div>
+
+    <div class="tile-container"></div>
+  </div>
+</div>
+
+<!-- GAME SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/js/animframe_polyfill.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/js/hammer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/js/keyboard_input_manager.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/js/html_actuator.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/js/grid.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/js/tile.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/js/ai.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/js/game_manager.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/qollaaa/j@12a9db02c96fde177dc0e56e1bcc440de5cc3250/Games/2048/js/application.js"></script>
+
+<!-- FULLSCREEN SCRIPT -->
+<script>
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+</script>
+
+</body>
+</html>
