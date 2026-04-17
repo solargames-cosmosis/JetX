@@ -1,133 +1,77 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Unity WebGL Player | AdVenture Capitalist!</title>
-    <link rel="stylesheet" href="TemplateData/style.css?ds" />
-    <link rel="shortcut icon" href="TemplateData/favicon.ico" />
-    <script src="TemplateData/UnityProgress.js"></script>
-    <script src="/js/global.js"></script>
-  </head>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-11292QMYXH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-11292QMYXH');
+  </script>
 
-  <body>
-    <canvas
-      class="emscripten"
-      id="canvas"
-      oncontextmenu="event.preventDefault()"
-    ></canvas>
+  <meta charset="UTF-8">
+  <title>AdVenture Capitalist Unblocked</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <div id="loadingBox">
-      <div id="bgBar"></div>
-      <div id="progressBar"></div>
-      <p id="loadingInfo">Loading...</p>
-    </div>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #0f1220;
+      overflow: hidden;
+      font-family: system-ui, Arial, sans-serif;
+    }
 
-    <script type="text/javascript">
-      var Module = {
-        TOTAL_MEMORY: 201326592,
-        filePackagePrefixURL: "Release/",
-        memoryInitializerPrefixURL: "Release/",
-        preRun: [],
-        postRun: [],
-        print: function () {
-          return function (text) {
-            console.log(text);
-          };
-        }(),
-        printErr: function (text) {
-          console.error(text);
-        },
-        canvas: document.getElementById("canvas"),
-        progress: null,
-        setStatus: function (text) {
-          if (this.progress == null) {
-            if (typeof UnityProgress != "function") return;
-            this.progress = new UnityProgress(canvas);
-          }
-          if (!Module.setStatus.last)
-            Module.setStatus.last = { time: Date.now(), text: "" };
-          if (text === Module.setStatus.text) return;
-          this.progress.SetMessage(text);
-          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
-          if (m) this.progress.SetProgress(parseInt(m[2]) / parseInt(m[4]));
-          if (text === "") this.progress.Clear();
-        },
-        totalDependencies: 0,
-        monitorRunDependencies: function (left) {
-          this.totalDependencies = Math.max(this.totalDependencies, left);
-          Module.setStatus(
-            left
-              ? "Preparing... (" +
-                  (this.totalDependencies - left) +
-                  "/" +
-                  this.totalDependencies +
-                  ")"
-              : "All downloads complete."
-          );
-        },
-      };
+    .site-logo {
+      position: fixed;
+      top: 12px;
+      left: 16px;
+      z-index: 9999;
+      text-decoration: none;
+    }
 
-      Module.setStatus("Downloading (0.0/1)");
-    </script>
+    .site-logo button {
+      height: 72px;
+      padding: 10px 18px;
+      font-size: 22px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      border-radius: 12px;
+      color: white;
+      background: linear-gradient(90deg, #ffffff, #6d28d9);
+      box-shadow: 0 0 18px rgba(109,40,217,0.6);
+    }
 
-    <script src="Release/UnityConfig.js"></script>
-    <script src="Release/fileloader.js"></script>
+    .site-logo button:hover {
+      transform: scale(1.05);
+    }
 
-    <script>
-      if (!!Math.fround) {
-        var script = document.createElement("script");
-        script.src = "Release/webgl.js";
-        document.body.appendChild(script);
-      } else {
-        var codeXHR = new XMLHttpRequest();
-        codeXHR.open("GET", "Release/webgl.js", true);
-        codeXHR.onload = function () {
-          var code = codeXHR.responseText;
+    .game-container {
+      width: 100%;
+      height: 100%;
+    }
 
-          if (!Math.fround) {
-            try {
-              console.log("optimizing out Math.fround calls");
-              var m = /var ([^=]+)=global\.Math\.fround;/.exec(code);
-              var minified = m[1];
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #000;
+    }
+  </style>
+</head>
 
-              if (!minified) throw "fail";
+<body>
 
-              var startAsm = code.indexOf("// EMSCRIPTEN_START_FUNCS");
-              var endAsm = code.indexOf("// EMSCRIPTEN_END_FUNCS");
-              var asm = code.substring(startAsm, endAsm);
+  <!-- 🔗 HOME BUTTON (SAFE) -->
+  <a class="site-logo" href="index.html">
+    <button>JetX</button>
+  </a>
 
-              do {
-                var moar = false;
-                asm = asm.replace(
-                  new RegExp("[^a-zA-Z0-9\\$\\_]" + minified + "\\(", "g"),
-                  function (s) {
-                    moar = true;
-                    return s[0] + "(";
-                  }
-                );
-              } while (moar);
+  <script src="/js/global.js"></script>
 
-              code = code.substring(0, startAsm) + asm + code.substring(endAsm);
-              code = code.replace("'use asm'", "'almost asm'");
-            } catch (e) {
-              console.log("failed to optimize out Math.fround calls " + e);
-            }
-          }
-
-          var blob = new Blob([code], { type: "text/javascript" });
-          var src = URL.createObjectURL(blob);
-
-          var script = document.createElement("script");
-          script.src = src;
-          script.onload = function () {
-            URL.revokeObjectURL(script.src);
-          };
-
-          document.body.appendChild(script);
-        };
-        codeXHR.send(null);
-      }
-    </script>
-  </body>
+</body>
 </html>
