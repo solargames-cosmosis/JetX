@@ -13,12 +13,13 @@ body {
   color: white;
 }
 
-/* LOGO */
+/* HEADER */
 .header {
   text-align: center;
   padding: 20px;
 }
 
+/* LOGO BUTTON */
 .logo-btn {
   font-size: 90px;
   font-weight: bold;
@@ -39,6 +40,7 @@ body {
   width: 60%;
   border-radius: 10px;
   border: none;
+  outline: none;
 }
 
 /* GRID */
@@ -63,7 +65,6 @@ body {
   transform: scale(1.05);
 }
 
-/* IMAGE */
 .card img {
   width: 100%;
   height: 120px;
@@ -71,20 +72,20 @@ body {
   display: block;
 }
 
-/* NAME */
 .name {
   padding: 8px;
   font-size: 14px;
   text-align: center;
 }
 
-/* fallback loading style */
-.loading {
-  background: #222;
+/* fallback box */
+.fallback {
+  width: 100%;
   height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #222;
   font-size: 12px;
 }
 </style>
@@ -103,8 +104,6 @@ body {
 <div id="grid"></div>
 
 <script>
-const base = "https://pizzaediton.win/images/games/";
-
 const games = [
 "1v1.LOL",
 "10 Minutes Til Dawn",
@@ -245,7 +244,6 @@ const games = [
 "Neon Swing",
 "OvO",
 "OvO Dimensions",
-"Path To Glory",
 "Papas Freezeria",
 "Ping Pong Go",
 "Police Chase",
@@ -337,19 +335,19 @@ function slugify(text){
 }
 
 function makeImage(name){
+  const img = document.createElement("img");
   const slug = slugify(name);
 
-  const img = document.createElement("img");
-
-  const png = `${base}${slug}-min.png`;
-  const jpg = `${base}${slug}-min.jpg`;
-
-  img.src = png;
+  img.src = `https://pizzaedition.win/avifgames/${slug}.avif`;
 
   img.onerror = () => {
-    if (img.src.includes(".png")) {
-      img.src = jpg;
-    }
+    img.style.display = "none";
+
+    const fallback = document.createElement("div");
+    fallback.className = "fallback";
+    fallback.textContent = "No Image";
+
+    img.parentNode.appendChild(fallback);
   };
 
   return img;
