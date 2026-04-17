@@ -5,8 +5,6 @@
   <title>JetX</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="icon" href="jet.png">
-
   <style>
     body {
       margin: 0;
@@ -43,6 +41,8 @@
       position: absolute;
       top: 15px;
       right: 15px;
+      display: flex;
+      gap: 8px;
     }
 
     #top-right button {
@@ -50,18 +50,19 @@
       border: 1px solid #003366;
       color: white;
       padding: 8px 12px;
-      margin-left: 6px;
       cursor: pointer;
       border-radius: 6px;
     }
 
-    /* CENTER WRAPPER */
+    /* CENTER */
     .center {
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
+      text-align: center;
+      flex-direction: row;
+      gap: 15px;
     }
 
     .logo {
@@ -70,81 +71,28 @@
       background: linear-gradient(90deg, white, #6d28d9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      position: relative;
-      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
 
-    /* JET (NOW ATTACHED TO LOGO AREA) */
+    /* JET */
     #jet {
-      position: absolute;
-
-      /* 👇 starts further left */
-      left: calc(50% - 260px);
-      top: 50%;
-      transform: translateY(-50%);
-
-      width: 140px;
-      height: auto;
-
-      animation: fly 2.2s ease-out forwards;
-      filter: drop-shadow(0 0 10px rgba(0, 102, 255, 0.6));
-      z-index: 1;
+      width: 90px;
+      transform: translateX(-200px);
+      opacity: 0;
+      animation: flyIn 1.8s ease-out forwards;
     }
 
-    @keyframes fly {
+    @keyframes flyIn {
       0% {
-        left: -200px;
+        transform: translateX(-200px);
         opacity: 0;
-        transform: translateY(-50%) rotate(-10deg) scale(0.9);
       }
-
       100% {
-        left: calc(50% - 260px);
+        transform: translateX(0px);
         opacity: 1;
-        transform: translateY(-50%) rotate(0deg) scale(1);
       }
-    }
-
-    /* MENU */
-    #menu-btn {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    #menu {
-      position: fixed;
-      bottom: 80px;
-      left: 20px;
-      width: 200px;
-      background: #0a0a0a;
-      border: 1px solid #222;
-      padding: 12px;
-      border-radius: 12px;
-      display: none;
-      box-shadow: 0 0 20px rgba(0,0,0,0.6);
-    }
-
-    #menu.show {
-      display: block;
-    }
-
-    #menu button {
-      display: block;
-      width: 100%;
-      margin-bottom: 8px;
-      padding: 10px;
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
     }
 
     /* VERSION */
@@ -164,16 +112,47 @@
       cursor: pointer;
     }
 
-    #version-panel {
-      position: fixed;
-      bottom: 70px;
-      left: 50%;
-      transform: translateX(-50%);
+    /* FLOATING MENU BUTTON */
+    #menu-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: #001a33;
+      border: 1px solid #003366;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    /* FLOATING MENU */
+    #menu {
+      position: absolute;
+      bottom: 80px;
+      left: 20px;
+      width: 200px;
       background: #0a0a0a;
       border: 1px solid #222;
-      padding: 15px;
-      display: none;
+      padding: 12px;
       border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #menu button {
+      padding: 10px;
+      background: #001a33;
+      border: 1px solid #003366;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    #menu button:hover {
+      background: #003366;
     }
   </style>
 </head>
@@ -183,7 +162,7 @@
   <!-- CLOCK -->
   <div id="clock">
     <div id="time">--:--</div>
-    <div id="date">Loading date...</div>
+    <div id="date">Loading...</div>
   </div>
 
   <!-- TOP RIGHT -->
@@ -192,15 +171,7 @@
     <button onclick="alert('Login coming soon')">Login</button>
   </div>
 
-  <!-- CENTER -->
-  <div class="center">
-    <img id="jet" src="jet.png">
-    <div class="logo">JetX</div>
-  </div>
-
   <!-- MENU -->
-  <button id="menu-btn" onclick="toggleMenu()">☰</button>
-
   <div id="menu">
     <button onclick="go('home.html')">Home</button>
     <button onclick="go('games.html')">Games</button>
@@ -211,30 +182,56 @@
     <button onclick="go('music.html')">Music</button>
   </div>
 
-  <!-- VERSION -->
-  <div id="version">
-    <button onclick="toggleVersion()">v1.0</button>
+  <button id="menu-btn" onclick="toggleMenu()">☰</button>
+
+  <!-- CENTER -->
+  <div class="center">
+    <div class="logo">
+      <img id="jet" src="jet.png" alt="jet">
+      JetX
+    </div>
   </div>
 
-  <div id="version-panel">
-    <b>JetX v1.0</b>
-    <p>Jet aligned with logo</p>
-    <p>UI improvements</p>
+  <!-- VERSION -->
+  <div id="version">
+    <button onclick="alert('JetX v1.0 - Initial Build')">v1.0</button>
   </div>
 
   <script>
-    function toggleMenu() {
-      document.getElementById("menu").classList.toggle("show");
+    // CLOCK (fixed)
+    function updateClock() {
+      const now = new Date();
+
+      document.getElementById("time").textContent =
+        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+      document.getElementById("date").textContent =
+        now.toDateString();
     }
 
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // MENU TOGGLE (fixed)
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    // PAGE NAV
     function go(page) {
       window.location.href = page;
     }
 
-    function toggleVersion() {
-      const panel = document.getElementById("version-panel");
-      panel.style.display = panel.style.display === "block" ? "none" : "block";
-    }
+    // close menu if clicking outside
+    document.addEventListener("click", function(e) {
+      const menu = document.getElementById("menu");
+      const btn = document.getElementById("menu-btn");
+
+      if (!menu.contains(e.target) && e.target !== btn) {
+        menu.style.display = "none";
+      }
+    });
   </script>
 
 </body>
