@@ -349,7 +349,7 @@ function render(){
   games.forEach(name => {
     const a = document.createElement("a");
     a.className = "card";
-    a.href = "/g/" + slugify(name);
+    a.href = "/g/" + slugify(name) + ".html";
 
     const img = makeImage(name);
 
