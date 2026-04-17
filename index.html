@@ -5,7 +5,6 @@
   <title>JetX</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- FAVICON (your jet PNG or replace this) -->
   <link rel="icon" href="jet.png">
 
   <style>
@@ -56,14 +55,13 @@
       border-radius: 6px;
     }
 
-    /* CENTER */
+    /* CENTER WRAPPER */
     .center {
       height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
+      position: relative;
     }
 
     .logo {
@@ -72,7 +70,81 @@
       background: linear-gradient(90deg, white, #6d28d9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      position: relative;
       z-index: 2;
+    }
+
+    /* JET (NOW ATTACHED TO LOGO AREA) */
+    #jet {
+      position: absolute;
+
+      /* 👇 starts further left */
+      left: calc(50% - 260px);
+      top: 50%;
+      transform: translateY(-50%);
+
+      width: 140px;
+      height: auto;
+
+      animation: fly 2.2s ease-out forwards;
+      filter: drop-shadow(0 0 10px rgba(0, 102, 255, 0.6));
+      z-index: 1;
+    }
+
+    @keyframes fly {
+      0% {
+        left: -200px;
+        opacity: 0;
+        transform: translateY(-50%) rotate(-10deg) scale(0.9);
+      }
+
+      100% {
+        left: calc(50% - 260px);
+        opacity: 1;
+        transform: translateY(-50%) rotate(0deg) scale(1);
+      }
+    }
+
+    /* MENU */
+    #menu-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: #001a33;
+      border: 1px solid #003366;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #menu {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      width: 200px;
+      background: #0a0a0a;
+      border: 1px solid #222;
+      padding: 12px;
+      border-radius: 12px;
+      display: none;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+
+    #menu.show {
+      display: block;
+    }
+
+    #menu button {
+      display: block;
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 10px;
+      background: #001a33;
+      border: 1px solid #003366;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
     }
 
     /* VERSION */
@@ -103,79 +175,6 @@
       display: none;
       border-radius: 10px;
     }
-
-    /* MENU */
-    #menu-btn {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      z-index: 5;
-    }
-
-    #menu {
-      position: fixed;
-      bottom: 80px;
-      left: 20px;
-      width: 200px;
-      background: #0a0a0a;
-      border: 1px solid #222;
-      padding: 12px;
-      border-radius: 12px;
-      display: none;
-      box-shadow: 0 0 20px rgba(0,0,0,0.6);
-      z-index: 5;
-    }
-
-    #menu.show {
-      display: block;
-    }
-
-    #menu button {
-      display: block;
-      width: 100%;
-      margin-bottom: 8px;
-      padding: 10px;
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    /* JET */
-    #jet {
-      position: absolute;
-      left: -180px;
-      top: 45%;
-      width: 140px;
-      height: auto;
-      object-fit: contain;
-      animation: fly 2.2s ease-out forwards;
-      filter: drop-shadow(0 0 10px rgba(0, 102, 255, 0.6));
-      z-index: 1;
-    }
-
-    @keyframes fly {
-      0% {
-        left: -180px;
-        opacity: 0;
-        transform: rotate(-10deg) scale(0.9);
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        left: 45%;
-        opacity: 1;
-        transform: rotate(0deg) scale(1);
-      }
-    }
   </style>
 </head>
 
@@ -193,7 +192,15 @@
     <button onclick="alert('Login coming soon')">Login</button>
   </div>
 
+  <!-- CENTER -->
+  <div class="center">
+    <img id="jet" src="jet.png">
+    <div class="logo">JetX</div>
+  </div>
+
   <!-- MENU -->
+  <button id="menu-btn" onclick="toggleMenu()">☰</button>
+
   <div id="menu">
     <button onclick="go('home.html')">Home</button>
     <button onclick="go('games.html')">Games</button>
@@ -204,14 +211,6 @@
     <button onclick="go('music.html')">Music</button>
   </div>
 
-  <button id="menu-btn" onclick="toggleMenu()">☰</button>
-
-  <!-- CENTER -->
-  <div class="center">
-    <img id="jet" src="jet.png" alt="jet">
-    <div class="logo">JetX</div>
-  </div>
-
   <!-- VERSION -->
   <div id="version">
     <button onclick="toggleVersion()">v1.0</button>
@@ -219,37 +218,19 @@
 
   <div id="version-panel">
     <b>JetX v1.0</b>
-    <p>✔ Jet animation system</p>
-    <p>✔ Floating menu UI</p>
-    <p>✔ Clock + date system</p>
+    <p>Jet aligned with logo</p>
+    <p>UI improvements</p>
   </div>
 
   <script>
-    // CLOCK
-    function updateClock() {
-      const now = new Date();
-
-      document.getElementById("time").textContent =
-        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-      document.getElementById("date").textContent =
-        now.toDateString();
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // MENU
     function toggleMenu() {
       document.getElementById("menu").classList.toggle("show");
     }
 
-    // NAVIGATION
     function go(page) {
       window.location.href = page;
     }
 
-    // VERSION
     function toggleVersion() {
       const panel = document.getElementById("version-panel");
       panel.style.display = panel.style.display === "block" ? "none" : "block";
