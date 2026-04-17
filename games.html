@@ -16,12 +16,12 @@ body {
 /* HEADER */
 .header {
   text-align: center;
-  padding: 20px;
+  padding: 20px 10px;
 }
 
-/* LOGO BUTTON */
+/* LOGO */
 .logo-btn {
-  font-size: 90px;
+  font-size: 80px;
   font-weight: bold;
   background: linear-gradient(90deg, white, #6d28d9);
   -webkit-background-clip: text;
@@ -32,21 +32,10 @@ body {
   background-color: transparent;
 }
 
-/* SEARCH */
-#searchBar {
-  display: block;
-  margin: 10px auto 20px;
-  padding: 10px;
-  width: 60%;
-  border-radius: 10px;
-  border: none;
-  outline: none;
-}
-
 /* GRID */
-#grid {
+.games-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 15px;
   padding: 20px;
 }
@@ -59,6 +48,7 @@ body {
   text-decoration: none;
   color: white;
   transition: 0.2s;
+  position: relative;
 }
 
 .card:hover {
@@ -69,7 +59,7 @@ body {
   width: 100%;
   height: 120px;
   object-fit: cover;
-  display: block;
+  background: #222;
 }
 
 .name {
@@ -77,33 +67,22 @@ body {
   font-size: 14px;
   text-align: center;
 }
-
-/* fallback box */
-.fallback {
-  width: 100%;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #222;
-  font-size: 12px;
-}
 </style>
+
 </head>
 
 <body>
 
 <div class="header">
-  <button class="logo-btn" onclick="window.location.href='index.html'">
+  <button class="logo-btn" onclick="location.href='index.html'">
     JetX
   </button>
 </div>
 
-<input id="searchBar" placeholder="Search games..." />
-
-<div id="grid"></div>
+<div class="games-grid" id="grid"></div>
 
 <script>
+
 const games = [
 "1v1.LOL",
 "10 Minutes Til Dawn",
@@ -172,7 +151,7 @@ const games = [
 "Drift Boss",
 "Drive Mad",
 "Ducklings IO",
-"Dune",
+"DUNE",
 "Eggy Car",
 "Escape Road",
 "Fear Response",
@@ -244,6 +223,7 @@ const games = [
 "Neon Swing",
 "OvO",
 "OvO Dimensions",
+"Path To Glory",
 "Papas Freezeria",
 "Ping Pong Go",
 "Police Chase",
@@ -331,56 +311,61 @@ const games = [
 ];
 
 function slugify(text){
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "");
+  return text.toLowerCase().replace(/[^a-z0-9]+/g,"");
 }
 
+/* IMAGE FALLBACK SYSTEM */
 function makeImage(name){
-  const img = document.createElement("img");
+  const base = "https://pizzaedition.win/avifgames/";
+
   const slug = slugify(name);
 
-  img.src = `https://pizzaedition.win/avifgames/${slug}.avif`;
+  const img = document.createElement("img");
+
+  const sources = [
+    base + slug + ".png",
+    base + slug + ".jpg",
+    base + slug + ".avif"
+  ];
+
+  let i = 0;
+
+  img.src = sources[i];
 
   img.onerror = () => {
-    img.style.display = "none";
-
-    const fallback = document.createElement("div");
-    fallback.className = "fallback";
-    fallback.textContent = "No Image";
-
-    img.parentNode.appendChild(fallback);
+    i++;
+    if(i < sources.length){
+      img.src = sources[i];
+    }
   };
 
   return img;
 }
 
-function render(list){
+function render(){
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
 
-  list.forEach(name => {
+  games.forEach(name => {
     const a = document.createElement("a");
     a.className = "card";
     a.href = "/g/" + slugify(name);
 
     const img = makeImage(name);
 
-    const title = document.createElement("div");
-    title.className = "name";
-    title.textContent = name;
+    const label = document.createElement("div");
+    label.className = "name";
+    label.textContent = name;
 
     a.appendChild(img);
-    a.appendChild(title);
+    a.appendChild(label);
 
     grid.appendChild(a);
   });
 }
 
-document.getElementById("searchBar").addEventListener("input", (e) => {
-  const val = e.target.value.toLowerCase();
-  render(games.filter(g => g.toLowerCase().includes(val)));
-});
+render();
 
-render(games);
 </script>
 
 </body>
