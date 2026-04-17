@@ -5,6 +5,9 @@
   <title>JetX</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- HOUSE FAVICON -->
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/25/25694.png">
+
   <style>
     body {
       margin: 0;
@@ -14,7 +17,7 @@
       overflow: hidden;
     }
 
-    /* TOP CLOCK */
+    /* CLOCK */
     #clock {
       position: absolute;
       top: 20px;
@@ -60,7 +63,6 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
     }
 
     .logo {
@@ -71,7 +73,7 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* VERSION PANEL */
+    /* VERSION */
     #version {
       position: absolute;
       bottom: 20px;
@@ -100,7 +102,7 @@
       border-radius: 10px;
     }
 
-    /* MENU */
+    /* MENU BUTTON */
     #menu-btn {
       position: absolute;
       bottom: 20px;
@@ -113,33 +115,45 @@
       cursor: pointer;
     }
 
+    /* FLOATING MENU */
     #menu {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100vh;
-      width: 220px;
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      width: 200px;
       background: #0a0a0a;
-      border-right: 1px solid #222;
-      padding: 20px;
-      transform: translateX(-100%);
-      transition: 0.3s;
+      border: 1px solid #222;
+      padding: 12px;
+      border-radius: 12px;
+      display: none;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
     }
 
     #menu.show {
-      transform: translateX(0);
+      display: block;
     }
 
     #menu button {
       display: block;
       width: 100%;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       padding: 10px;
       background: #001a33;
       border: 1px solid #003366;
       color: white;
       border-radius: 6px;
       cursor: pointer;
+    }
+
+    #close-menu {
+      width: 100%;
+      margin-bottom: 10px;
+      background: darkred;
+      border: none;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
     }
 
     /* JET */
@@ -172,8 +186,9 @@
     <button onclick="alert('Login coming soon')">Login</button>
   </div>
 
-  <!-- MENU -->
+  <!-- FLOATING MENU -->
   <div id="menu">
+    <button id="close-menu" onclick="toggleMenu()">Close ✕</button>
     <button onclick="go('home.html')">Home</button>
     <button onclick="go('games.html')">Games</button>
     <button onclick="go('apps.html')">Apps</button>
@@ -198,9 +213,9 @@
 
   <div id="version-panel">
     <b>JetX v1.0</b>
-    <p>Initial build of JetX homepage</p>
-    <p>• Jet animation added</p>
-    <p>• Menu system active</p>
+    <p>Initial JetX build</p>
+    <p>✔ Jet animation</p>
+    <p>✔ Floating menu system</p>
   </div>
 
   <script>
@@ -228,7 +243,7 @@
       window.location.href = page;
     }
 
-    // VERSION PANEL
+    // VERSION
     function toggleVersion() {
       const panel = document.getElementById("version-panel");
       panel.style.display = panel.style.display === "block" ? "none" : "block";
