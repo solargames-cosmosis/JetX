@@ -1,3 +1,15 @@
+const frame = document.getElementById("frame");
+
+// NAVIGATION
+function go(page) {
+  frame.src = "pages/" + page;
+  document.getElementById("menu").classList.remove("show");
+}
+
+function toggleMenu() {
+  document.getElementById("menu").classList.toggle("show");
+}
+
 // CLOCK
 function updateClock() {
   const now = new Date();
@@ -12,18 +24,7 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-
-// MENU
-function toggleMenu() {
-  document.getElementById("side-menu").classList.toggle("hidden");
-}
-
-// VERSION POPUP
-function showUpdates() {
-  alert("JetX v1.0\n\n- Initial release\n- Jet animation\n- UI layout system");
-}
-
-// SETTINGS / LOGIN (placeholders)
+// PLACEHOLDERS
 function openSettings() {
   alert("Settings coming soon");
 }
