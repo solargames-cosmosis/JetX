@@ -1,238 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>JetX</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>JetX</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: white;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
+<style>
+body {
+  margin: 0;
+  background: #000;
+  color: white;
+  font-family: Arial;
+  overflow: hidden;
+}
 
-    /* CLOCK */
-    #clock {
-      position: absolute;
-      top: 20px;
-      width: 100%;
-      text-align: center;
-    }
+/* CLOCK */
+#clock {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  text-align: center;
+}
 
-    #time {
-      font-size: 26px;
-      font-weight: bold;
-      background: linear-gradient(90deg, white, #6d28d9);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+#time {
+  font-size: 26px;
+  font-weight: bold;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-    #date {
-      font-size: 14px;
-      opacity: 0.7;
-      color: #aaa;
-    }
+#date {
+  font-size: 14px;
+  opacity: 0.7;
+}
 
-    /* TOP RIGHT */
-    #top-right {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      display: flex;
-      gap: 8px;
-    }
+/* TOP RIGHT */
+#top-right {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  gap: 8px;
+}
 
-    #top-right button {
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      padding: 8px 12px;
-      cursor: pointer;
-      border-radius: 6px;
-    }
+#top-right button {
+  background: #001a33;
+  border: 1px solid #003366;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-    /* CENTER */
-    .center {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      flex-direction: row;
-      gap: 15px;
-    }
+/* CENTER */
+.center {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 15px;
+}
 
-    .logo {
-      font-size: 80px;
-      font-weight: bold;
-      background: linear-gradient(90deg, white, #6d28d9);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+.logo {
+  font-size: 80px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-    /* JET */
-    #jet {
-      width: 90px;
-      transform: translateX(-200px);
-      opacity: 0;
-      animation: flyIn 1.8s ease-out forwards;
-    }
+/* JET */
+#jet {
+  width: 90px;
+  transform: translateX(-200px);
+  animation: fly 1.8s ease-out forwards;
+}
 
-    @keyframes flyIn {
-      0% {
-        transform: translateX(-200px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0px);
-        opacity: 1;
-      }
-    }
+@keyframes fly {
+  from { transform: translateX(-200px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
 
-    /* VERSION */
-    #version {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      text-align: center;
-    }
+/* MENU */
+#menu-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: #001a33;
+  border: 1px solid #003366;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    #version button {
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+#menu {
+  position: absolute;
+  bottom: 80px;
+  left: 20px;
+  background: #0a0a0a;
+  border: 1px solid #222;
+  padding: 10px;
+  border-radius: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
 
-    /* FLOATING MENU BUTTON */
-    #menu-btn {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      z-index: 10;
-    }
+#menu button {
+  background: #001a33;
+  border: 1px solid #003366;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-    /* FLOATING MENU */
-    #menu {
-      position: absolute;
-      bottom: 80px;
-      left: 20px;
-      width: 200px;
-      background: #0a0a0a;
-      border: 1px solid #222;
-      padding: 12px;
-      border-radius: 10px;
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-    }
+/* VERSION */
+#version {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
 
-    #menu button {
-      padding: 10px;
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: left;
-    }
-
-    #menu button:hover {
-      background: #003366;
-    }
-  </style>
+#version button {
+  background: #001a33;
+  border: 1px solid #003366;
+  padding: 8px 14px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- CLOCK -->
-  <div id="clock">
-    <div id="time">--:--</div>
-    <div id="date">Loading...</div>
+<!-- CLOCK -->
+<div id="clock">
+  <div id="time">--:--</div>
+  <div id="date">Loading...</div>
+</div>
+
+<!-- TOP RIGHT -->
+<div id="top-right">
+  <button onclick="alert('Settings soon')">⚙</button>
+  <button onclick="alert('Login soon')">Login</button>
+</div>
+
+<!-- MENU -->
+<div id="menu">
+  <button onclick="go('index.html')">Home</button>
+  <button onclick="go('games.html')">Games</button>
+  <button onclick="alert('Apps soon')">Apps</button>
+  <button onclick="alert('Browser soon')">Browser</button>
+  <button onclick="alert('Movies soon')">Movies</button>
+  <button onclick="alert('AI soon')">AI Chat</button>
+  <button onclick="alert('Music soon')">Music</button>
+</div>
+
+<button id="menu-btn" onclick="toggleMenu()">☰</button>
+
+<!-- CENTER -->
+<div class="center">
+  <div class="logo">
+    <img id="jet" src="assets/jet.png">
+    JetX
   </div>
+</div>
 
-  <!-- TOP RIGHT -->
-  <div id="top-right">
-    <button onclick="alert('Settings coming soon')">⚙</button>
-    <button onclick="alert('Login coming soon')">Login</button>
-  </div>
+<!-- VERSION -->
+<div id="version">
+  <button onclick="alert('JetX v1.0')">v1.0</button>
+</div>
 
-  <!-- MENU -->
-  <div id="menu">
-    <button onclick="go('home.html')">Home</button>
-    <button onclick="go('games.html')">Games</button>
-    <button onclick="go('apps.html')">Apps</button>
-    <button onclick="go('browser.html')">Browser</button>
-    <button onclick="go('movies.html')">Movies</button>
-    <button onclick="go('ai.html')">AI Chat</button>
-    <button onclick="go('music.html')">Music</button>
-  </div>
+<script>
+// CLOCK
+function updateClock() {
+  const now = new Date();
+  document.getElementById("time").textContent =
+    now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  document.getElementById("date").textContent = now.toDateString();
+}
+setInterval(updateClock, 1000);
+updateClock();
 
-  <button id="menu-btn" onclick="toggleMenu()">☰</button>
+// MENU
+function toggleMenu() {
+  const menu = document.getElementById("menu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
 
-  <!-- CENTER -->
-  <div class="center">
-    <div class="logo">
-      <img id="jet" src="jet.png" alt="jet">
-      JetX
-    </div>
-  </div>
+// NAV
+function go(page) {
+  window.location.href = page;
+}
 
-  <!-- VERSION -->
-  <div id="version">
-    <button onclick="alert('JetX v1.0 - Initial Build')">v1.0</button>
-  </div>
-
-  <script>
-    // CLOCK (fixed)
-    function updateClock() {
-      const now = new Date();
-
-      document.getElementById("time").textContent =
-        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-      document.getElementById("date").textContent =
-        now.toDateString();
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // MENU TOGGLE (fixed)
-    function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
-
-    // PAGE NAV
-    function go(page) {
-      window.location.href = page;
-    }
-
-    // close menu if clicking outside
-    document.addEventListener("click", function(e) {
-      const menu = document.getElementById("menu");
-      const btn = document.getElementById("menu-btn");
-
-      if (!menu.contains(e.target) && e.target !== btn) {
-        menu.style.display = "none";
-      }
-    });
-  </script>
+// CLOSE MENU OUTSIDE CLICK
+document.addEventListener("click", (e) => {
+  const menu = document.getElementById("menu");
+  const btn = document.getElementById("menu-btn");
+  if (!menu.contains(e.target) && e.target !== btn) {
+    menu.style.display = "none";
+  }
+});
+</script>
 
 </body>
 </html>
