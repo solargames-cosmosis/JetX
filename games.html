@@ -13,15 +13,14 @@ body {
   color: white;
 }
 
-/* HEADER */
+/* LOGO */
 .header {
   text-align: center;
-  padding: 20px 10px;
+  padding: 20px;
 }
 
-/* LOGO */
 .logo-btn {
-  font-size: 100px;
+  font-size: 90px;
   font-weight: bold;
   background: linear-gradient(90deg, white, #6d28d9);
   -webkit-background-clip: text;
@@ -32,54 +31,61 @@ body {
   background-color: transparent;
 }
 
-/* SEARCH (optional but safe now) */
+/* SEARCH */
 #searchBar {
-  width: 80%;
-  max-width: 500px;
+  display: block;
+  margin: 10px auto 20px;
   padding: 10px;
+  width: 60%;
   border-radius: 10px;
   border: none;
-  margin: 10px auto;
-  display: block;
-  outline: none;
 }
 
 /* GRID */
 #grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 15px;
   padding: 20px;
 }
 
-/* GAME CARD */
+/* CARD */
 .card {
-  display: block;
   background: #141424;
   border-radius: 12px;
+  overflow: hidden;
   text-decoration: none;
   color: white;
-  overflow: hidden;
-  transition: 0.2s ease;
+  transition: 0.2s;
 }
 
 .card:hover {
   transform: scale(1.05);
 }
 
-.thumb {
-  height: 110px;
-  background: linear-gradient(135deg, #6d28d9, #1b1b2e);
+/* IMAGE */
+.card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+/* NAME */
+.name {
+  padding: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* fallback loading style */
+.loading {
+  background: #222;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-}
-
-.name {
-  padding: 10px;
-  font-size: 14px;
-  text-align: center;
+  font-size: 12px;
 }
 </style>
 </head>
@@ -97,9 +103,256 @@ body {
 <div id="grid"></div>
 
 <script>
-const games = [ "1v1.LOL", "10 Minutes Til Dawn", "2048", "2D Rocket League", "60 Second Burger Run", "A Dance Of Fire And Ice", "Achievement Unlocked", "Achievement Unlocked 2", "Adventure Capitalist", "Adventure Drivers", "Age Of War", "Age Of War 2", "Arcade Car Drift", "Archery World Tour", "Astro Survivors", "A Small World Cup", "Awesome Tanks 2", "Backrooms", "Bacon May Die", "Bad Ice Cream", "Bad Ice Cream 2", "Bad Ice Cream 3", "Bad Time Simulator", "Baldis Basics", "Basketball Stars", "Basket Random", "Bee Swarm Simulator", "Big Tower Tiny Square", "Bike Obby", "BitLife", "Bob The Robber 2", "Bounce Masters", "Bow Masters", "Boxing Random", "Block Blast", "Blumgi Bounce", "Blumgi Paintball", "Blumgi Racers", "Blumgi Slime", "Brain Test", "Cappybara Clicker", "Cell Machine", "Chess", "Choppy Orc", "CircloO", "Clicker Heroes", "Cluster Rush", "Cookie Clicker", "Core Ball", "Crazy Bikes", "Crazy Cars", "Crossy Road", "CSGO Clicker", "Cube Field", "Cut The Rope", "Dante", "Day Of Meat Radiation", "Deadly Decent", "Deal Or No Deal", "Dogeminer", "Dogeminer 2", "Doodle Jump", "Dreadhead Parkour", "Drift Hunters", "Drift Boss", "Drive Mad", "Ducklings IO", "Dune", "Eggy Car", "Escape Road", "Fear Response", "Fireboy And Water Girl Forest Temple", "FNAF", "FNAF 2", "FNAF 3", "FNAF 4", "FNAF Sister Location", "Free Rider Jumps", "Frying Nemo", "Fruit Merge", "Fruit Ninja", "Full Speed Racing", "Funny Shooter 2", "Geometry Dash", "Geometry Dash Subzero", "Getaway Shootout", "Gladihoppers", "Going Balls", "Golf Orbit", "Google Feud", "Granny", "Grindcraft", "Gunblood", "Gunspin", "Happy Glass", "Happy Wheels", "Harvest Simulator", "Henry Stickmin Infiltrating The Airship", "Henry Stickmin Breaking The Bank", "Henry Stickmin Stealing The Diamond", "Henry Stickmin Escaping The Prison", "Henry Stickmin Fleeing The Complex", "Hexgl", "Hill Climb Racing", "Horde Killer You VS 100", "Idle Ants", "Idle Breakout", "Idle Dices", "Idle Digging Tycoon", "Idle Revolution", "Impossible Quiz", "Iron Snout", "Jetpack Joyride", "Jumping Shell", "Jump Only", "Justfall LOL", "Kiwi Clicker", "Knife Hit", "Learn To Fly", "Learn To Fly 2", "Learn To Fly 3", "Learn To Fly Idle", "Level Devil", "Little Alchemy", "Madalin Cars 3", "Mad Skills Motocross 2", "Mine Line", "Monkey Mart", "Monster Tracks", "Moto X3M", "Moto X3M 3", "Moto X3M Pool Party", "Moto X3M Spooky", "Moto X3M Winter", "Mr Racer", "Murder", "Neon Swing", "OvO", "OvO Dimensions", "Path To Glory", "Papas Freezeria", "Ping Pong Go", "Police Chase", "Paper IO 2", "Paper Plane", "Penalty Shooters 2", "Polytrack", "Poor Eddie", "Raft Wars", "Ragdoll Archers", "Ragdoll Fall", "Race Survival", "Retro Bowl", "Retro Bowl College", "Redball 4", "Red VS Bluez", "Rise Higher", "Rocket Soccer Derby", "Rooftop Snipers", "Roper", "Run 3", "Sausage Flip", "Sketchbook", "Sky Riders", "Slime Dunk", "Slope", "Slow Roads", "Smash It", "Snake Pivot", "Soccer Random", "Spacebar Clicker", "Space Waves", "Speed Stars", "Spiral Roll", "Stack", "Stack Bounce", "Stacktris", "Steal A Brainrot", "Steel Hills", "Stickman Bike", "Stickman Climb 2", "Stickman Climb 3D", "Stickman Hook", "Stickman Run", "Stick Merge", "Stunt Bike Extreme", "Stunt Car Extreme", "Subway Surfers", "Super Fowlst", "Super Hot", "Super Liquid Soccer", "Swingo", "Table Tennis", "Tag", "Tanuki Sunset", "Temple Of Boom", "Temple Run 2", "The Baby In Yellow", "The Final Earth", "The Final Earth 2", "There Is No Game", "Time Shooter 3", "Tiny Fishing", "Tiny Towers", "Tomb Of The Mask", "Townscaper", "Tube Jumpers", "Tunnel Rush 2", "Turbo Moto Racer", "Unicycle Heros", "Vex 3", "Vex 4", "Vex 5", "Vex 6", "Vex 7", "Vex 8", "Vex Challenges", "Volley Random", "Webgl Fluid", "Whack Your Boss", "Wordle", "Worlds Hardest Game", "Worlds Hardest Game 2", "Zombie Derby" ];
+const base = "https://everett123.root.sx/images/games/";
+
+const games = [
+"1v1.LOL",
+"10 Minutes Til Dawn",
+"2048",
+"2D Rocket League",
+"60 Second Burger Run",
+"A Dance Of Fire And Ice",
+"Achievement Unlocked",
+"Achievement Unlocked 2",
+"Adventure Capitalist",
+"Adventure Drivers",
+"Age Of War",
+"Age Of War 2",
+"Arcade Car Drift",
+"Archery World Tour",
+"Astro Survivors",
+"A Small World Cup",
+"Awesome Tanks 2",
+"Backrooms",
+"Bacon May Die",
+"Bad Ice Cream",
+"Bad Ice Cream 2",
+"Bad Ice Cream 3",
+"Bad Time Simulator",
+"Baldis Basics",
+"Basketball Stars",
+"Basket Random",
+"Bee Swarm Simulator",
+"Big Tower Tiny Square",
+"Bike Obby",
+"BitLife",
+"Bob The Robber 2",
+"Bounce Masters",
+"Bow Masters",
+"Boxing Random",
+"Block Blast",
+"Blumgi Bounce",
+"Blumgi Paintball",
+"Blumgi Racers",
+"Blumgi Slime",
+"Brain Test",
+"Cappybara Clicker",
+"Cell Machine",
+"Chess",
+"Choppy Orc",
+"CircloO",
+"Clicker Heroes",
+"Cluster Rush",
+"Cookie Clicker",
+"Core Ball",
+"Crazy Bikes",
+"Crazy Cars",
+"Crossy Road",
+"CSGO Clicker",
+"Cube Field",
+"Cut The Rope",
+"Dante",
+"Day Of Meat Radiation",
+"Deadly Decent",
+"Deal Or No Deal",
+"Dogeminer",
+"Dogeminer 2",
+"Doodle Jump",
+"Dreadhead Parkour",
+"Drift Hunters",
+"Drift Boss",
+"Drive Mad",
+"Ducklings IO",
+"Dune",
+"Eggy Car",
+"Escape Road",
+"Fear Response",
+"Fireboy And Water Girl Forest Temple",
+"FNAF",
+"FNAF 2",
+"FNAF 3",
+"FNAF 4",
+"FNAF Sister Location",
+"Free Rider Jumps",
+"Frying Nemo",
+"Fruit Merge",
+"Fruit Ninja",
+"Full Speed Racing",
+"Funny Shooter 2",
+"Geometry Dash",
+"Geometry Dash Subzero",
+"Getaway Shootout",
+"Gladihoppers",
+"Going Balls",
+"Golf Orbit",
+"Google Feud",
+"Granny",
+"Grindcraft",
+"Gunblood",
+"Gunspin",
+"Happy Glass",
+"Happy Wheels",
+"Harvest Simulator",
+"Henry Stickmin Infiltrating The Airship",
+"Henry Stickmin Breaking The Bank",
+"Henry Stickmin Stealing The Diamond",
+"Henry Stickmin Escaping The Prison",
+"Henry Stickmin Fleeing The Complex",
+"Hexgl",
+"Hill Climb Racing",
+"Horde Killer You VS 100",
+"Idle Ants",
+"Idle Breakout",
+"Idle Dices",
+"Idle Digging Tycoon",
+"Idle Revolution",
+"Impossible Quiz",
+"Iron Snout",
+"Jetpack Joyride",
+"Jumping Shell",
+"Jump Only",
+"Justfall LOL",
+"Kiwi Clicker",
+"Knife Hit",
+"Learn To Fly",
+"Learn To Fly 2",
+"Learn To Fly 3",
+"Learn To Fly Idle",
+"Level Devil",
+"Little Alchemy",
+"Madalin Cars 3",
+"Mad Skills Motocross 2",
+"Mine Line",
+"Monkey Mart",
+"Monster Tracks",
+"Moto X3M",
+"Moto X3M 3",
+"Moto X3M Pool Party",
+"Moto X3M Spooky",
+"Moto X3M Winter",
+"Mr Racer",
+"Murder",
+"Neon Swing",
+"OvO",
+"OvO Dimensions",
+"Path To Glory",
+"Papas Freezeria",
+"Ping Pong Go",
+"Police Chase",
+"Paper IO 2",
+"Paper Plane",
+"Penalty Shooters 2",
+"Polytrack",
+"Poor Eddie",
+"Raft Wars",
+"Ragdoll Archers",
+"Ragdoll Fall",
+"Race Survival",
+"Retro Bowl",
+"Retro Bowl College",
+"Redball 4",
+"Red VS Bluez",
+"Rise Higher",
+"Rocket Soccer Derby",
+"Rooftop Snipers",
+"Roper",
+"Run 3",
+"Sausage Flip",
+"Sketchbook",
+"Sky Riders",
+"Slime Dunk",
+"Slope",
+"Slow Roads",
+"Smash It",
+"Snake Pivot",
+"Soccer Random",
+"Spacebar Clicker",
+"Space Waves",
+"Speed Stars",
+"Spiral Roll",
+"Stack",
+"Stack Bounce",
+"Stacktris",
+"Steal A Brainrot",
+"Steel Hills",
+"Stickman Bike",
+"Stickman Climb 2",
+"Stickman Climb 3D",
+"Stickman Hook",
+"Stickman Run",
+"Stick Merge",
+"Stunt Bike Extreme",
+"Stunt Car Extreme",
+"Subway Surfers",
+"Super Fowlst",
+"Super Hot",
+"Super Liquid Soccer",
+"Swingo",
+"Table Tennis",
+"Tag",
+"Tanuki Sunset",
+"Temple Of Boom",
+"Temple Run 2",
+"The Baby In Yellow",
+"The Final Earth",
+"The Final Earth 2",
+"There Is No Game",
+"Time Shooter 3",
+"Tiny Fishing",
+"Tiny Towers",
+"Tomb Of The Mask",
+"Townscaper",
+"Tube Jumpers",
+"Tunnel Rush 2",
+"Turbo Moto Racer",
+"Unicycle Heros",
+"Vex 3",
+"Vex 4",
+"Vex 5",
+"Vex 6",
+"Vex 7",
+"Vex 8",
+"Vex Challenges",
+"Volley Random",
+"Webgl Fluid",
+"Whack Your Boss",
+"Wordle",
+"Worlds Hardest Game",
+"Worlds Hardest Game 2",
+"Zombie Derby"
+];
+
 function slugify(text){
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function makeImage(name){
+  const slug = slugify(name);
+
+  const img = document.createElement("img");
+
+  const png = `${base}${slug}-min.png`;
+  const jpg = `${base}${slug}-min.jpg`;
+
+  img.src = png;
+
+  img.onerror = () => {
+    if (img.src.includes(".png")) {
+      img.src = jpg;
+    }
+  };
+
+  return img;
 }
 
 function render(list){
@@ -111,18 +364,20 @@ function render(list){
     a.className = "card";
     a.href = "/g/" + slugify(name);
 
-    a.innerHTML = `
-      <div class="thumb">Play</div>
-      <div class="name">${name}</div>
-    `;
+    const img = makeImage(name);
+
+    const title = document.createElement("div");
+    title.className = "name";
+    title.textContent = name;
+
+    a.appendChild(img);
+    a.appendChild(title);
 
     grid.appendChild(a);
   });
 }
 
-/* SAFE SEARCH (won’t break page) */
-const search = document.getElementById("searchBar");
-search.addEventListener("input", (e) => {
+document.getElementById("searchBar").addEventListener("input", (e) => {
   const val = e.target.value.toLowerCase();
   render(games.filter(g => g.toLowerCase().includes(val)));
 });
