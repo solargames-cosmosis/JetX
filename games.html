@@ -26,39 +26,33 @@ body {
     border-bottom: 1px solid #222;
 }
 
-/* ===== JETX LOGO (MATCH HOME PAGE STYLE) ===== */
+/* ===== JETX LOGO (WHITE → PURPLE GLOW) ===== */
 .logo {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 1px;
+    font-size: 28px;
+    font-weight: bold;
 
-    background: linear-gradient(90deg, #ff3b3b, #ff7a18, #ff3b3b);
+    background: linear-gradient(90deg, white, #6d28d9);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
 
-    filter: drop-shadow(0 0 8px rgba(255, 60, 60, 0.6))
-            drop-shadow(0 0 15px rgba(255, 120, 0, 0.4));
+    text-shadow: 0 0 20px rgba(109,40,217,0.6);
+    filter: drop-shadow(0 0 10px rgba(109,40,217,0.5))
+            drop-shadow(0 0 18px rgba(255,255,255,0.15));
 
     animation: glowPulse 2.5s infinite ease-in-out;
 }
 
-.logo span {
-    background: linear-gradient(90deg, #ff2d2d, #ffcc00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    filter: drop-shadow(0 0 10px rgba(255, 200, 0, 0.7));
-}
-
+/* pulse glow */
 @keyframes glowPulse {
     0% {
-        filter: drop-shadow(0 0 6px rgba(255, 60, 60, 0.5));
+        filter: drop-shadow(0 0 8px rgba(109,40,217,0.4));
     }
     50% {
-        filter: drop-shadow(0 0 14px rgba(255, 120, 0, 0.9));
+        filter: drop-shadow(0 0 18px rgba(109,40,217,0.8));
     }
     100% {
-        filter: drop-shadow(0 0 6px rgba(255, 60, 60, 0.5));
+        filter: drop-shadow(0 0 8px rgba(109,40,217,0.4));
     }
 }
 
@@ -114,7 +108,7 @@ header {
 
 .card:hover {
     transform: scale(1.05);
-    border-color: #444;
+    border-color: #555;
 }
 
 .thumb {
@@ -139,7 +133,7 @@ header {
 
 <!-- TOP BAR -->
 <div class="topbar">
-    <div class="logo">Jet<span>X</span></div>
+    <div class="logo">JetX</div>
     <a class="home-btn" href="/">Home</a>
 </div>
 
