@@ -5,7 +5,7 @@
   <title>JetX</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- FAVICON (upload your own icon.png in root OR change link) -->
+  <!-- FAVICON -->
   <link rel="icon" href="jet.png">
 
   <link rel="stylesheet" href="style.css">
@@ -25,7 +25,7 @@
     <button onclick="alert('Login coming soon')">Login</button>
   </div>
 
-  <!-- FLOATING MENU BUTTON -->
+  <!-- MENU BUTTON -->
   <button id="menu-btn" onclick="toggleMenu()">☰</button>
 
   <!-- FLOATING MENU -->
@@ -37,13 +37,14 @@
     <button onclick="goPage('movies.html')">Movies</button>
     <button onclick="goPage('ai.html')">AI Chat</button>
     <button onclick="goPage('music.html')">Music</button>
-
     <button onclick="toggleMenu()">Close ✕</button>
   </div>
 
   <!-- CENTER -->
   <div class="center">
-    <img id="jet" src="assets/jet.png" alt="jet">
+    <!-- Jet (won’t break if image missing) -->
+    <img id="jet" src="jet.png" onerror="this.style.display='none'">
+
     <div class="logo">JetX</div>
   </div>
 
