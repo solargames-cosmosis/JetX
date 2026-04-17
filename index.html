@@ -1,207 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>JetX</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div style="color:white; padding:50px; text-align:center;">
 
-  <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: white;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
+  <h1 style="
+    font-size:60px;
+    background: linear-gradient(90deg, white, #6d28d9);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:10px;
+  ">
+    JetX
+  </h1>
 
-    /* TOP CLOCK */
-    #clock {
-      position: absolute;
-      top: 20px;
-      width: 100%;
-      text-align: center;
-      color: white;
-    }
+  <p style="opacity:0.7; font-size:16px;">
+    Welcome to JetX — your gaming hub
+  </p>
 
-    #time {
-      font-size: 26px;
-      font-weight: bold;
-      background: linear-gradient(90deg, white, #6d28d9);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+  <div style="margin-top:40px; display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
 
-    #date {
-      font-size: 14px;
-      opacity: 0.7;
-      color: #aaa;
-    }
+    <div style="background:#001a33; padding:20px; border-radius:10px; width:120px;">
+      🎮<br>Games
+    </div>
 
-    /* TOP RIGHT */
-    #top-right {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-    }
+    <div style="background:#001a33; padding:20px; border-radius:10px; width:120px;">
+      📱<br>Apps
+    </div>
 
-    #top-right button {
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      padding: 8px 12px;
-      margin-left: 6px;
-      cursor: pointer;
-      border-radius: 6px;
-    }
+    <div style="background:#001a33; padding:20px; border-radius:10px; width:120px;">
+      🎬<br>Movies
+    </div>
 
-    /* CENTER */
-    .center {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+    <div style="background:#001a33; padding:20px; border-radius:10px; width:120px;">
+      🤖<br>AI
+    </div>
 
-    .logo {
-      font-size: 80px;
-      font-weight: bold;
-      background: linear-gradient(90deg, white, #6d28d9);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* VERSION */
-    #version {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      text-align: center;
-    }
-
-    #version button {
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    /* MENU */
-    #menu-btn {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    #menu {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100vh;
-      width: 220px;
-      background: #0a0a0a;
-      border-right: 1px solid #222;
-      padding: 20px;
-      transform: translateX(-100%);
-      transition: 0.3s;
-    }
-
-    #menu.show {
-      transform: translateX(0);
-    }
-
-    #menu button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    /* JET */
-    #jet {
-      position: absolute;
-      left: -150px;
-      top: 45%;
-      width: 100px;
-      animation: fly 2s ease-out forwards;
-    }
-
-    @keyframes fly {
-      0% { left: -150px; opacity: 0; }
-      100% { left: 40%; opacity: 1; }
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- CLOCK -->
-  <div id="clock">
-    <div id="time">--:--</div>
-    <div id="date">Loading date...</div>
   </div>
 
-  <!-- TOP RIGHT -->
-  <div id="top-right">
-    <button onclick="alert('Settings coming soon')">⚙</button>
-    <button onclick="alert('Login coming soon')">Login</button>
-  </div>
-
-  <!-- MENU -->
-  <div id="menu">
-    <button>Home</button>
-    <button>Games</button>
-    <button>Watch</button>
-    <button>AI</button>
-  </div>
-
-  <button id="menu-btn" onclick="toggleMenu()">☰</button>
-
-  <!-- CENTER -->
-  <div class="center">
-    <img id="jet" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/F-16_Jet.png/320px-F-16_Jet.png">
-    <div class="logo">JetX</div>
-  </div>
-
-  <!-- VERSION -->
-  <div id="version">
-    <button onclick="alert('JetX v1.0 - Initial Build')">v1.0</button>
-  </div>
-
-  <script>
-    // CLOCK
-    function updateClock() {
-      const now = new Date();
-
-      document.getElementById("time").textContent =
-        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-      document.getElementById("date").textContent =
-        now.toDateString();
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // MENU
-    function toggleMenu() {
-      document.getElementById("menu").classList.toggle("show");
-    }
-  </script>
-
-</body>
-</html>
+</div>
