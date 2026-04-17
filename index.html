@@ -5,11 +5,143 @@
   <title>JetX</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Favicon -->
-  <link rel="icon" href="jet.png">
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="jet.png">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    /* CLOCK */
+    #clock {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    #time {
+      font-size: 32px;
+      font-weight: bold;
+      background: linear-gradient(90deg, white, #6d28d9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #date {
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    /* TOP RIGHT */
+    #top-right {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+
+    #top-right button {
+      background: #001a33;
+      border: 1px solid #003366;
+      color: white;
+      padding: 8px 12px;
+      margin-left: 6px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    /* CENTER */
+    .center {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 100px;
+      font-weight: bold;
+      background: linear-gradient(90deg, white, #6d28d9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(109,40,217,0.6);
+    }
+
+    /* JET */
+    #jet {
+      width: 120px;
+      animation: fly 2s ease-out forwards;
+    }
+
+    @keyframes fly {
+      0% { transform: translateX(-200px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+
+    /* VERSION */
+    #version {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    #version button {
+      background: #001a33;
+      border: 1px solid #003366;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* FLOAT MENU */
+    #menu {
+      position: absolute;
+      bottom: 70px;
+      left: 20px;
+      background: rgba(10,10,10,0.95);
+      border: 1px solid #222;
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    #menu button {
+      display: block;
+      width: 160px;
+      margin-bottom: 8px;
+      padding: 10px;
+      background: #001a33;
+      border: 1px solid #003366;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    #menu-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: #001a33;
+      border: 1px solid #003366;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -17,7 +149,7 @@
   <!-- CLOCK -->
   <div id="clock">
     <div id="time">--:--</div>
-    <div id="date">Loading date...</div>
+    <div id="date">Loading...</div>
   </div>
 
   <!-- TOP RIGHT -->
@@ -26,37 +158,31 @@
     <button onclick="alert('Login coming soon')">Login</button>
   </div>
 
-  <!-- MENU AREA (HOVER) -->
-  <div id="menu-area">
-    <button id="menu-btn">☰</button>
-
-    <div id="menu">
-      <button onclick="go('home.html')">Home</button>
-      <button onclick="go('games.html')">Games</button>
-      <button onclick="go('apps.html')">Apps</button>
-      <button onclick="go('browser.html')">Browser</button>
-      <button onclick="go('movies.html')">Movies</button>
-      <button onclick="go('ai.html')">AI Chat</button>
-      <button onclick="go('music.html')">Music</button>
-    </div>
+  <!-- MENU -->
+  <div id="menu">
+    <button onclick="go('games.html')">Games</button>
+    <button onclick="go('apps.html')">Apps</button>
+    <button onclick="go('browser.html')">Browser</button>
+    <button onclick="go('movies.html')">Movies</button>
+    <button onclick="go('ai.html')">AI Chat</button>
+    <button onclick="go('music.html')">Music</button>
   </div>
+
+  <button id="menu-btn" onclick="toggleMenu()">☰</button>
 
   <!-- CENTER -->
   <div class="center">
-    <!-- Jet (safe if missing) -->
-    <img id="jet" src="jet.png" onerror="this.style.display='none'">
-
-    <div class="logo">JetX</div>
+    <div class="logo-container">
+      <img id="jet" src="jet.png">
+      <div class="logo">JetX</div>
+    </div>
   </div>
 
   <!-- VERSION -->
   <div id="version">
-    <button onclick="alert('JetX v1.0 - Initial Build')">
-      v1.0
-    </button>
+    <button onclick="alert('JetX v1.0 - Initial Build')">v1.0</button>
   </div>
 
-  <!-- SCRIPT -->
   <script>
     // CLOCK
     function updateClock() {
@@ -72,9 +198,15 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // PAGE NAVIGATION
+    // MENU
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    // NAVIGATION
     function go(page) {
-      window.location.href = "pages/" + page;
+      window.location.href = page;
     }
   </script>
 
