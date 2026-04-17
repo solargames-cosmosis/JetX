@@ -13,29 +13,58 @@
         color: white;
     }
 
-    header {
-        padding: 20px;
-        text-align: center;
-        background: #111;
+    /* TOP BAR (USE THIS ON ALL PAGES) */
+    .topbar {
         position: sticky;
         top: 0;
-        z-index: 10;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        background: #0b0b0b;
         border-bottom: 1px solid #222;
     }
 
-    header h1 {
-        margin: 0;
-        font-size: 24px;
+    /* JetX-style logo */
+    .logo {
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        color: white;
+    }
+
+    .logo span {
+        color: #ff3b3b; /* JetX red accent */
+    }
+
+    .home-btn {
+        background: #1f1f1f;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 13px;
+        transition: 0.2s;
+    }
+
+    .home-btn:hover {
+        background: #333;
+    }
+
+    header {
+        text-align: center;
+        padding: 10px;
     }
 
     #searchBar {
-        margin-top: 10px;
         width: 90%;
         max-width: 500px;
         padding: 10px;
         border-radius: 10px;
         border: none;
         outline: none;
+        margin-top: 10px;
     }
 
     #grid {
@@ -61,37 +90,32 @@
     }
 
     .thumb {
-        width: 100%;
         height: 110px;
         background: #222;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 14px;
+        font-size: 12px;
         color: #aaa;
     }
 
     .name {
         padding: 10px;
-        font-size: 14px;
+        font-size: 13px;
         text-align: center;
-    }
-
-    .badge {
-        position: absolute;
-        background: red;
-        padding: 3px 6px;
-        font-size: 10px;
-        border-radius: 5px;
-        margin: 6px;
     }
 </style>
 </head>
 
 <body>
 
+<!-- GLOBAL TOP BAR -->
+<div class="topbar">
+    <div class="logo">Jet<span>X</span></div>
+    <a class="home-btn" href="/">Home</a>
+</div>
+
 <header>
-    <h1>Games Library</h1>
     <input id="searchBar" placeholder="Search games..." />
 </header>
 
@@ -292,7 +316,6 @@ const games = [
 "Super Liquid Soccer",
 "Swingo",
 "Table Tennis",
-"TABS",
 "Tag",
 "Tanuki Sunset",
 "Temple Of Boom",
@@ -323,7 +346,6 @@ const games = [
 "Wordle",
 "Worlds Hardest Game",
 "Worlds Hardest Game 2",
-"xx142 b2 exe",
 "Zombie Derby"
 ];
 
@@ -338,11 +360,9 @@ function render(list){
     grid.innerHTML = "";
 
     list.forEach(name => {
-        const slug = slugify(name);
-
         const a = document.createElement("a");
         a.className = "card";
-        a.href = "/g/" + slug;
+        a.href = "/g/" + slugify(name);
 
         a.innerHTML = `
             <div class="thumb">Game</div>
