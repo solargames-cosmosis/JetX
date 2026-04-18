@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JetX Scientific Calculator</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  font-family: Arial, sans-serif;
+}
+
+/* ===== HEADER (JetX STANDARD) ===== */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 36px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.controls button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: none;
+  background: #6d28d9;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ===== CALCULATOR ===== */
+.wrapper {
+  margin-top: 90px;
+  display: flex;
+  justify-content: center;
+}
+
+.calc {
+  width: 340px;
+  background: #141424;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+input {
+  width: 100%;
+  height: 55px;
+  font-size: 20px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background: black;
+  color: white;
+}
+
+/* BUTTON GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #222;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #333;
+}
+
+.equal {
+  background: #6d28d9;
+}
+
+.equal:hover {
+  background: #7c3aed;
+}
+
+.small {
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo" onclick="goHome()">JetX</div>
+  <div class="controls">
+    <button onclick="goFullscreen()">Fullscreen</button>
+    <button onclick="goHome()">Home</button>
+  </div>
+</div>
+
+<!-- CALCULATOR -->
+<div class="wrapper">
+  <div class="calc">
+
+    <!-- TYPEABLE DISPLAY -->
+    <input id="display" placeholder="Type math here..." />
+
+    <!-- SCIENTIFIC BUTTONS -->
+    <div class="grid">
+
+      <button onclick="add('Math.sin(')">sin</button>
+      <button onclick="add('Math.cos(')">cos</button>
+      <button onclick="add('Math.tan(')">tan</button>
+      <button onclick="add('Math.sqrt(')">√</button>
+
+      <button onclick="add('Math.log(')">log</button>
+      <button onclick="add('Math.PI')">π</button>
+      <button onclick="add('Math.E')">e</button>
+      <button onclick="add('^')">^</button>
+
+      <button onclick="add('(')">(</button>
+      <button onclick="add(')')">)</button>
+      <button onclick="clearAll()">C</button>
+      <button onclick="back()">⌫</button>
+
+      <button onclick="add('7')">7</button>
+      <button onclick="add('8')">8</button>
+      <button onclick="add('9')">9</button>
+      <button onclick="add('/')">÷</button>
+
+      <button onclick="add('4')">4</button>
+      <button onclick="add('5')">5</button>
+      <button onclick="add('6')">6</button>
+      <button onclick="add('*')">×</button>
+
+      <button onclick="add('1')">1</button>
+      <button onclick="add('2')">2</button>
+      <button onclick="add('3')">3</button>
+      <button onclick="add('-')">-</button>
+
+      <button onclick="add('0')">0</button>
+      <button onclick="add('.')">.</button>
+      <button onclick="calc()" class="equal" style="grid-column: span 2;">=</button>
+
+    </div>
+  </div>
+</div>
+
+<script>
+
+const display = document.getElementById("display");
+
+/* TYPE SUPPORT */
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") calc();
+});
+
+/* ADD TEXT */
+function add(val){
+  display.value += val;
+}
+
+/* BACKSPACE */
+function back(){
+  display.value = display.value.slice(0, -1);
+}
+
+/* CLEAR */
+function clearAll(){
+  display.value = "";
+}
+
+/* CALCULATE (SAFE-ish scientific eval) */
+function calc(){
+  try {
+    let expr = display.value;
+
+    // replace ^ with power
+    expr = expr.replace(/\^/g, "**");
+
+    let result = Function("return " + expr)();
+    display.value = result;
+  } catch {
+    display.value = "Error";
+  }
+}
+
+/* HEADER */
+function goHome(){
+  window.location.href = "index.html";
+}
+
+function goFullscreen(){
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+}
+
+</script>
+
+</body>
+</html>
