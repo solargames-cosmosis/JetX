@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JetX AI</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2"></script>
+
+<style>
+body {
+  margin: 0;
+  background: #000;
+  font-family: Arial;
+  color: white;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+}
+
+.logo {
+  font-size: 34px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.chat {
+  margin-top: 80px;
+  width: 90%;
+  max-width: 800px;
+  height: 70vh;
+  margin-left: auto;
+  margin-right: auto;
+  background: #141424;
+  border-radius: 12px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.msg {
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.user { background: #6d28d9; text-align: right; }
+.ai { background: #222; }
+
+.input {
+  display: flex;
+  gap: 10px;
+  width: 90%;
+  max-width: 800px;
+  margin: 10px auto;
+}
+
+input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #141424;
+  color: white;
+}
+
+button {
+  padding: 12px;
+  background: #6d28d9;
+  border: none;
+  color: white;
+  border-radius: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="logo" onclick="goHome()">JetX AI</div>
+</div>
+
+<div class="chat" id="chat"></div>
+
+<div class="input">
+  <input id="input" placeholder="Ask JetX AI..." />
+  <button onclick="send()">Send</button>
+</div>
+
+<script>
+
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+
+let model;
+
+// load real AI model in browser
+async function loadAI(){
+  add("Loading AI model... ⏳", "ai");
+
+  const { pipeline } = window.transformers;
+  model = await pipeline("text-generation", "Xenova/distilgpt2");
+
+  add("AI ready 🚀", "ai");
+}
+
+function add(text, type){
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+async function send(){
+
+  const text = input.value.trim();
+  if(!text || !model) return;
+
+  add(text, "user");
+  input.value = "";
+
+  const output = await model(text, {
+    max_new_tokens: 80,
+    temperature: 0.7
+  });
+
+  const reply = output[0].generated_text.replace(text, "").trim();
+
+  add(reply || "I couldn't think of a response.", "ai");
+}
+
+function goHome(){
+  window.location.href = "https://jet-x-silk.vercel.app";
+}
+
+loadAI();
+
+</script>
+
+</body>
+</html>
