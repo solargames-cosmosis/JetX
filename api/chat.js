@@ -13,25 +13,24 @@ export default async function handler(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3.1-70b-versatile",
+        model: "llama3-8b-8192",
         messages: [
           { role: "user", content: message }
-        ]
+        ],
+        temperature: 0.7
       })
     });
 
     const data = await response.json();
 
-    // 🔥 DEBUG OUTPUT (this is key)
-    console.log(data);
+    const reply = data?.choices?.[0]?.message?.content;
 
-    res.status(200).json({
-      reply: data.choices?.[0]?.message?.content,
-      debug: data
+    return res.status(200).json({
+      reply: reply || "No response from model"
     });
 
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       error: err.message
     });
   }
