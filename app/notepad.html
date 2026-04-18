@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JetX Notepad</title>
+
+<style>
+body {
+  margin: 0;
+  background: #000;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+/* ===== HEADER (JetX) ===== */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 36px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.controls button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: none;
+  background: #6d28d9;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ===== NOTEPAD ===== */
+.container {
+  margin-top: 80px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+textarea {
+  width: 90%;
+  max-width: 900px;
+  height: 75vh;
+  background: #141424;
+  color: white;
+  border: none;
+  outline: none;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 12px;
+  resize: none;
+  line-height: 1.5;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo" onclick="goHome()">JetX</div>
+
+  <div class="controls">
+    <button onclick="goFullscreen()">Fullscreen</button>
+    <button onclick="clearNotes()">Clear</button>
+    <button onclick="goHome()">Home</button>
+  </div>
+</div>
+
+<!-- NOTEPAD -->
+<div class="container">
+  <textarea id="note" placeholder="Start typing your notes..."></textarea>
+</div>
+
+<script>
+
+const note = document.getElementById("note");
+
+/* LOAD SAVED NOTES */
+note.value = localStorage.getItem("jetx_notes") || "";
+
+/* AUTO SAVE */
+note.addEventListener("input", () => {
+  localStorage.setItem("jetx_notes", note.value);
+});
+
+/* CLEAR */
+function clearNotes(){
+  if(confirm("Clear all notes?")){
+    note.value = "";
+    localStorage.removeItem("jetx_notes");
+  }
+}
+
+/* HEADER */
+function goHome(){
+  window.location.href = "https://jet-x-silk.vercel.app";
+}
+
+function goFullscreen(){
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+}
+
+</script>
+
+</body>
+</html>
