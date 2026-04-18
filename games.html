@@ -1,38 +1,463 @@
-gg<doctypehrkcdfnbklbnsdfgjkl hnjcsv bnjncfv jkx hjxf
-     g
-    \fg
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JetX Games</title>
 
-    dfgh
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0b12;
+  color: white;
+}
 
-    dfgj
+/* HEADER */
+.header {
+  text-align: center;
+  padding: 20px 10px;
+}
 
-    fgj
-    jdfg
-    j
-    fgh
-    fghjh
-    ggfhj
-    fgh
-    fgh
-    fg
-    dx
-    fg
-    n
+.logo-btn {
+  font-size: 80px;
+  font-weight: bold;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
 
-    defr
+/* GRID */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
 
-    dfh
-    d
-     f
-    dfghn ety
+/* CARD */
+.card {
+  background: #141424;
+  border-radius: 12px;
+  overflow: hidden;
+  color: white;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  background: #222;
+}
+
+.name {
+  padding: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* GAME VIEW */
+#gameView {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: none;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+/* GAME HEADER */
+.game-header {
+  height: 50px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+}
+
+.game-title {
+  font-weight: bold;
+}
+
+.game-buttons button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: none;
+  background: #6d28d9;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* IFRAME */
+#gameFrame {
+  flex: 1;
+  width: 100%;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <button class="logo-btn">JetX</button>
+</div>
+
+<div class="games-grid" id="grid"></div>
+
+<!-- GAME VIEW -->
+<div id="gameView">
+  <div class="game-header">
+    <div class="game-title">JetX</div>
+    <div class="game-buttons">
+      <button onclick="goHome()">Home</button>
+      <button onclick="goFullscreen()">Fullscreen</button>
+    </div>
+  </div>
+  <iframe id="gameFrame"></iframe>
+</div>
+
+<!-- UGS FILE LIST -->
+<script src="https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/games.js"></script>
+
+<script>
+
+// 🔥 YOUR GAMES HERE
+const games = [
+"1v1.LOL",
+"10 Minutes Til Dawn",
+"2048",
+"2D Rocket League",
+"60 Second Burger Run",
+"A Dance Of Fire And Ice",
+"Achievement Unlocked",
+"Achievement Unlocked 2",
+"Adventure Capitalist",
+"Adventure Drivers",
+"Age Of War",
+"Age Of War 2",
+"Arcade Car Drift",
+"Archery World Tour",
+"Astro Survivors",
+"A Small World Cup",
+"Awesome Tanks 2",
+"Backrooms",
+"Bacon May Die",
+"Bad Ice Cream",
+"Bad Ice Cream 2",
+"Bad Ice Cream 3",
+"Bad Time Simulator",
+"Baldis Basics",
+"Basketball Stars",
+"Basket Random",
+"Bee Swarm Simulator",
+"Big Tower Tiny Square",
+"Bike Obby",
+"BitLife",
+"Bob The Robber 2",
+"Bounce Masters",
+"Bow Masters",
+"Boxing Random",
+"Block Blast",
+"Blumgi Bounce",
+"Blumgi Paintball",
+"Blumgi Racers",
+"Blumgi Slime",
+"Brain Test",
+"Cappybara clicker",
+"Cell Machine",
+"Chess",
+"Choppy Orc",
+"CircloO",
+"Ckicker Heroes",
+"Cluster Rush",
+"Cookie Clicker",
+"Core Ball",
+"Crazy Bikes",
+"Crazy Cars",
+"Crossyroad",
+"CSGO CLicker",
+"Cubefeild",
+"Cut The Rope",
+"Dante",
+"Day Of Meat: Radiation",
+"Deadly Decent",
+"Deal Or No Deal",
+"Dogeminer",
+"Dogeminer 2",
+"Doodle Jump",
+"Dreadhead Parkour",
+"Drift Hunters",
+"Drift Boss",
+"Drive Mad",
+"Ducklings io",
+"DUNE!",
+"Eggy Car",
+"Escape Road",
+"Fear Response",
+"Fireboy And Water Girl Forest Temple",
+"FNAF",
+"FNAF2",
+"FNAF3",
+"FNAF4",
+"FNAF5 Sister Location",
+"Free Rider Jumps",
+"Frying Nemo",
+"Fruit Merge",
+"Fruit Ninja",
+"Full Speed Racing",
+"Funnyshooter 2",
+"Geometry Dash",
+"Geometry Dash Subzero",
+"Getaway Shootout",
+"Gladihoppers",
+"Going Balls",
+"Golf Orbit",
+"Google Feud",
+"Granny",
+"Grindcraft",
+"Gunblood",
+"Gunspin",
+"Happy Glass",
+"Happy Wheels",
+"Harvest Simulator",
+"Henry Stickmin - Infiltrating The Airship",
+"Henry Stickmin - Breaking The Bank",
+"Henry Stickmin - Stealing The Diamond",
+"Henry Stickmin - Escaping The Prison",
+"Henry Stickmin - Fleeing The Complex",
+"Hexgl",
+"Hill Climb Racing",
+"Horde Killer You VS 100",
+"Idle Ants",
+"Idle Breakout",
+"Idle Dices",
+"Idle Digging Tycoon",
+"Idle Revolution",
+"Impossible Quiz",
+"Iron Snout",
+"Jetpack Joyride",
+"Jumping Shell",
+"Jump Only",
+"Justfall.LOL",
+"Kiwi Clicker",
+"Knife Hit",
+"Learn To Fly",
+"Learn To Fly 2",
+"Learn To Fly 3",
+"Learn To Fly Idle",
+"Level Devil",
+"Little Alchemy",
+"Madalin Cars 3",
+"Mad Skills MotoCross 2",
+"Mine Line",
+"Monkey Mart",
+"Monster Tracks",
+"Moto X3M",
+"Moto X3M 3",
+"Moto X3M Pool Party",
+"Moto X3M Spooky",
+"Moto X3M Winter",
+"Mr Racer",
+"Murder",
+"Neon Swing",
+"OvO",
+"OvO Dimensions",
+"Path To Glory",
+"Papas Freezeria",
+"Ping Pong Go",
+"Police Chase",
+"Paper.IO 2",
+"Paper Plane",
+"Penalty Shooters 2",
+"Polytrack",
+"Poor Eddie",
+"Raft Wars",
+"Ragdoll Archers",
+"Ragdoll Fall",
+"Race Survival",
+"Retro Bowl",
+"Retro Bowl College",
+"Redball 4",
+"Red VS Bluez",
+"Rise Higher",
+"Rocket Soccer Derby",
+"Rooftop Snipers",
+"Roper",
+"Run 3",
+"Sausage Flip",
+"Sketchbook",
+"Sky Riders",
+"Slime Dunk!",
+"Slope",
+"Slowroads",
+"Smash It",
+"Snake Pivot",
+"Soccer Random",
+"Spacebar Clicker",
+"Space Waves",
+"Speed Stars",
+"Spiral Roll",
+"Stack",
+"Stack Bounce",
+"Stacktris",
+"Steal A Brainrot",
+"Steel Hills",
+"Stickman Bike",
+"Stickman Climb 2",
+"Stickman Climb 3D",
+"Stickman Hook",
+"Stickman Run",
+"StickMerge",
+"Stunt Bike Extreme",
+"Stunt Car Extreme",
+"Subway Surfers",
+"Super Fowlst",
+"Super Hot",
+"Super Liquid Soccer",
+"Swingo",
+"Tabletennis",
+"TABS",
+"Tag",
+"Tanuki Sunset",
+"Temple Of Boom",
+"Temple Run 2",
+"The Baby In Yellow",
+"The Final Earth",
+"The Final Earth 2",
+"There Is No Game",
+"Time Shooter 3",
+"Tiny Fishing",
+"Tiny Towers",
+"Tomb Of The Mask",
+"Townscaper",
+"Tube Jumpers",
+"Tunnel Rush 2",
+"Turbo Moto Racer",
+"Unicycle Heros",
+"Vex 3M",
+"Vex 3",
+"Vex 4",
+"Vex 5",
+"Vex 6",
+"Vex 7",
+"Vex 8",
+"Vex Challenges",
+"Volley Random",
+"Webgl Fluid",
+"Whack Your Boss",
+"Wordle",
+"Worlds Hardest Game",
+"Worlds Hardest Game 2",
+"xx142-b2.exe",
+"Zombie Derby"
+];
 
 
-    dh 
-    dg dn 
-    dht
+// IMAGE
+function makeImage(name){
+  const base = "https://pizzaedition.win/avifgames/";
+  const img = document.createElement("img");
+
+  const sources = [
+    base + name + ".png",
+    base + name + ".jpg",
+    base + name + ".avif"
+  ];
+
+  let i = 0;
+  img.src = sources[i];
+
+  img.onerror = () => {
+    i++;
+    if(i < sources.length){
+      img.src = sources[i];
+    } else {
+      img.src = "https://via.placeholder.com/300x200?text=No+Image";
+    }
+  };
+
+  return img;
+}
 
 
-    hnrt
-    nnrtu
-    bcn 
-    g
+// 🔥 LOAD GAME INTO IFRAME
+function openGame(file){
+  const frame = document.getElementById("gameFrame");
+  const view = document.getElementById("gameView");
+
+  const url = `https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/${encodeURIComponent(file + ".html")}`;
+
+  frame.src = url;
+  view.style.display = "flex";
+}
+
+
+// 🔥 HOME BUTTON
+function goHome(){
+  document.getElementById("gameView").style.display = "none";
+  document.getElementById("gameFrame").src = "";
+}
+
+
+// 🔥 FULLSCREEN BUTTON
+function goFullscreen(){
+  const frame = document.getElementById("gameFrame");
+  if (frame.requestFullscreen) {
+    frame.requestFullscreen();
+  }
+}
+
+
+// 🔥 RENDER
+function render(){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  files.forEach(file => {
+
+    const clean = file
+      .toLowerCase()
+      .replace(/^cl/, "")
+      .replace(/[^a-z0-9]/g,"");
+
+    if (!allowedGames.includes(clean)) return;
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.onclick = () => openGame(file);
+
+    const img = makeImage(clean);
+
+    const label = document.createElement("div");
+    label.className = "name";
+    label.textContent = clean;
+
+    card.appendChild(img);
+    card.appendChild(label);
+
+    grid.appendChild(card);
+  });
+}
+
+render();
+
+</script>
+
+</body>
+</html>
