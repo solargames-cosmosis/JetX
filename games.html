@@ -70,9 +70,8 @@ body {
 /* GRID */
 .buttons-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 110px));
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   gap: 12px;
-  justify-content: center;
 }
 
 .card {
@@ -82,8 +81,10 @@ body {
   cursor: pointer;
   transition: 0.2s;
 
-  width: 110px;
   aspect-ratio: 1 / 1;
+  max-width: 130px;   /* THIS is the key */
+  width: 100%;
+  justify-self: center;
   display: flex;
   flex-direction: column;
 }
