@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>JetX: Apps</title>
+<meta charset="UTF-8">
+<title>JetX Apps</title>
 
 <style>
 body {
-  font-family: Arial, sans-serif;
-  background: #000000; /* 🔥 PURE BLACK */
   margin: 0;
+  background: #000;
+  font-family: Arial, sans-serif;
+  color: white;
 }
 
-/* HEADER */
+/* ===== HEADER (JetX STANDARD) ===== */
 .header {
   position: fixed;
   top: 0;
@@ -21,12 +23,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 15px;
   z-index: 1000;
 }
 
 .logo {
-  font-size: 42px;
+  font-size: 36px;
   font-weight: bold;
   cursor: pointer;
   background: linear-gradient(90deg, white, #6d28d9);
@@ -36,7 +38,7 @@ body {
 
 .controls button {
   margin-left: 10px;
-  padding: 6px 12px;
+  padding: 6px 10px;
   border: none;
   background: #6d28d9;
   color: white;
@@ -44,157 +46,103 @@ body {
   cursor: pointer;
 }
 
-/* MAIN */
+/* ===== GRID ===== */
 .main {
-  margin-top: 80px;
+  margin-top: 90px;
   padding: 20px;
 }
 
-/* GRID */
-.apps-grid {
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 15px;
 }
 
-/* CARD */
-.app-card {
+/* ===== APP CARDS ===== */
+.card {
   background: #141424;
   border-radius: 12px;
-  aspect-ratio: 1 / 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  padding: 15px;
+  text-align: center;
   cursor: pointer;
   transition: 0.2s;
+  user-select: none;
 }
 
-.app-card:hover {
+.card:hover {
   transform: scale(1.05);
+  background: #1d1d35;
 }
 
-.app-name {
-  color: white;
+.title {
   font-size: 14px;
-  text-align: center;
-}
-
-/* PLAYER */
-#app-player {
-  position: fixed;
-  top: 60px;
-  left: 0;
-  width: 100%;
-  height: calc(100% - 60px);
-  background: black;
-  display: none;
-  z-index: 999;
-}
-
-#app-frame {
-  width: 100%;
-  height: 100%;
-  border: none;
+  font-weight: 600;
 }
 </style>
+
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="logo" onclick="goHome()">JetX</div>
+
   <div class="controls">
     <button onclick="goHome()">Home</button>
   </div>
 </div>
 
+<!-- APPS -->
 <div class="main">
-  <div class="apps-grid" id="appsGrid"></div>
-</div>
+  <div class="grid">
 
-<div id="app-player">
-  <iframe id="app-frame"></iframe>
+    <div class="card" onclick="openApp('app/calculator.html')">
+      <div class="title">Calculator</div>
+    </div>
+
+    <div class="card" onclick="openApp('app/ai.html')">
+      <div class="title">AI</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Notes</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Randomizer</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Chat</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Vault</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Flash Emulator</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Coming Soon</div>
+    </div>
+
+  </div>
 </div>
 
 <script>
 
-/* NAV */
+/* OPEN APP */
+function openApp(path){
+  window.location.href = path;
+}
+
+/* HOME */
 function goHome(){
   window.location.href = "index.html";
 }
-
-function openApp(html){
-  document.getElementById("app-player").style.display = "block";
-  document.getElementById("app-frame").srcdoc = html;
-}
-
-/* APPS LIST (10 total) */
-const apps = [
-  "Calculator",
-  "AI",
-  "Notes",
-  "Music",
-  "Randomizer",
-  "Browser",
-  "Vault",
-  "Chat",
-  "Settings",
-  "Coming Soon"
-];
-
-/* BUILD CARDS */
-const grid = document.getElementById("appsGrid");
-
-apps.forEach(name => {
-
-  const card = document.createElement("div");
-  card.className = "app-card";
-
-  const label = document.createElement("div");
-  label.className = "app-name";
-  label.textContent = name;
-
-  card.appendChild(label);
-
-  /* CLICK ACTIONS */
-  card.onclick = () => {
-
-    if(name === "Calculator"){
-      openApp(`
-        <html>
-        <body style="margin:0;background:black;color:white;display:flex;align-items:center;justify-content:center;height:100vh;">
-          <h1>Calculator App (Coming Soon)</h1>
-        </body>
-        </html>
-      `);
-    }
-
-    else if(name === "AI"){
-      openApp(`
-        <html>
-        <body style="margin:0;background:black;color:white;display:flex;align-items:center;justify-content:center;height:100vh;">
-          <h1>AI App (Coming Soon)</h1>
-        </body>
-        </html>
-      `);
-    }
-
-    else {
-      openApp(`
-        <html>
-        <body style="margin:0;background:black;color:white;display:flex;align-items:center;justify-content:center;height:100vh;">
-          <h1>${name} (Coming Soon)</h1>
-        </body>
-        </html>
-      `);
-    }
-
-  };
-
-  grid.appendChild(card);
-
-});
 
 </script>
 
