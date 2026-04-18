@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JetX Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #2e3244 0%, #36224b 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 80px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .sidebar-btn {
+            background: rgb(89, 134, 218);
+            border: none;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            text-align: center;
+            min-height: 45px;
+        }
+
+        .sidebar-btn:hover {
+            background: #79aadb;
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            margin-left: 100px;
+            flex: 1;
+            padding: 20px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .letter-section {
+            margin-bottom: 40px;
+            padding: 0 20px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: 100px;
+        }
+
+        .letter-header {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid rgba(255,255,255,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input[type="button"] {
+            background: rgb(89, 134, 218);
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 600px;
+            color: white;
+            text-align: left;
+        }
+
+        input[type="button"]:hover {
+            transform: translateY(-2px);
+            background: #79aadb;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 15px 5px;
+            }
+            .sidebar-btn {
+                padding: 8px;
+                font-size: 16px;
+            }
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar"></div>
+
+    <div class="main-content">
+        <h1>JetX Files</h1>
+
+        <h2 style="color: white; text-align: center; margin-bottom: 30px; font-weight: normal; font-size: 18px;">
+            Files Hub
+        </h2>
+
+        <h2 style="color: white; text-align: center; margin-bottom: 30px; font-weight: normal; font-size: 18px;">
+            <input type="text" placeholder="Search..." id="searchInput" style="padding: 13px; width: 100%; max-width: 420px; border-radius: 8px; border: none;">
+            <script src="https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/searchbut.js"></script>
+            <button onclick="const script = document.createElement('script');script.src='https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@latest/game.js';document.body.appendChild(script);">
+                Click to load if it isn’t loading
+            </button>
+        </h2>
+
+        <div id="sections-container"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/games.js"></script>
+    <script src="/js/global.js"></script>
+</body>
+</html>
