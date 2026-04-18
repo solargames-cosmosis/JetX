@@ -1,161 +1,202 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JetX Files</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #2e3244 0%, #36224b 100%);
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
+<title>JetX: Apps</title>
 
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 80px;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 20px 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-            z-index: 1000;
-        }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #000000; /* 🔥 PURE BLACK */
+  margin: 0;
+}
 
-        .sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
+/* HEADER */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
 
-        .sidebar::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
-        }
+.logo {
+  font-size: 42px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-        .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.3);
-            border-radius: 3px;
-        }
+.controls button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  background: #6d28d9;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-        .sidebar-btn {
-            background: rgb(89, 134, 218);
-            border: none;
-            padding: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: white;
-            text-align: center;
-            min-height: 45px;
-        }
+/* MAIN */
+.main {
+  margin-top: 80px;
+  padding: 20px;
+}
 
-        .sidebar-btn:hover {
-            background: #79aadb;
-            transform: scale(1.05);
-        }
+/* GRID */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+}
 
-        .main-content {
-            margin-left: 100px;
-            flex: 1;
-            padding: 20px;
-        }
+/* CARD */
+.app-card {
+  background: #141424;
+  border-radius: 12px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-        h1 {
-            color: white;
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+.app-card:hover {
+  transform: scale(1.05);
+}
 
-        .letter-section {
-            margin-bottom: 40px;
-            padding: 0 20px;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-            min-height: 100px;
-        }
+.app-name {
+  color: white;
+  font-size: 14px;
+  text-align: center;
+}
 
-        .letter-header {
-            color: white;
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid rgba(255,255,255,0.3);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+/* PLAYER */
+#app-player {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  background: black;
+  display: none;
+  z-index: 999;
+}
 
-        .buttons-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
-
-        input[type="button"] {
-            background: rgb(89, 134, 218);
-            border: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            max-width: 600px;
-            color: white;
-            text-align: left;
-        }
-
-        input[type="button"]:hover {
-            transform: translateY(-2px);
-            background: #79aadb;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 60px;
-                padding: 15px 5px;
-            }
-            .sidebar-btn {
-                padding: 8px;
-                font-size: 16px;
-            }
-            .main-content {
-                margin-left: 70px;
-            }
-        }
-    </style>
+#app-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+</style>
 </head>
+
 <body>
-    <div class="sidebar" id="sidebar"></div>
 
-    <div class="main-content">
-        <h1>JetX Files</h1>
+<div class="header">
+  <div class="logo" onclick="goHome()">JetX</div>
+  <div class="controls">
+    <button onclick="goHome()">Home</button>
+  </div>
+</div>
 
-        <h2 style="color: white; text-align: center; margin-bottom: 30px; font-weight: normal; font-size: 18px;">
-            Files Hub
-        </h2>
+<div class="main">
+  <div class="apps-grid" id="appsGrid"></div>
+</div>
 
-        <h2 style="color: white; text-align: center; margin-bottom: 30px; font-weight: normal; font-size: 18px;">
-            <input type="text" placeholder="Search..." id="searchInput" style="padding: 13px; width: 100%; max-width: 420px; border-radius: 8px; border: none;">
-            <script src="https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/searchbut.js"></script>
-            <button onclick="const script = document.createElement('script');script.src='https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@latest/game.js';document.body.appendChild(script);">
-                Click to load if it isn’t loading
-            </button>
-        </h2>
+<div id="app-player">
+  <iframe id="app-frame"></iframe>
+</div>
 
-        <div id="sections-container"></div>
-    </div>
+<script>
 
-    <script src="https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/games.js"></script>
-    <script src="/js/global.js"></script>
+/* NAV */
+function goHome(){
+  window.location.href = "index.html";
+}
+
+function openApp(html){
+  document.getElementById("app-player").style.display = "block";
+  document.getElementById("app-frame").srcdoc = html;
+}
+
+/* APPS LIST (10 total) */
+const apps = [
+  "Calculator",
+  "AI",
+  "Notes",
+  "Music",
+  "Randomizer",
+  "Browser",
+  "Vault",
+  "Chat",
+  "Settings",
+  "Coming Soon"
+];
+
+/* BUILD CARDS */
+const grid = document.getElementById("appsGrid");
+
+apps.forEach(name => {
+
+  const card = document.createElement("div");
+  card.className = "app-card";
+
+  const label = document.createElement("div");
+  label.className = "app-name";
+  label.textContent = name;
+
+  card.appendChild(label);
+
+  /* CLICK ACTIONS */
+  card.onclick = () => {
+
+    if(name === "Calculator"){
+      openApp(`
+        <html>
+        <body style="margin:0;background:black;color:white;display:flex;align-items:center;justify-content:center;height:100vh;">
+          <h1>Calculator App (Coming Soon)</h1>
+        </body>
+        </html>
+      `);
+    }
+
+    else if(name === "AI"){
+      openApp(`
+        <html>
+        <body style="margin:0;background:black;color:white;display:flex;align-items:center;justify-content:center;height:100vh;">
+          <h1>AI App (Coming Soon)</h1>
+        </body>
+        </html>
+      `);
+    }
+
+    else {
+      openApp(`
+        <html>
+        <body style="margin:0;background:black;color:white;display:flex;align-items:center;justify-content:center;height:100vh;">
+          <h1>${name} (Coming Soon)</h1>
+        </body>
+        </html>
+      `);
+    }
+
+  };
+
+  grid.appendChild(card);
+
+});
+
+</script>
+
 </body>
 </html>
