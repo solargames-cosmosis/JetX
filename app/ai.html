@@ -1,89 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Queen Aura's Card</title>
-  
-  <!-- Mondiad Verification -->
-  <meta name="mnd-ver" content="lbnzftemozmce5xvcsnaq" />
+<meta charset="UTF-8">
+<title>JetX AI</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      background-color: #121212;
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start; /* start so ad shows at top */
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      padding-top: 20px;
-    }
+<style>
+body {
+  margin: 0;
+  background: #000;
+  font-family: Arial;
+  color: white;
+}
 
-    #ad-zone {
-      margin-bottom: 20px;
-    }
+/* HEADER */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+}
 
-    .card {
-      background-color: #1f1f1f;
-      color: white;
-      border-radius: 20px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 0 20px #ff66cc;
-      max-width: 300px;
-    }
+.logo {
+  font-size: 34px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-    .card img {
-      border-radius: 50%;
-      width: 120px;
-      height: 120px;
-      border: 3px solid #ff66cc;
-    }
+.controls button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: none;
+  background: #6d28d9;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-    .card h1 {
-      margin-top: 15px;
-      font-size: 24px;
-    }
+/* CHAT BOX */
+.chat {
+  margin-top: 80px;
+  width: 90%;
+  max-width: 800px;
+  height: 70vh;
+  margin-left: auto;
+  margin-right: auto;
+  background: #141424;
+  border-radius: 12px;
+  padding: 10px;
+  overflow-y: auto;
+}
 
-    .card p {
-      font-size: 14px;
-      color: #ccc;
-    }
+.msg {
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 10px;
+}
 
-    .card button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 25px;
-      background-color: #ff66cc;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-    }
+.user {
+  background: #6d28d9;
+  text-align: right;
+}
 
-    .card button:hover {
-      background-color: #ff33aa;
-    }
-  </style>
+.ai {
+  background: #222;
+}
+
+/* INPUT */
+.input {
+  display: flex;
+  gap: 10px;
+  width: 90%;
+  max-width: 800px;
+  margin: 10px auto;
+}
+
+input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #141424;
+  color: white;
+}
+
+button {
+  padding: 12px;
+  background: #6d28d9;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-  <!-- Mondiad Ad at Top -->
-  <div id="ad-zone">
-    <script async src="https://cdn.mondiad.net/placement/24280.js"></script>
+<div class="header">
+  <div class="logo" onclick="goHome()">JetX AI</div>
+  <div class="controls">
+    <button onclick="clearChat()">Clear</button>
+    <button onclick="goHome()">Home</button>
   </div>
+</div>
 
-  <!-- Queen Aura Profile Card -->
-  <div class="card">
-    <img src="https://i.ibb.co/hrTqv6X/8bd14c880091f60ba92ced41af59b510-1.jpg" alt="Queen Aura">
-    <h1>Queen Aura</h1>
-    <p>AI Buddy, Meme Queen 👑<br>Loves coding and good vibes!</p>
-    <button onclick="window.open('https://wa.me/2348163005682', '_blank');">
-      Chat With Me
-    </button>
-  </div>
+<div class="chat" id="chat"></div>
+
+<div class="input">
+  <input id="input" placeholder="Ask JetX AI..." />
+  <button onclick="send()">Send</button>
+</div>
+
+<script>
+
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+
+input.addEventListener("keydown", e => {
+  if(e.key === "Enter") send();
+});
+
+function add(text, type){
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+async function send(){
+
+  const text = input.value.trim();
+  if(!text) return;
+
+  add(text, "user");
+  input.value = "";
+
+  add("Thinking...", "ai");
+
+  const res = await fetch("/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ message: text })
+  });
+
+  const data = await res.json();
+
+  chat.lastChild.textContent = data.reply || "No response";
+}
+
+function clearChat(){
+  chat.innerHTML = "";
+}
+
+function goHome(){
+  window.location.href = "https://jet-x-silk.vercel.app";
+}
+
+</script>
 
 </body>
 </html>
