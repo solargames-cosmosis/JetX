@@ -40,9 +40,13 @@ body {
 }
 
 .logo {
-  font-size: 28px;
+  font-size: 42px;
   font-weight: bold;
   cursor: pointer;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 15px rgba(109,40,217,0.5);
 }
 
 .controls button {
@@ -2921,10 +2925,15 @@ function openGame(html){
 }
 
 function closeGame(){
-  document.getElementById("player").style.display = "none";
-  document.getElementById("gameFrame").srcdoc = "";
-}
+  const player = document.getElementById("player");
+  const frame = document.getElementById("gameFrame");
 
+  player.style.display = "none";
+  frame.srcdoc = "";
+
+  window.location.href = "index.html";
+}
+  
 function goFullscreen(){
   const el = document.getElementById("player");
   if(el.requestFullscreen) el.requestFullscreen();
@@ -2939,8 +2948,25 @@ function generateAllSections(){
     const card = document.createElement("div");
     card.className = "card";
 
-    const img = document.createElement("img");
-    img.src = "https://pizzaedition.win/avifgames/" + slugify(name) + ".png";
+    const slug = slugify(name);
+
+const sources = [
+  `https://pizzaedition.win/avifgames/${slug}.png`,
+  `https://pizzaedition.win/avifgames/${slug}.jpg`,
+  `https://pizzaedition.win/avifgames/${slug}.avif`
+];
+
+let i = 0;
+img.src = sources[i];
+
+img.onerror = () => {
+  i++;
+  if(i < sources.length){
+    img.src = sources[i];
+  } else {
+    img.src = "https://via.placeholder.com/300x200?text=No+Image";
+  }
+};
 
     const label = document.createElement("div");
     label.className = "name";
