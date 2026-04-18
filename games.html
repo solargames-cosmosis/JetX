@@ -71,9 +71,11 @@ body {
 /* GRID */
 .buttons-container {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* EXACTLY 7 per row */
+  grid-template-columns: repeat(auto-fill, minmax(120px, 120px));
   gap: 12px;
+  justify-content: center;
 }
+  
 .card {
   background: #141424;
   border-radius: 12px;
@@ -82,11 +84,10 @@ body {
   transition: 0.2s;
 
   aspect-ratio: 1 / 1;
-  width: 100%;
   display: flex;
   flex-direction: column;
 }
-
+  
 .card:hover {
   transform: scale(1.05);
 }
