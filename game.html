@@ -16,7 +16,7 @@
       font-family: Arial, sans-serif;
     }
 
-    /* JetX Logo (home button) */
+    /* JetX Logo */
     .logo {
       position: fixed;
       top: 10px;
@@ -47,14 +47,13 @@
       color: white;
       opacity: 0.7;
       font-size: 18px;
-      text-align: center;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- JetX Home Button -->
+  <!-- JetX Home -->
   <div class="logo" onclick="window.location.href='games.html'">
     JetX
   </div>
@@ -63,7 +62,6 @@
 
   <iframe id="gameFrame"></iframe>
 
-  <!-- your global script -->
   <script src="/js/global.js"></script>
 
   <script>
@@ -74,18 +72,48 @@
     const loading = document.getElementById("loading");
 
     if (game) {
-      // FINAL RULE YOU ASKED FOR:
-      const url = `https://ubgwtf.gitlab.io/${game}`;
 
-      frame.src = url;
+      const base = "https://ubgwtf.gitlab.io/";
 
-      frame.onload = () => {
-        loading.style.display = "none";
-      };
+      const clean = game.toLowerCase().replace(/[^a-z0-9]/g, "");
 
-      frame.onerror = () => {
-        loading.innerText = "Game failed to load.";
-      };
+      const attempts = [
+        game.toLowerCase(),
+        clean,
+        game.toLowerCase().replace(/\\s+/g, "-"),
+        game.toLowerCase().replace(/-/g, ""),
+        game.toLowerCase().replace(/\\s+/g, ""),
+        game.toLowerCase().replace(/([a-z])([0-9])/g, "$1-$2"),
+        game.toLowerCase().replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
+      ];
+
+      let i = 0;
+
+      function tryNext() {
+        if (i >= attempts.length) {
+          loading.innerText = "Game not found.";
+          return;
+        }
+
+        const url = base + attempts[i];
+        frame.src = url;
+
+        let loaded = false;
+
+        frame.onload = () => {
+          loaded = true;
+          loading.style.display = "none";
+        };
+
+        setTimeout(() => {
+          if (!loaded) {
+            i++;
+            tryNext();
+          }
+        }, 2500);
+      }
+
+      tryNext();
 
     } else {
       loading.innerText = "No game selected.";
