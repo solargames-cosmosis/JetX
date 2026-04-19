@@ -11,7 +11,7 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* ===== HEADER (JetX STANDARD) ===== */
+/* HEADER */
 .header {
   position: fixed;
   top: 0;
@@ -45,7 +45,7 @@ body {
   cursor: pointer;
 }
 
-/* ===== CALCULATOR ===== */
+/* CALCULATOR */
 .wrapper {
   margin-top: 90px;
   display: flex;
@@ -72,7 +72,7 @@ input {
   color: white;
 }
 
-/* BUTTON GRID */
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -100,10 +100,6 @@ button:hover {
 .equal:hover {
   background: #7c3aed;
 }
-
-.small {
-  font-size: 12px;
-}
 </style>
 </head>
 
@@ -122,10 +118,8 @@ button:hover {
 <div class="wrapper">
   <div class="calc">
 
-    <!-- TYPEABLE DISPLAY -->
     <input id="display" placeholder="Type math here..." />
 
-    <!-- SCIENTIFIC BUTTONS -->
     <div class="grid">
 
       <button onclick="add('Math.sin(')">sin</button>
@@ -170,34 +164,26 @@ button:hover {
 
 const display = document.getElementById("display");
 
-/* TYPE SUPPORT */
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") calc();
 });
 
-/* ADD TEXT */
 function add(val){
   display.value += val;
 }
 
-/* BACKSPACE */
 function back(){
   display.value = display.value.slice(0, -1);
 }
 
-/* CLEAR */
 function clearAll(){
   display.value = "";
 }
 
-/* CALCULATE (SAFE-ish scientific eval) */
 function calc(){
   try {
     let expr = display.value;
-
-    // replace ^ with power
     expr = expr.replace(/\^/g, "**");
-
     let result = Function("return " + expr)();
     display.value = result;
   } catch {
@@ -205,9 +191,9 @@ function calc(){
   }
 }
 
-/* HEADER */
+/* ✅ FIXED HOME */
 function goHome(){
-  window.location.href = "index.html";
+  window.location.href = "/";
 }
 
 function goFullscreen(){
