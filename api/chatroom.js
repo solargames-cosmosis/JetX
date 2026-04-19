@@ -1,26 +1,33 @@
-export default async function handler(req, res) {
+import { createClient } from "redis";
 
-  const url = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
+let client;
 
-  if (!url || !token) {
-    return res.status(500).json({ error: "Database not connected" });
+async function getClient() {
+  if (!client) {
+    client = createClient({
+      url: process.env.REDIS_URL
+    });
+    await client.connect();
   }
+  return client;
+}
+
+export default async function handler(req, res) {
+  const redis = await getClient();
 
   // SEND MESSAGE
   if (req.method === "POST") {
     const { text, name } = req.body;
 
     if (text && name) {
-      await fetch(`${url}/rpush/chat_messages/${encodeURIComponent(JSON.stringify({
-        text,
-        name,
-        time: Date.now()
-      }))}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      await redis.rPush(
+        "chat_messages",
+        JSON.stringify({
+          text,
+          name,
+          time: Date.now()
+        })
+      );
     }
 
     return res.status(200).json({ success: true });
@@ -28,15 +35,8 @@ export default async function handler(req, res) {
 
   // GET MESSAGES
   if (req.method === "GET") {
-    const response = await fetch(`${url}/lrange/chat_messages/0/-1`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const data = await response.json();
-
-    const messages = data.result.map(m => JSON.parse(m));
+    const raw = await redis.lRange("chat_messages", 0, -1);
+    const messages = raw.map(m => JSON.parse(m));
 
     return res.status(200).json({ messages });
   }
