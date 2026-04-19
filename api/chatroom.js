@@ -1,27 +1,43 @@
-import { kv } from '@vercel/kv';
-
 export default async function handler(req, res) {
 
+  const url = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+
+  if (!url || !token) {
+    return res.status(500).json({ error: "Database not connected" });
+  }
+
+  // SEND MESSAGE
   if (req.method === "POST") {
     const { text, name } = req.body;
 
     if (text && name) {
-      await kv.rpush("chat_messages", JSON.stringify({
+      await fetch(`${url}/rpush/chat_messages/${encodeURIComponent(JSON.stringify({
         text,
         name,
         time: Date.now()
-      }));
-
-      const length = await kv.llen("chat_messages");
-      if (length > 100) await kv.lpop("chat_messages");
+      }))}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
     }
 
     return res.status(200).json({ success: true });
   }
 
+  // GET MESSAGES
   if (req.method === "GET") {
-    const raw = await kv.lrange("chat_messages", 0, -1);
-    const messages = raw.map(m => JSON.parse(m));
+    const response = await fetch(`${url}/lrange/chat_messages/0/-1`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await response.json();
+
+    const messages = data.result.map(m => JSON.parse(m));
+
     return res.status(200).json({ messages });
   }
 
