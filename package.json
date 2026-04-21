@@ -1,7 +1,6 @@
 {
   "scripts": {
-    "build": "echo 'Build complete'",
-    "start": "node api/chat.js"
+    "build": "echo 'Build complete'"
   },
   "dependencies": {
     "redis": "^4.6.7"
