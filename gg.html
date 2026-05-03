@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Zaapiz Game Corner Games</title>
+<title>JetX Library</title>
 
 <style>
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
   background: #000;
-  margin: 0;
-  display: flex;
 }
 
-/* HEADER (JetX style) */
+/* HEADER (JetX) */
 .header {
   position: fixed;
   top: 0;
@@ -21,17 +20,17 @@ body {
   height: 60px;
   background: #111;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 0 20px;
   z-index: 1000;
 }
 
 .logo {
-  font-size: 32px;
+  color: white;
+  font-size: 28px;
   font-weight: bold;
   cursor: pointer;
-  color: white;
 }
 
 .controls button {
@@ -48,59 +47,63 @@ body {
 .main {
   margin-top: 70px;
   padding: 20px;
-  width: 100%;
 }
 
-/* SEARCH (kept but simplified) */
-.search-container {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto 20px auto;
+/* SEARCH */
+.search {
   display: flex;
   gap: 10px;
+  max-width: 900px;
+  margin: auto;
 }
 
-#searchInput {
+.search input {
   flex: 1;
   padding: 10px;
   border-radius: 8px;
   border: none;
 }
 
-#sortSelect {
+.search select {
   padding: 10px;
   border-radius: 8px;
 }
 
 /* GRID */
 #container {
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 12px;
 }
 
-.zone-item {
+.card {
   background: #141424;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   text-align: center;
+  transition: 0.2s;
 }
 
-.zone-item img {
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
   width: 100%;
   height: 120px;
   object-fit: cover;
 }
 
-.zone-item p {
-  font-size: 12px;
+.card p {
   color: white;
+  font-size: 12px;
   padding: 6px;
 }
 
-/* PLAYER (JetX style) */
-#zoneViewer {
+/* PLAYER */
+#player {
   position: fixed;
   top: 60px;
   left: 0;
@@ -108,13 +111,12 @@ body {
   height: calc(100% - 60px);
   background: black;
   display: none;
-  flex-direction: column;
   z-index: 999;
 }
 
-#zoneFrame {
-  flex: 1;
+#frame {
   width: 100%;
+  height: 100%;
   border: none;
 }
 </style>
@@ -124,22 +126,20 @@ body {
 
 <!-- HEADER -->
 <div class="header">
-  <div class="logo" onclick="goHome()">JetX</div>
+  <div class="logo" onclick="home()">JetX</div>
   <div class="controls">
-    <button onclick="fullscreenZone()">Fullscreen</button>
-    <button onclick="closeZone()">Home</button>
+    <button onclick="fullscreen()">Fullscreen</button>
+    <button onclick="closeGame()">Home</button>
   </div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-  <div class="search-container">
-    <input id="searchInput" placeholder="Search games..." oninput="handleSearch()">
-    <select id="sortSelect" onchange="handleSearch()">
-      <option value="popular">Popular</option>
-      <option value="name">Name</option>
-      <option value="id">Date</option>
+  <div class="search">
+    <input id="search" placeholder="Search games..." oninput="render()">
+    <select>
+      <option>Name</option>
     </select>
   </div>
 
@@ -147,77 +147,138 @@ body {
 </div>
 
 <!-- PLAYER -->
-<div id="zoneViewer">
-  <iframe id="zoneFrame"></iframe>
+<div id="player">
+  <iframe id="frame"></iframe>
 </div>
 
 <script>
+
+/* =========================
+   ZAAPIZ IMAGE SYSTEM
+========================= */
+
+const coverURL = "https://pizzaedition.win/avifgames";
+
+const PLACEHOLDER =
+'data:image/svg+xml;utf8,' + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="720">
+<rect width="100%" height="100%" fill="#071029"/>
+<text x="50%" y="50%" fill="#94a3b8" font-size="20"
+text-anchor="middle" dominant-baseline="middle">
+No cover
+</text>
+</svg>`);
+
+function slugify(text){
+  return text.toLowerCase().replace(/[^a-z0-9]/g,"");
+}
+
+function getCover(name){
+  const slug = slugify(name);
+
+  const sources = [
+    `${coverURL}/${slug}.png`,
+    `${coverURL}/${slug}.jpg`,
+    `${coverURL}/${slug}.avif`
+  ];
+
+  return sources;
+}
+
+/* =========================
+   GAMES
+========================= */
+
+let games = [
+  "1v1.LOL",
+  "2048",
+  "Bad Ice Cream",
+  "Basketball Stars",
+  "Cookie Clicker",
+  "Drift Hunters",
+  "Geometry Dash",
+  "Slope",
+  "Subway Surfers"
+];
+
+/* =========================
+   RENDER
+========================= */
+
 const container = document.getElementById("container");
-const zoneViewer = document.getElementById("zoneViewer");
-const zoneFrame = document.getElementById("zoneFrame");
 
-let zones = [];
+function render(){
 
-function renderGrid(data){
+  const q = document.getElementById("search").value.toLowerCase();
+
   container.innerHTML = "";
 
-  data.forEach(file => {
-    const div = document.createElement("div");
-    div.className = "zone-item";
+  games
+    .filter(g => g.toLowerCase().includes(q))
+    .forEach(name => {
 
-    const img = document.createElement("img");
-    img.src = file.cover || "https://via.placeholder.com/300";
+      const card = document.createElement("div");
+      card.className = "card";
 
-    const p = document.createElement("p");
-    p.textContent = file.name;
+      const img = document.createElement("img");
 
-    div.onclick = () => openZone(file);
+      const sources = getCover(name);
+      let i = 0;
+      img.src = sources[i];
 
-    div.appendChild(img);
-    div.appendChild(p);
-    container.appendChild(div);
-  });
-}
+      img.onerror = () => {
+        i++;
+        if(i < sources.length){
+          img.src = sources[i];
+        } else {
+          img.src = PLACEHOLDER;
+        }
+      };
 
-function handleSearch(){
-  const q = document.getElementById("searchInput").value.toLowerCase();
+      const label = document.createElement("p");
+      label.textContent = name;
 
-  const filtered = zones.filter(z =>
-    z.name.toLowerCase().includes(q)
-  );
+      card.onclick = () => openGame(name);
 
-  renderGrid(filtered);
-}
+      card.appendChild(img);
+      card.appendChild(label);
 
-function openZone(file){
-  zoneViewer.style.display = "flex";
-
-  fetch(file.url)
-    .then(r => r.text())
-    .then(html => {
-      zoneFrame.srcdoc = html;
+      container.appendChild(card);
     });
 }
 
-function closeZone(){
-  zoneViewer.style.display = "none";
-  zoneFrame.srcdoc = "";
+/* =========================
+   PLAYER
+========================= */
+
+const player = document.getElementById("player");
+const frame = document.getElementById("frame");
+
+function openGame(name){
+  player.style.display = "block";
+
+  frame.srcdoc = `
+  <html><body style="margin:0;background:black;color:white;
+  display:flex;align-items:center;justify-content:center;">
+  <h1>${name}</h1>
+  </body></html>`;
 }
 
-function fullscreenZone(){
-  zoneViewer.requestFullscreen();
+function closeGame(){
+  player.style.display = "none";
+  frame.srcdoc = "";
 }
 
-function goHome(){
+function fullscreen(){
+  player.requestFullscreen();
+}
+
+function home(){
   window.location.href = "/index.html";
 }
 
-/* TEMP SAMPLE DATA (replace with your fetch) */
-zones = [
-  { name: "Test Game", cover: "https://via.placeholder.com/300", url: "about:blank" }
-];
+render();
 
-renderGrid(zones);
 </script>
 
 </body>
