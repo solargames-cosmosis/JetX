@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Zaapiz Game Corner Games</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #000;
+  margin: 0;
+  display: flex;
+}
+
+/* HEADER (JetX style) */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.controls button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: none;
+  background: #6d28d9;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* MAIN */
+.main {
+  margin-top: 70px;
+  padding: 20px;
+  width: 100%;
+}
+
+/* SEARCH (kept but simplified) */
+.search-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 20px auto;
+  display: flex;
+  gap: 10px;
+}
+
+#searchInput {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+#sortSelect {
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* GRID */
+#container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.zone-item {
+  background: #141424;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+}
+
+.zone-item img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.zone-item p {
+  font-size: 12px;
+  color: white;
+  padding: 6px;
+}
+
+/* PLAYER (JetX style) */
+#zoneViewer {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  background: black;
+  display: none;
+  flex-direction: column;
+  z-index: 999;
+}
+
+#zoneFrame {
+  flex: 1;
+  width: 100%;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo" onclick="goHome()">JetX</div>
+  <div class="controls">
+    <button onclick="fullscreenZone()">Fullscreen</button>
+    <button onclick="closeZone()">Home</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="search-container">
+    <input id="searchInput" placeholder="Search games..." oninput="handleSearch()">
+    <select id="sortSelect" onchange="handleSearch()">
+      <option value="popular">Popular</option>
+      <option value="name">Name</option>
+      <option value="id">Date</option>
+    </select>
+  </div>
+
+  <div id="container"></div>
+</div>
+
+<!-- PLAYER -->
+<div id="zoneViewer">
+  <iframe id="zoneFrame"></iframe>
+</div>
+
+<script>
+const container = document.getElementById("container");
+const zoneViewer = document.getElementById("zoneViewer");
+const zoneFrame = document.getElementById("zoneFrame");
+
+let zones = [];
+
+function renderGrid(data){
+  container.innerHTML = "";
+
+  data.forEach(file => {
+    const div = document.createElement("div");
+    div.className = "zone-item";
+
+    const img = document.createElement("img");
+    img.src = file.cover || "https://via.placeholder.com/300";
+
+    const p = document.createElement("p");
+    p.textContent = file.name;
+
+    div.onclick = () => openZone(file);
+
+    div.appendChild(img);
+    div.appendChild(p);
+    container.appendChild(div);
+  });
+}
+
+function handleSearch(){
+  const q = document.getElementById("searchInput").value.toLowerCase();
+
+  const filtered = zones.filter(z =>
+    z.name.toLowerCase().includes(q)
+  );
+
+  renderGrid(filtered);
+}
+
+function openZone(file){
+  zoneViewer.style.display = "flex";
+
+  fetch(file.url)
+    .then(r => r.text())
+    .then(html => {
+      zoneFrame.srcdoc = html;
+    });
+}
+
+function closeZone(){
+  zoneViewer.style.display = "none";
+  zoneFrame.srcdoc = "";
+}
+
+function fullscreenZone(){
+  zoneViewer.requestFullscreen();
+}
+
+function goHome(){
+  window.location.href = "/index.html";
+}
+
+/* TEMP SAMPLE DATA (replace with your fetch) */
+zones = [
+  { name: "Test Game", cover: "https://via.placeholder.com/300", url: "about:blank" }
+];
+
+renderGrid(zones);
+</script>
+
+</body>
+</html>
