@@ -1,212 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Zaapiz Game Corner Games</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <style>
-        :root {
-            --bg: #000000;
-            --accent: #ff7ab8;
-            --accent-glow: rgba(110, 203, 255, 0.3);
-            --text-dim: #94a3b8;
-            --border: rgba(110, 203, 255, 0.08);
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --input-bg: rgba(255, 255, 255, 0.05);
-            --font: 'Brush Script MT', 'Brush Script', cursive;
-            --transition-fast: 0.2s ease;
-            --transition-slow: 0.4s ease-in;
-            --fav-color: #ff4b2b;
-            /* cotton candy gradient for outlines */
-            --cotton-one: #6699ff;
-            --cotton-two: #ff7ab8;
-        }
+<title>JetX: Library</title>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #000000;
+  margin: 0;
+  display: flex;
+}
 
-        body {
-            font-family: var(--font);
-            background: var(--bg);
-            color: white;
-            padding: 20px;
-            overflow-x: hidden;
-            animation: fadeIn var(--transition-slow);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  width: 70px;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+/* HEADER */
+.header {
+  position: fixed;
+  top: 0;
+  left: 70px;
+  right: 0;
+  height: 60px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
 
-        /* Search */
-        .search-container {
-            width: 100%;
-            max-width: 1000px;
-            margin-top: 20px;
-            margin-bottom: 30px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
+.logo {
+  font-size: 48px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 15px rgba(109,40,217,0.5);
+}
 
-        .search-input-wrapper {
-            position: relative;
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            color: var(--accent);
-            pointer-events: none;
-        }
-
-        #searchInput {
-            width: 100%;
-            background: var(--input-bg);
-            border: 2px solid var(--border);
-            padding: 14px 20px 14px 45px;
-            color: white;
-            border-radius: 12px;
-            font-family: var(--font);
-            outline: none;
-            font-size: 1rem;
-            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-        }
-        #searchInput:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 10px var(--accent-glow);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        #sortSelect {
-            width: auto;
-            flex-shrink: 0;
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 14px 12px;
-            border-radius: 12px;
-            font-family: var(--font);
-            font-size: 0.9rem;
-            cursor: pointer;
-            outline: none;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            color-scheme: dark;
-        }
-
-        .fav-filter-btn {
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 14px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: var(--font);
-            transition: all var(--transition-fast);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .fav-filter-btn.active {
-            border-color: var(--fav-color);
-            color: var(--fav-color);
-            background: rgba(255, 75, 43, 0.05);
-        }
-
-        /* Zaapiz carousel */
-        .zaapiz-wrapper {
-            width: 100%;
-            max-width: 1200px;
-            position: relative;
-            margin-bottom: 40px;
-            padding: 0 60px;
-            box-sizing: border-box;
-            z-index: 1;
-        }
-        .zaapiz-header {
-            text-align: left;
-            margin-bottom: 15px;
-            background-image: linear-gradient(90deg, var(--cotton-one), var(--cotton-two));
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: gradientShift 6s linear infinite;
-            font-size: 1rem;
-            letter-spacing: 3px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .zaapiz-viewport {
-            overflow: hidden;
-            border-radius: 20px;
-            background: rgba(110, 203, 255, 0.02);
-            border: 1px solid var(--border);
-            padding: 20px 0;
-        }
-        #zaapizFavsContainer {
-            display: flex;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .zaapiz-item {
-            flex: 0 0 calc(20% - 30px);
-            margin: 0 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform var(--transition-fast);
-        }
-        .zaapiz-item:hover { transform: scale(1.03); }
-        .zaapiz-item img {
-            width: 100%;
-            aspect-ratio: 2/3;
-            border-radius: 15px;
-            object-fit: cover;
-            border: 4px solid transparent;
-            border-image-source: linear-gradient(90deg, var(--cotton-one), var(--cotton-two));
-            border-image-slice: 1;
-            transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
-        }
-        .zaapiz-item:hover img {
-            box-shadow: 0 0 24px rgba(102,153,255,0.25), 0 0 36px rgba(255,122,184,0.2);
-        }
-        .zaapiz-nav {
-            position: absolute;
-            top: 55%;
-            transform: translateY(-50%);
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background var(--transition-fast);
-        }
-        .zaapiz-nav:hover {
-            background: var(--input-bg);
-            border-color: var(--accent);
-        }
-        .zaapiz-prev { left: 5px; }
-        .zaapiz-next { right: 5px; }
+.controls button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: none;
+  background: #6d28d9;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
         /* Main Grid */
         #container {
