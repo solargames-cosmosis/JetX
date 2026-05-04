@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Zaapiz Game Corner Games</title>
+    <title>JetX Game Corner Games</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
         :root {
@@ -13,7 +13,7 @@
             --border: rgba(110, 203, 255, 0.08);
             --card-bg: rgba(255, 255, 255, 0.03);
             --input-bg: rgba(255, 255, 255, 0.05);
-            --font: 'Brush Script MT', 'Brush Script', cursive;
+            --font: Arial, sans-serif;
             --transition-fast: 0.2s ease;
             --transition-slow: 0.4s ease-in;
             --fav-color: #ff4b2b;
@@ -28,7 +28,7 @@
             font-family: var(--font);
             background: var(--bg);
             color: white;
-            padding: 20px;
+            padding: 50px;
             overflow-x: hidden;
             animation: fadeIn var(--transition-slow);
             display: flex;
@@ -126,8 +126,8 @@
             background: rgba(255, 75, 43, 0.05);
         }
 
-        /* Zaapiz carousel */
-        .zaapiz-wrapper {
+        /* JetX carousel */
+        .JetX-wrapper {
             width: 100%;
             max-width: 1200px;
             position: relative;
@@ -136,7 +136,7 @@
             box-sizing: border-box;
             z-index: 1;
         }
-        .zaapiz-header {
+        .JetX-header {
             text-align: left;
             margin-bottom: 15px;
             background-image: linear-gradient(90deg, var(--cotton-one), var(--cotton-two));
@@ -152,26 +152,26 @@
             align-items: center;
             gap: 12px;
         }
-        .zaapiz-viewport {
+        .JetX-viewport {
             overflow: hidden;
             border-radius: 20px;
             background: rgba(110, 203, 255, 0.02);
             border: 1px solid var(--border);
             padding: 20px 0;
         }
-        #zaapizFavsContainer {
+        #JetXFavsContainer {
             display: flex;
             transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .zaapiz-item {
+        .JetX-item {
             flex: 0 0 calc(20% - 30px);
             margin: 0 15px;
             text-align: center;
             cursor: pointer;
             transition: transform var(--transition-fast);
         }
-        .zaapiz-item:hover { transform: scale(1.03); }
-        .zaapiz-item img {
+        .JetX-item:hover { transform: scale(1.03); }
+        .JetX-item img {
             width: 100%;
             aspect-ratio: 2/3;
             border-radius: 15px;
@@ -181,10 +181,10 @@
             border-image-slice: 1;
             transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
         }
-        .zaapiz-item:hover img {
+        .JetX-item:hover img {
             box-shadow: 0 0 24px rgba(102,153,255,0.25), 0 0 36px rgba(255,122,184,0.2);
         }
-        .zaapiz-nav {
+        .JetX-nav {
             position: absolute;
             top: 55%;
             transform: translateY(-50%);
@@ -201,12 +201,12 @@
             justify-content: center;
             transition: background var(--transition-fast);
         }
-        .zaapiz-nav:hover {
+        .JetX-nav:hover {
             background: var(--input-bg);
             border-color: var(--accent);
         }
-        .zaapiz-prev { left: 5px; }
-        .zaapiz-next { right: 5px; }
+        .JetX-prev { left: 5px; }
+        .JetX-next { right: 5px; }
 
         /* Main Grid */
         #container {
@@ -337,8 +337,8 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         @media (max-width: 800px) {
-            .zaapiz-item { flex: 0 0 calc(50% - 20px); }
-            .zaapiz-wrapper { padding: 0 40px; }
+            .JetX-item { flex: 0 0 calc(50% - 20px); }
+            .JetX-wrapper { padding: 0 40px; }
             .search-container { flex-direction: column; align-items: stretch; }
         }
 
@@ -376,8 +376,8 @@
         .pop-in { opacity: 0; transform: translateY(12px) scale(0.98); animation: popIn 420ms cubic-bezier(.2, .8, .2, 1) forwards; }
         @keyframes popIn { to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        .zaapiz-nav { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .zaapiz-nav:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.45); }
+        .JetX-nav { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .JetX-nav:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.45); }
 
         .heart-btn:hover { transform: scale(1.08); }
 
@@ -390,13 +390,13 @@
 </head>
 <body>
 
-    <div class="zaapiz-wrapper" id="zaapizFavsWrapper" style="display:none;">
-        <div class="zaapiz-header">Zaapiz's Favs</div>
-        <button class="zaapiz-nav zaapiz-prev" onclick="zManualNav(-1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <div class="zaapiz-viewport">
-            <div id="zaapizFavsContainer"></div>
+    <div class="JetX-wrapper" id="JetXFavsWrapper" style="display:none;">
+        <div class="JetX-header">JetX's Favs</div>
+        <button class="JetX-nav JetX-prev" onclick="zManualNav(-1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div class="JetX-viewport">
+            <div id="JetXFavsContainer"></div>
         </div>
-        <button class="zaapiz-nav zaapiz-next" onclick="zManualNav(1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        <button class="JetX-nav JetX-next" onclick="zManualNav(1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
 
     <div class="search-container">
@@ -423,7 +423,6 @@
             </div>
             <div class="controls">
                 <button class="control-btn" onclick="fullscreenZone()">Fullscreen</button>
-                <button class="control-btn" onclick="downloadZone()">Download</button>
                 <button class="control-btn" onclick="closeZone()">Close</button>
             </div>
         </div>
@@ -502,7 +501,7 @@
                 const response = await fetch(zonesURL + "?t=" + Date.now());
                 zones = await response.json();
                 await fetchPopularity();
-                // build Zaapiz favs carousel and grid
+                // build JetX favs carousel and grid
                 zSetupFavs();
                 handleSearch();
             } catch (error) {
@@ -528,20 +527,20 @@
             }
         }
 
-        /* Zaapiz carousel JS (distinct names to avoid interference) */
-        // Dev-pinned IDs: edit this array to pin game IDs at the top of Zaapiz's Favs.
+        /* JetX carousel JS (distinct names to avoid interference) */
+        // Dev-pinned IDs: edit this array to pin game IDs at the top of JetX's Favs.
         // Example: const DEV_PINNED_IDS = [123,456];
         const DEV_PINNED_IDS = [1,182,117,11,710,751,103,82]; // <-- put numeric game IDs here
 
         function getDevPinnedIds() {
             try {
                 if (Array.isArray(DEV_PINNED_IDS) && DEV_PINNED_IDS.length) return DEV_PINNED_IDS.slice();
-                const raw = localStorage.getItem('zaapiz_favs') || '';
+                const raw = localStorage.getItem('JetX_favs') || '';
                 return raw.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
             } catch (e) { return []; }
         }
 
-        let zaapizFavs = [];
+        let JetXFavs = [];
         let zCarouselIndex = 0;
         let zCarouselTimer;
         let zPauseTimer;
@@ -554,31 +553,31 @@
             if (Array.isArray(pinnedIds) && pinnedIds.length) {
                 const pinned = pinnedIds.map(id => pool.find(z => z.id == id)).filter(Boolean);
                 if (pinned.length) {
-                    zaapizFavs = pinned;
+                    JetXFavs = pinned;
                     zRenderFavs();
-                    document.getElementById('zaapizFavsWrapper').style.display = 'block';
+                    document.getElementById('JetXFavsWrapper').style.display = 'block';
                     return;
                 }
             }
             // fallback: pick top N by popularity
             pool.sort((a, b) => (popularityData[b.id] || 0) - (popularityData[a.id] || 0));
-            zaapizFavs = pool.slice(0, 10);
+            JetXFavs = pool.slice(0, 10);
             zRenderFavs();
-            document.getElementById('zaapizFavsWrapper').style.display = zaapizFavs.length ? 'block' : 'none';
+            document.getElementById('JetXFavsWrapper').style.display = JetXFavs.length ? 'block' : 'none';
         }
 
         function zRenderFavs() {
-            const container = document.getElementById('zaapizFavsContainer');
+            const container = document.getElementById('JetXFavsContainer');
             if (!container) return;
             container.innerHTML = '';
             const itemsVisible = window.innerWidth > 800 ? 5 : 2;
-            const clonesBefore = zaapizFavs.slice(-itemsVisible);
-            const clonesAfter = zaapizFavs.slice(0, itemsVisible);
-            const displayPool = [...clonesBefore, ...zaapizFavs, ...clonesAfter];
+            const clonesBefore = JetXFavs.slice(-itemsVisible);
+            const clonesAfter = JetXFavs.slice(0, itemsVisible);
+            const displayPool = [...clonesBefore, ...JetXFavs, ...clonesAfter];
             displayPool.forEach((file) => {
                 try {
                     const div = document.createElement('div');
-                    div.className = 'zaapiz-item';
+                    div.className = 'JetX-item';
                     div.onclick = () => openZone(file);
                     const img = document.createElement('img');
                     img.alt = (file && file.name) ? file.name : 'cover';
@@ -592,13 +591,13 @@
                     div.append(img, p);
                     container.appendChild(div);
                 } catch (e) {
-                    console.error('Error rendering zaapiz item', e, file);
+                    console.error('Error rendering JetX item', e, file);
                 }
             });
             // staggered pop-in animation for carousel items
             setTimeout(() => {
                 try {
-                    const zaItems = container.querySelectorAll('.zaapiz-item');
+                    const zaItems = container.querySelectorAll('.JetX-item');
                     zaItems.forEach((el, i) => {
                         el.classList.add('pop-in');
                         el.style.animationDelay = (i * 80) + 'ms';
@@ -613,7 +612,7 @@
         function zUpdateCarouselPosition(transition = true) {
             const itemsVisible = window.innerWidth > 800 ? 5 : 2;
             const offset = zCarouselIndex * (100 / itemsVisible);
-            const container = document.getElementById('zaapizFavsContainer');
+            const container = document.getElementById('JetXFavsContainer');
             if (!container) return;
             container.style.transition = transition ? 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)' : 'none';
             container.style.transform = `translateX(-${offset}%)`;
@@ -627,7 +626,7 @@
         function zMoveCarousel(direction) {
             if (zIsTransitioning) return;
             const itemsVisible = window.innerWidth > 800 ? 5 : 2;
-            const totalItems = zaapizFavs.length;
+            const totalItems = JetXFavs.length;
             if (!totalItems) return;
             zIsTransitioning = true;
             zCarouselIndex += direction;
@@ -652,7 +651,7 @@
         }
 
         window.addEventListener('resize', () => {
-            if (zaapizFavs.length > 0) zRenderFavs();
+            if (JetXFavs.length > 0) zRenderFavs();
         });
 
         function handleSearch() {
