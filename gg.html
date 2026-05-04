@@ -414,20 +414,21 @@
         </button>
     </div>
 
-  <div class="header">
-  <div class="logo" onclick="goHome()">JetX</div>
-  <div class="controls">
-    <button onclick="fullscreenZone()">Fullscreen</button>
-    <button onclick="downloadZone()">Download</button>
-    <button onclick="closeZone()">Home</button>
-  </div>
-</div>
+    <div id="container">Loading zones...</div>
 
-<div id="container" style="margin-top:70px;">Loading zones...</div>
-
-<div id="zoneViewer" style="top:60px; left:0; width:100%; height:calc(100% - 60px); position:fixed; display:none; flex-direction:column;">
-    <iframe id="zoneFrame" style="width:100%; height:100%; border:none;"></iframe>
-</div>
+    <div id="zoneViewer">
+        <div class="zone-header">
+            <div>
+                <strong id="zoneName">Game</strong>
+            </div>
+            <div class="controls">
+                <button class="control-btn" onclick="fullscreenZone()">Fullscreen</button>
+                <button class="control-btn" onclick="downloadZone()">Download</button>
+                <button class="control-btn" onclick="closeZone()">Close</button>
+            </div>
+        </div>
+        <iframe id="zoneFrame"></iframe>
+    </div>
 
     <script>
         function cleanHTML(html) {
