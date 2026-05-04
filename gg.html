@@ -391,7 +391,7 @@
 <body>
 
     <div class="JetX-wrapper" id="JetXFavsWrapper" style="display:none;">
-        <div class="JetX-header">JetX's Favs</div>
+      <div class="zaapiz-header" onclick="homeZone()" style="cursor:pointer;">Zaapiz's Favs</div>
         <button class="JetX-nav JetX-prev" onclick="zManualNav(-1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
         <div class="JetX-viewport">
             <div id="JetXFavsContainer"></div>
@@ -422,8 +422,9 @@
                 <strong id="zoneName">Game</strong>
             </div>
             <div class="controls">
-                <button class="control-btn" onclick="fullscreenZone()">Fullscreen</button>
-                <button class="control-btn" onclick="closeZone()">Close</button>
+                <button class="control-btn" onclick="fullscreenZone()">↕️ Fullscreen</button>
+                <button class="control-btn" onclick="closeZone()">❌ Close</button>
+                <button class="control-btn" onclick="homeZone()">🏠 Go Home</button>
             </div>
         </div>
         <iframe id="zoneFrame"></iframe>
@@ -796,6 +797,10 @@
             }
         }
 
+ function homeZone(){
+  window.location.href = "/index.html";
+}
+        
         function openCloudmoon() {
             const relativePath = 'index-2604131056.html';
             try {
