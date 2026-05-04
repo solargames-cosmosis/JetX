@@ -1,152 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Zaapiz Game Corner Games</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta charset="UTF-8">
+    <title>Zaapiz Game Corner Games</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        :root {
+            --bg: #000000;
+            --accent: #ff7ab8;
+            --accent-glow: rgba(110, 203, 255, 0.3);
+            --text-dim: #94a3b8;
+            --border: rgba(110, 203, 255, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --font: 'Brush Script MT', 'Brush Script', cursive;
+            --transition-fast: 0.2s ease;
+            --transition-slow: 0.4s ease-in;
+            --fav-color: #ff4b2b;
+            /* cotton candy gradient for outlines */
+            --cotton-one: #6699ff;
+            --cotton-two: #ff7ab8;
+        }
 
-<style>
-:root {
-    --bg: #000000;
-    --accent: #ff7ab8;
-    --accent-glow: rgba(110, 203, 255, 0.3);
-    --text-dim: #94a3b8;
-    --border: rgba(110, 203, 255, 0.08);
-    --card-bg: rgba(255, 255, 255, 0.03);
-    --input-bg: rgba(255, 255, 255, 0.05);
-    --font: 'Brush Script MT', 'Brush Script', cursive;
-    --transition-fast: 0.2s ease;
-    --transition-slow: 0.4s ease-in;
-    --fav-color: #ff4b2b;
-    --cotton-one: #6699ff;
-    --cotton-two: #ff7ab8;
-}
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: white;
+            padding: 20px;
+            overflow-x: hidden;
+            animation: fadeIn var(--transition-slow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: white;
-    padding: 20px;
-    overflow-x: hidden;
-    animation: fadeIn var(--transition-slow);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-/* ===== JETX HEADER INSERT START ===== */
-.sidebar {
-  position: fixed;
-  width: 70px;
-  height: 100vh;
-  background: rgba(0,0,0,0.3);
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  overflow-y: auto;
-  z-index: 1001;
-}
+        /* Search */
+        .search-container {
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
 
-.header {
-  position: fixed;
-  top: 0;
-  left: 70px;
-  right: 0;
-  height: 60px;
-  background: #111;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  z-index: 1000;
-}
+        .search-input-wrapper {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
 
-.logo {
-  font-size: 48px;
-  font-weight: bold;
-  cursor: pointer;
-  background: linear-gradient(90deg, white, #6d28d9);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 15px rgba(109,40,217,0.5);
-}
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            color: var(--accent);
+            pointer-events: none;
+        }
 
-.controls button {
-  margin-left: 10px;
-  padding: 6px 10px;
-  border: none;
-  background: #6d28d9;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-}
-/* ===== JETX HEADER INSERT END ===== */
+        #searchInput {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--border);
+            padding: 14px 20px 14px 45px;
+            color: white;
+            border-radius: 12px;
+            font-family: var(--font);
+            outline: none;
+            font-size: 1rem;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+        #searchInput:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+            background: rgba(255, 255, 255, 0.05);
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+        #sortSelect {
+            width: auto;
+            flex-shrink: 0;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 14px 12px;
+            border-radius: 12px;
+            font-family: var(--font);
+            font-size: 0.9rem;
+            cursor: pointer;
+            outline: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            color-scheme: dark;
+        }
 
-/* KEEPING ALL YOUR ORIGINAL CSS BELOW EXACTLY */
-</style>
+        .fav-filter-btn {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font);
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .fav-filter-btn.active {
+            border-color: var(--fav-color);
+            color: var(--fav-color);
+            background: rgba(255, 75, 43, 0.05);
+        }
+
+        /* Zaapiz carousel */
+        .zaapiz-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+            margin-bottom: 40px;
+            padding: 0 60px;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+        .zaapiz-header {
+            text-align: left;
+            margin-bottom: 15px;
+            background-image: linear-gradient(90deg, var(--cotton-one), var(--cotton-two));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 6s linear infinite;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .zaapiz-viewport {
+            overflow: hidden;
+            border-radius: 20px;
+            background: rgba(110, 203, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 20px 0;
+        }
+        #zaapizFavsContainer {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .zaapiz-item {
+            flex: 0 0 calc(20% - 30px);
+            margin: 0 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform var(--transition-fast);
+        }
+        .zaapiz-item:hover { transform: scale(1.03); }
+        .zaapiz-item img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 4px solid transparent;
+            border-image-source: linear-gradient(90deg, var(--cotton-one), var(--cotton-two));
+            border-image-slice: 1;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+        }
+        .zaapiz-item:hover img {
+            box-shadow: 0 0 24px rgba(102,153,255,0.25), 0 0 36px rgba(255,122,184,0.2);
+        }
+        .zaapiz-nav {
+            position: absolute;
+            top: 55%;
+            transform: translateY(-50%);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background var(--transition-fast);
+        }
+        .zaapiz-nav:hover {
+            background: var(--input-bg);
+            border-color: var(--accent);
+        }
+        .zaapiz-prev { left: 5px; }
+        .zaapiz-next { right: 5px; }
+
+        /* Main Grid */
+        #container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            animation: fadeIn var(--transition-slow);
+            justify-content: center;
+            z-index: 1;
+        }
+        .zone-item {
+            background: var(--card-bg);
+            border: 4px solid transparent;
+            border-image-source: linear-gradient(90deg, var(--cotton-one), var(--cotton-two));
+            border-image-slice: 1;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform var(--transition-fast), border var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .zone-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 20px rgba(102,153,255,0.18), 0 0 40px rgba(255,122,184,0.16);
+        }
+        .zone-item img {
+            width: 100%;
+            border-radius: 8px;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border: 4px solid transparent;
+            border-image-source: linear-gradient(90deg, var(--cotton-one), var(--cotton-two));
+            border-image-slice: 1;
+        }
+        .heart-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.6);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            transition: color var(--transition-fast);
+            z-index: 5;
+        }
+        .heart-btn.active { color: var(--fav-color); }
+        .zone-item p {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            transition: color var(--transition-fast);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .zone-item:hover p {
+            color: var(--accent);
+            text-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        /* Zone Viewer Overlay */
+        #zoneViewer {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            animation: fadeIn var(--transition-slow);
+        }
+        .zone-header {
+            padding: 15px;
+            background: var(--bg);
+            border-bottom: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #zoneName {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent-glow);
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+        .controls { display: flex; gap: 10px; }
+        .control-btn {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .control-btn:hover {
+            background: var(--accent);
+            color: black;
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+        #zoneFrame {
+            flex-grow: 1;
+            border: none;
+            width: calc(100% - 24px);
+            height: calc(100% - 24px);
+            margin: 0 12px 12px 12px;
+            background: transparent;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--input-bg); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        @media (max-width: 800px) {
+            .zaapiz-item { flex: 0 0 calc(50% - 20px); }
+            .zaapiz-wrapper { padding: 0 40px; }
+            .search-container { flex-direction: column; align-items: stretch; }
+        }
+
+        /* Liveliness: animated background blobs and pop-in animations */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: -20%;
+            background:
+                radial-gradient(600px 400px at 10% 20%, rgba(102,153,255,0.12), transparent 20%),
+                radial-gradient(500px 300px at 80% 70%, rgba(255,122,184,0.10), transparent 20%),
+                radial-gradient(400px 250px at 50% 50%, rgba(110,203,255,0.06), transparent 20%);
+            filter: blur(60px);
+            z-index: 0;
+            pointer-events: none;
+            animation: floatBubbles 14s linear infinite;
+            mix-blend-mode: screen;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255,255,255,0.015), rgba(255,255,255,0) 30%);
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: overlay;
+            opacity: 0.9;
+        }
+        @keyframes floatBubbles {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(3deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .pop-in { opacity: 0; transform: translateY(12px) scale(0.98); animation: popIn 420ms cubic-bezier(.2, .8, .2, 1) forwards; }
+        @keyframes popIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .zaapiz-nav { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .zaapiz-nav:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.45); }
+
+        .heart-btn:hover { transform: scale(1.08); }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- ===== JETX HEADER INSERT START ===== -->
-<div class="sidebar"></div>
+    <div class="zaapiz-wrapper" id="zaapizFavsWrapper" style="display:none;">
+        <div class="zaapiz-header">Zaapiz's Favs</div>
+        <button class="zaapiz-nav zaapiz-prev" onclick="zManualNav(-1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div class="zaapiz-viewport">
+            <div id="zaapizFavsContainer"></div>
+        </div>
+        <button class="zaapiz-nav zaapiz-next" onclick="zManualNav(1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
 
-<div class="header">
-  <div class="logo" onclick="window.location.href='/'">JetX</div>
+    <div class="search-container">
+        <div class="search-input-wrapper">
+            <span class="search-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+            <input type="text" id="searchInput" placeholder="Search for a game..." oninput="handleSearch()">
+        </div>
+        <select id="sortSelect" onchange="handleSearch()">
+            <option value="popular">Popular</option>
+            <option value="name">Name</option>
+            <option value="id">Date (ID)</option>
+        </select>
+        <button id="favFilter" class="fav-filter-btn" onclick="toggleFavFilter()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> Favorites
+        </button>
+    </div>
+
+  <div class="header">
+  <div class="logo" onclick="goHome()">JetX</div>
   <div class="controls">
-    <button onclick="window.location.href='/'">Home</button>
-    <button onclick="document.documentElement.requestFullscreen()">Fullscreen</button>
+    <button onclick="fullscreenZone()">Fullscreen</button>
+    <button onclick="downloadZone()">Download</button>
+    <button onclick="closeZone()">Home</button>
   </div>
 </div>
-<!-- ===== JETX HEADER INSERT END ===== -->
 
-<!-- ===== YOUR ORIGINAL CONTENT (UNCHANGED) ===== -->
+<div id="container" style="margin-top:70px;">Loading zones...</div>
 
-<div class="zaapiz-wrapper" id="zaapizFavsWrapper" style="display:none;">
-    <!-- Zaapiz header removed as requested -->
-    <button class="zaapiz-nav zaapiz-prev" onclick="zManualNav(-1)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="15 18 9 12 15 6"/>
-        </svg>
-    </button>
-    <div class="zaapiz-viewport">
-        <div id="zaapizFavsContainer"></div>
-    </div>
-    <button class="zaapiz-nav zaapiz-next" onclick="zManualNav(1)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="9 18 15 12 9 6"/>
-        </svg>
-    </button>
+<div id="zoneViewer" style="top:60px; left:0; width:100%; height:calc(100% - 60px); position:fixed; display:none; flex-direction:column;">
+    <iframe id="zoneFrame" style="width:100%; height:100%; border:none;"></iframe>
 </div>
-
-<div class="search-container">
-    <!-- (UNCHANGED FROM YOUR ORIGINAL FILE) -->
-</div>
-
-
-    <div id="container">Loading zones...</div>
-
-    <div id="zoneViewer">
-        <div class="zone-header">
-            <div>
-                <strong id="zoneName">Game</strong>
-            </div>
-            <div class="controls">
-                <button class="control-btn" onclick="fullscreenZone()">Fullscreen</button>
-                <button class="control-btn" onclick="downloadZone()">Download</button>
-                <button class="control-btn" onclick="closeZone()">Close</button>
-            </div>
-        </div>
-        <iframe id="zoneFrame"></iframe>
-    </div>
 
     <script>
         function cleanHTML(html) {
