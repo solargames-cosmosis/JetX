@@ -1,226 +1,58 @@
-<!---Vapor V4.5 OpenSource HTML Sctipt. All Credits (and everything that runs from this code) Goes Directly To Vapor. To View Their Site, Please Visit vaporon.top--->
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>JetX Music</title>
-
-<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>JetX: Lessons</title>
 
 <style>
-:root {
-  --accent: #a855f7;
-  --accent2: #ffffff;
-  --bg: #000;
-  --panel: #0a0a0a;
-  --panel2: #050505;
-  --text: #ffffff;
-  --subtext: #aaaaaa;
-}
-
-/* RESET */
-* { box-sizing: border-box; }
-
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Segoe UI', sans-serif;
-  overflow: hidden;
-  font-size: 16px;
+  background: black;
+  font-family: Arial, sans-serif;
 }
 
-/* ===== HEADER (JetX Glow) ===== */
+/* HEADER */
 .header {
   position: fixed;
   top: 0;
-  width: 100%;
-  height: 55px;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(14px);
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #111;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 15px;
-  z-index: 999;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  z-index: 1000;
 }
 
 .logo {
-  font-weight: 700;
-  font-size: 18px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  font-size: 34px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, white, #6d28d9);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.header-icons i {
-  font-size: 22px;
-  margin-left: 14px;
-  cursor: pointer;
-}
-
-/* ===== LAYOUT ===== */
-.wrapper {
-  position: absolute;
-  top: 55px;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-}
-
-/* LEFT */
-.left {
-  width: 38%;
-  min-width: 300px;
-  background: var(--panel2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  padding: 20px;
-}
-
-#coverArt {
-  width: 240px;
-  height: 240px;
-  border-radius: 16px;
-  background: #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 55px;
-}
-
-#songTitle {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-#songArtist {
-  font-size: 14px;
-  color: var(--subtext);
-}
-
-#progressBar {
-  width: 85%;
-}
-
-/* CONTROLS */
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
-
-.controls i {
-  font-size: 30px;
-  cursor: pointer;
-}
-
-#playPauseButton {
-  background: none;
+.controls button {
+  margin-left: 10px;
+  padding: 6px 10px;
   border: none;
-}
-
-#playPauseButton i {
-  font-size: 48px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* RIGHT */
-#rightBox {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: var(--panel);
-}
-
-/* SEARCH BAR */
-.top-bar {
-  display: flex;
-  padding: 12px;
-  gap: 10px;
-}
-
-#searchInput {
-  flex: 1;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: #111;
+  background: #6d28d9;
   color: white;
-  font-size: 15px;
-}
-
-#serviceButtonIcon {
-  font-size: 22px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-/* RESULTS */
-#searchResults {
-  flex: 1;
-  overflow-y: auto;
-}
-
-/* ITEMS */
-.result-item {
-  display: flex;
-  gap: 12px;
-  padding: 12px;
-  cursor: pointer;
-  border-radius: 10px;
-}
-
-.result-item:hover {
-  background: rgba(255,255,255,0.05);
-}
-
-.result-art {
-  width: 55px;
-  height: 55px;
-  background: #222;
-  border-radius: 10px;
-}
-
-.result-title { font-size: 15px; }
-.result-artist { font-size: 13px; color: var(--subtext); }
-
-/* FORCE TEXT FIX */
-* {
-  color: var(--text);
-}
-
-/* DROPDOWN */
-#dropdownOverlay {
+/* IFRAME */
+.fullscreen-iframe {
   position: fixed;
-  inset: 0;
-  display: none;
-}
-#dropdownOverlay.visible { display: block; }
-
-#serviceDropdown {
-  position: fixed;
-  background: #111;
-  border-radius: 10px;
-  padding: 10px;
-  display: none;
-}
-#serviceDropdown.visible { display: block; }
-
-.dropdown-option {
-  padding: 8px;
-  cursor: pointer;
-}
-.dropdown-option:hover {
-  background: #222;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  border: none;
 }
 </style>
 </head>
@@ -229,70 +61,29 @@ body {
 
 <!-- HEADER -->
 <div class="header">
-  <div class="logo">JetX</div>
-  <div class="header-icons">
-    <i class="ri-home-line" onclick="goHome()"></i>
-    <i class="ri-fullscreen-line" onclick="document.documentElement.requestFullscreen()"></i>
+  <div class="logo" onclick="goHome()">JetX</div>
+
+  <div class="controls">
+    <button onclick="goFullscreen()">Fullscreen</button>
+    <button onclick="goHome()">Home</button>
   </div>
 </div>
 
-<div class="wrapper">
-
-  <!-- LEFT -->
-  <div class="left">
-    <div id="coverArt">
-      <i id="musicIcon" class="ri-music-2-fill"></i>
-    </div>
-
-    <div id="songTitle">Not Playing</div>
-    <div id="songArtist">Search for a track</div>
-
-    <input type="range" id="progressBar" value="0" max="100">
-
-    <div class="controls">
-      <i id="prevButton" class="ri-skip-back-fill"></i>
-      <button id="playPauseButton"><i class="ri-play-circle-fill"></i></button>
-      <i id="nextButton" class="ri-skip-forward-fill"></i>
-    </div>
-  </div>
-
-  <!-- RIGHT -->
-  <div id="rightBox">
-
-    <div class="top-bar">
-      <input id="searchInput" placeholder="Search music..." />
-      <i id="serviceButtonIcon" class="ri-hd-line"></i>
-    </div>
-
-    <div id="searchResults"></div>
-    <div id="loadingMore"></div>
-
-  </div>
-
-</div>
-
-<!-- DROPDOWN -->
-<div id="dropdownOverlay"></div>
-
-<div id="serviceDropdown">
-  <div class="dropdown-option" data-service="tidal">Tidal</div>
-  <div class="dropdown-option" data-service="soundcloud">SoundCloud</div>
-</div>
-
-<!-- JS -->
-<script src="./js/theme.js"></script>
-<script src="./js/tooltip.js"></script>
-<script src="./js/background.js"></script>
-<script src="script.js"></script>
+<!-- IFRAME -->
+<iframe 
+  id="frame"
+  src="https://dfs3rzq44v6as.cloudfront.net/zz/service/hvtrs8%2F-smuldalmuf.aoo%2F"
+  class="fullscreen-iframe">
+</iframe>
 
 <script>
-function goHome() {
-  window.location.href = "/";
+function goHome(){
+  window.location.href = "/index.html";
 }
 
-/* Prevent crash if background.js missing */
-if (typeof apply_background_effect === "function") {
-  apply_background_effect("html");
+function goFullscreen(){
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
 }
 </script>
 
