@@ -6,33 +6,80 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>JetX Player</title>
+
+    <!-- Main Styles -->
     <link href="style.css" rel="stylesheet" />
     <link href="/style/all.css" rel="stylesheet" />
+
+    <!-- Remix Icons (FIXED) -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- Base Layout Fixes -->
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inconsolata', Arial, sans-serif;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .wrapper {
+        display: flex;
+        width: 750px;
+        height: 600px;
+        margin: auto;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+      .box {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .left {
+        min-width: 0;
+      }
+
+      .right {
+        min-width: 0;
+      }
+    </style>
+
+    <!-- Scripts -->
     <script src="/script/theme.js"></script>
     <script src="/script/tooltip.js"></script>
     <script src="/script/background.js"></script>
 
+    <!-- Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-PPE9RTDYDG"
-    ></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PPE9RTDYDG"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-
       gtag("config", "G-PPE9RTDYDG");
     </script>
-    <link href="style.css" rel="stylesheet" />
   </head>
 
   <body>
