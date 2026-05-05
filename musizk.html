@@ -12,7 +12,8 @@
 
 <style>
 :root {
-  --accent: #ff2a2a;
+  --accent: #a855f7;
+  --accent2: #ffffff;
   --bg: #000;
   --panel: #0a0a0a;
   --panel2: #050505;
@@ -27,92 +28,97 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   overflow: hidden;
+  font-size: 16px;
 }
 
-/* HEADER */
+/* ===== HEADER (JetX Glow) ===== */
 .header {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 50px;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(10px);
+  height: 55px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12px;
+  padding: 0 15px;
   z-index: 999;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .logo {
-  color: var(--accent);
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 18px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .header-icons i {
   font-size: 22px;
-  margin-left: 12px;
+  margin-left: 14px;
   cursor: pointer;
 }
 
-/* LAYOUT */
+/* ===== LAYOUT ===== */
 .wrapper {
   position: absolute;
-  top: 50px;
+  top: 55px;
   bottom: 0;
   width: 100%;
   display: flex;
 }
 
-/* LEFT PLAYER */
+/* LEFT */
 .left {
-  width: 40%;
+  width: 38%;
   min-width: 300px;
   background: var(--panel2);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 18px;
   padding: 20px;
 }
 
 #coverArt {
-  width: 220px;
-  height: 220px;
-  border-radius: 15px;
+  width: 240px;
+  height: 240px;
+  border-radius: 16px;
   background: #111;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 50px;
+  font-size: 55px;
 }
 
 #songTitle {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
 }
 
 #songArtist {
+  font-size: 14px;
   color: var(--subtext);
 }
 
-/* PROGRESS */
 #progressBar {
-  width: 80%;
+  width: 85%;
 }
 
 /* CONTROLS */
 .controls {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 22px;
 }
 
 .controls i {
-  font-size: 28px;
+  font-size: 30px;
   cursor: pointer;
 }
 
@@ -122,11 +128,13 @@ body {
 }
 
 #playPauseButton i {
-  font-size: 42px;
-  color: var(--accent);
+  font-size: 48px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* RIGHT SIDE */
+/* RIGHT */
 #rightBox {
   flex: 1;
   display: flex;
@@ -134,21 +142,21 @@ body {
   background: var(--panel);
 }
 
-/* SEARCH */
+/* SEARCH BAR */
 .top-bar {
   display: flex;
-  padding: 10px;
+  padding: 12px;
   gap: 10px;
 }
 
 #searchInput {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   border-radius: 10px;
   border: none;
   background: #111;
   color: white;
-  outline: none;
+  font-size: 15px;
 }
 
 #serviceButtonIcon {
@@ -165,10 +173,10 @@ body {
 /* ITEMS */
 .result-item {
   display: flex;
-  gap: 10px;
-  padding: 10px;
+  gap: 12px;
+  padding: 12px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .result-item:hover {
@@ -176,19 +184,17 @@ body {
 }
 
 .result-art {
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   background: #222;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
-.result-text { flex: 1; }
-
-.result-title { color: var(--text); }
-.result-artist { color: var(--subtext); }
+.result-title { font-size: 15px; }
+.result-artist { font-size: 13px; color: var(--subtext); }
 
 /* FORCE TEXT FIX */
-span, div, p, input {
+* {
   color: var(--text);
 }
 
@@ -198,7 +204,6 @@ span, div, p, input {
   inset: 0;
   display: none;
 }
-
 #dropdownOverlay.visible { display: block; }
 
 #serviceDropdown {
@@ -208,14 +213,12 @@ span, div, p, input {
   padding: 10px;
   display: none;
 }
-
 #serviceDropdown.visible { display: block; }
 
 .dropdown-option {
   padding: 8px;
   cursor: pointer;
 }
-
 .dropdown-option:hover {
   background: #222;
 }
@@ -228,7 +231,7 @@ span, div, p, input {
 <div class="header">
   <div class="logo">JetX</div>
   <div class="header-icons">
-    <i class="ri-home-line"></i>
+    <i class="ri-home-line" onclick="goHome()"></i>
     <i class="ri-fullscreen-line" onclick="document.documentElement.requestFullscreen()"></i>
   </div>
 </div>
@@ -276,13 +279,18 @@ span, div, p, input {
   <div class="dropdown-option" data-service="soundcloud">SoundCloud</div>
 </div>
 
-<!-- YOUR JS -->
+<!-- JS -->
 <script src="./js/theme.js"></script>
 <script src="./js/tooltip.js"></script>
 <script src="./js/background.js"></script>
 <script src="script.js"></script>
 
 <script>
+function goHome() {
+  window.location.href = "/";
+}
+
+/* Prevent crash if background.js missing */
 if (typeof apply_background_effect === "function") {
   apply_background_effect("html");
 }
