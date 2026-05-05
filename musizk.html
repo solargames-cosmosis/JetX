@@ -1,482 +1,292 @@
 <!---Vapor V4.5 OpenSource HTML Sctipt. All Credits (and everything that runs from this code) Goes Directly To Vapor. To View Their Site, Please Visit vaporon.top--->
 
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <title>JetX Player</title>
+<title>JetX Music</title>
 
-    <!-- Main Styles -->
-    <link href="style.css" rel="stylesheet" />
-    <link href="/style/all.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
-    <!-- Remix Icons (FIXED) -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+<style>
+:root {
+  --accent: #ff2a2a;
+  --bg: #000;
+  --panel: #0a0a0a;
+  --panel2: #050505;
+  --text: #ffffff;
+  --subtext: #aaaaaa;
+}
 
-    <!-- Base Layout Fixes -->
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Inconsolata', Arial, sans-serif;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
-      }
+/* RESET */
+* { box-sizing: border-box; }
 
-      .wrapper {
-        display: flex;
-        width: 750px;
-        height: 600px;
-        margin: auto;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-      }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: sans-serif;
+  overflow: hidden;
+}
 
-      .box {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
+/* HEADER */
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  z-index: 999;
+}
 
-      .left {
-        min-width: 0;
-      }
+.logo {
+  color: var(--accent);
+  font-weight: bold;
+}
 
-      .right {
-        min-width: 0;
-      }
-    </style>
+.header-icons i {
+  font-size: 22px;
+  margin-left: 12px;
+  cursor: pointer;
+}
 
-    <!-- Scripts -->
-    <script src="/js/theme.js"></script>
-    <script src="/js/tooltip.js"></script>
-    <script src="/js/background.js"></script>
+/* LAYOUT */
+.wrapper {
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+}
 
-    <!-- Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+/* LEFT PLAYER */
+.left {
+  width: 40%;
+  min-width: 300px;
+  background: var(--panel2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+}
 
-    <!-- Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+#coverArt {
+  width: 220px;
+  height: 220px;
+  border-radius: 15px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+}
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PPE9RTDYDG"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-PPE9RTDYDG");
-    </script>
-  </head>
+#songTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
 
-  <body>
-    <div class="wrapper" id="wrapper">
-      <div class="box left">
-        <div class="left-content-wrapper">
-          <div class="left-inner">
-            <div class="cover-art" id="coverArt">
-              <div class="blur-overlay"></div>
-              <i class="ri-music-2-fill" id="musicIcon"></i>
-            </div>
+#songArtist {
+  color: var(--subtext);
+}
 
-            <div class="song-info-wrapper">
-              <div class="song-title-row">
-                <div class="eq-visualizer" id="eqVisualizer">
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                </div>
-                <div id="songTitle" class="truncate-text">Not Playing</div>
-                <span id="hdTag" class="hd-tag">HD</span>
-                <i
-                  class="ri-heart-line"
-                  id="nowPlayingHeart"
-                  style="
-                    margin-left: auto;
-                    font-size: 1.3rem;
-                    opacity: 0.3;
-                    pointer-events: none;
-                    transition: all 0.2s ease;
-                    flex-shrink: 0;
-                  "
-                ></i>
-              </div>
-              <div class="song-artist" id="songArtist">
-                Try searching on the right
-              </div>
-            </div>
-          </div>
+/* PROGRESS */
+#progressBar {
+  width: 80%;
+}
 
-          <div class="progress-wrapper">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              step="any"
-              value="0"
-              class="progress-bar"
-              id="progressBar"
-            />
-            <div class="progress-times">
-              <span id="currentTime"></span>
-              <span id="duration"></span>
-            </div>
-          </div>
+/* CONTROLS */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 
-          <div class="player-controls-wrapper">
-            <div class="controls">
-              <button
-                style="display: none"
-                id="repeatButton"
-                class="side-button"
-                data-tooltip="Repeat"
-                data-tooltip-pos="top"
-                data-tooltip-delay="0"
-              >
-                <i class="ri-repeat-line"></i>
-              </button>
-              <div class="main-controls">
-                <button id="prevButton"><i class="ri-rewind-fill"></i></button>
-                <button class="play-button" id="playPauseButton">
-                  <i class="ri-play-circle-fill"></i>
-                </button>
-                <button id="nextButton"><i class="ri-speed-fill"></i></button>
-              </div>
-              <button style="display: none" id="muteButton" class="side-button">
-                <i class="ri-volume-up-line"></i>
-              </button>
-            </div>
-          </div>
-        </div>
+.controls i {
+  font-size: 28px;
+  cursor: pointer;
+}
 
-        <div class="lyrics-view" id="lyricsContainer">
-          <div class="lyrics-content-spacer"></div>
-          <div class="lyrics-scroll-container" id="lyricsContent">
-            <div class="lyrics-status-container">
-              <i class="ri-music-2-line"></i>
-              <span>Play a song to see lyrics</span>
-            </div>
-          </div>
-          <div class="lyrics-content-spacer"></div>
-        </div>
+#playPauseButton {
+  background: none;
+  border: none;
+}
 
-        <div class="bottom-actions">
-          <button id="loopButton" data-tooltip="Loop"
-              data-tooltip-pos="top"
-              data-tooltip-delay="0">
-            <i class="ri-repeat-line"></i>
-          </button>
-          
-          <div class="volume-container">
-            <i class="ri-volume-up-fill" id="volumeIcon"></i>
-            <div class="volume-slider-wrapper">
-              <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="any" value="1" />
-            </div>
-          </div>
-        </div>
+#playPauseButton i {
+  font-size: 42px;
+  color: var(--accent);
+}
 
-        <button id="lyricsButton"><i class="ri-chat-quote-line"></i></button>
-      </div>
+/* RIGHT SIDE */
+#rightBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+}
 
-      <div class="box right" id="rightBox">
-        <div class="right-inner-wrapper">
-          <div id="searchView" class="view-section view-active">
-            <div class="right-search">
-              <i class="ri-search-line"></i>
-              <input
-                type="text"
-                placeholder="Search any song"
-                id="searchInput"
-              />
-              <i
-                class="ri-list-ordered-2 action-icon"
-                id="openQueueBtn"
-                data-tooltip="Queue"
-                data-tooltip-pos="bottom"
-                data-tooltip-delay="0"
-              ></i>
-              <i
-                class="ri-folders-line action-icon"
-                id="openPlaylistsBtn"
-                data-tooltip="Playlists"
-                data-tooltip-pos="bottom"
-                data-tooltip-delay="0"
-              ></i>
-              <i
-                class="ri-soundcloud-line action-icon"
-                id="serviceButtonIcon"
-                data-tooltip="Switch Provider"
-                data-tooltip-pos="bottom"
-                data-tooltip-delay="0"
-              ></i>
-            </div>
-            <div class="search-results" id="searchResults">
-              <div
-                class="lyrics-status-container pulse-vibe"
-                style="pointer-events: none"
-              >
-                <i class="ri-search-line"></i>
-                <span
-                  >Try searching
-                  <script>
-                    (function () {
-                      const list = [
-                        '"pop"',
-                        '"hip hop"',
-                        '"rap"',
-                        '"r&b"',
-                        '"rock"',
-                        '"country"',
-                        '"jazz"',
-                        '"metal"',
-                        '"electronic"',
-                        '"indie"',
-                      ];
-                      document.currentScript.replaceWith(
-                        list[Math.floor(Math.random() * list.length)]
-                      );
-                    })();
-                  </script>
-                </span>
-              </div>
-              <div
-                id="loadingMore"
-                style="
-                  text-align: center;
-                  color: rgba(255, 255, 255, 0.5);
-                  padding: 10px 0;
-                  display: none;
-                "
-              ></div>
-            </div>
-          </div>
+/* SEARCH */
+.top-bar {
+  display: flex;
+  padding: 10px;
+  gap: 10px;
+}
 
-          <div id="queueView" class="view-section view-hidden">
-            <div class="playlist-header">
-              <div class="playlist-header-left" id="backToSearchFromQueueBtn">
-                <i class="ri-arrow-left-line"></i> Back to search
-              </div>
-              <div style="display: flex; gap: 10px; align-items: center">
-                <span
-                  style="
-                    font-weight: 600;
-                    font-size: 1rem;
-                    color: var(--text-color);
-                  "
-                  >Queue</span
-                >
-                <i
-                  class="ri-lock-line playlist-edit-toggle"
-                  id="lockQueueBtn"
-                  data-tooltip="Toggle track rearrangement"
-                  data-tooltip-pos="bottom"
-                  data-tooltip-delay="0"
-                ></i>
-              </div>
-            </div>
-            <div class="search-results" id="queueListContainer"></div>
-          </div>
+#searchInput {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #111;
+  color: white;
+  outline: none;
+}
 
-          <div id="playlistListView" class="view-section view-hidden">
-            <div class="playlist-header">
-              <div class="playlist-header-left" id="backToSearchBtn">
-                <i class="ri-arrow-left-line"></i> Back to search
-              </div>
-            </div>
-            <div class="search-results" id="playlistListContainer">
-              <div class="result-item" id="createPlaylistBtn">
-                <div class="result-art">
-                  <i class="ri-add-line"></i>
-                </div>
-                <div class="result-text">
-                  <div class="result-title">Create Playlist</div>
-                </div>
-              </div>
-            </div>
-          </div>
+#serviceButtonIcon {
+  font-size: 22px;
+  cursor: pointer;
+}
 
-          <div id="playlistDetailView" class="view-section view-hidden">
-            <div class="playlist-header">
-              <div class="playlist-header-left" id="backToPlaylistsBtn">
-                <i class="ri-arrow-left-line"></i> Back to playlists
-              </div>
-              <div style="display: flex; gap: 10px; align-items: center">
-                <i
-                  class="ri-shuffle-line playlist-edit-toggle"
-                  id="shufflePlaylistBtn"
-                  data-tooltip="Shuffle"
-                  data-tooltip-pos="bottom"
-                  data-tooltip-delay="0"
-                ></i>
-                <i
-                  class="ri-lock-line playlist-edit-toggle"
-                  id="lockPlaylistBtn"
-                  data-tooltip="Toggle track rearrangement"
-                  data-tooltip-pos="bottom"
-                  data-tooltip-delay="0"
-                ></i>
-                <i
-                  class="ri-pencil-line playlist-edit-toggle"
-                  id="toggleEditModeBtn"
-                  data-tooltip="Edit Playlist"
-                  data-tooltip-pos="bottom"
-                  data-tooltip-delay="0"
-                ></i>
-              </div>
-            </div>
-            <div class="search-results" id="playlistEditorContainer">
-              <div class="playlist-meta">
-                <div class="playlist-view-mode" id="playlistViewMode">
-                  <div class="playlist-title-row">
-                    <div
-                      class="playlist-title-display"
-                      id="playlistTitleDisplay"
-                    ></div>
-                    <div class="playlist-color-dot" id="playlistColorDot"></div>
-                  </div>
-                  <div
-                    class="playlist-desc-display"
-                    id="playlistDescDisplay"
-                  ></div>
-                </div>
+/* RESULTS */
+#searchResults {
+  flex: 1;
+  overflow-y: auto;
+}
 
-                <div class="playlist-edit-mode" id="playlistEditMode">
-                  <input
-                    type="text"
-                    class="playlist-input"
-                    id="playlistTitleInput"
-                    placeholder="Playlist Name"
-                  />
-                  <input
-                    type="text"
-                    class="playlist-input"
-                    id="playlistDescInput"
-                    placeholder="Description (Optional)"
-                  />
-                  <div
-                    class="color-picker-grid"
-                    id="colorPickerContainer"
-                  ></div>
-                </div>
-              </div>
+/* ITEMS */
+.result-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+}
 
-              <div class="result-item" id="addSongToPlaylistBtn">
-                <div class="result-art">
-                  <i class="ri-add-line"></i>
-                </div>
-                <div class="result-text">
-                  <div class="result-title">Add Song</div>
-                </div>
-              </div>
+.result-item:hover {
+  background: rgba(255,255,255,0.05);
+}
 
-              <div id="playlistTracksList"></div>
-            </div>
-          </div>
+.result-art {
+  width: 50px;
+  height: 50px;
+  background: #222;
+  border-radius: 8px;
+}
 
-          <div id="playlistAddSongView" class="view-section view-hidden">
-            <div class="playlist-header">
-              <div class="playlist-header-left" id="backToEditorBtn">
-                <i class="ri-arrow-left-line"></i> Back to playlist
-              </div>
-              <i
-                class="ri-check-line playlist-edit-toggle"
-                id="finishAddingSongsBtn"
-                data-tooltip="Done"
-                data-tooltip-pos="bottom"
-                data-tooltip-delay="0"
-                style="display: none; color: var(--accent)"
-              ></i>
-            </div>
-            <div class="right-search">
-              <i class="ri-search-line"></i>
-              <input
-                type="text"
-                placeholder="Search tracks..."
-                id="playlistSearchInput"
-              />
-              <i
-                class="ri-soundcloud-line action-icon"
-                id="playlistServiceBtn"
-                data-tooltip="Switch Provider"
-                data-tooltip-pos="bottom"
-                data-tooltip-delay="0"
-              ></i>
-            </div>
-            <div class="search-results" id="playlistSearchResults">
-              <div
-                class="lyrics-status-container pulse-vibe"
-                style="pointer-events: none"
-              >
-                <i class="ri-search-eye-line"></i>
-                <span>Try searching "Dih"!</span>
-              </div>
-              <div
-                id="playlistLoadingMore"
-                style="
-                  text-align: center;
-                  color: rgba(255, 255, 255, 0.5);
-                  padding: 10px 0;
-                  display: none;
-                "
-              ></div>
-            </div>
-          </div>
-        </div>
-      </div>
+.result-text { flex: 1; }
+
+.result-title { color: var(--text); }
+.result-artist { color: var(--subtext); }
+
+/* FORCE TEXT FIX */
+span, div, p, input {
+  color: var(--text);
+}
+
+/* DROPDOWN */
+#dropdownOverlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+}
+
+#dropdownOverlay.visible { display: block; }
+
+#serviceDropdown {
+  position: fixed;
+  background: #111;
+  border-radius: 10px;
+  padding: 10px;
+  display: none;
+}
+
+#serviceDropdown.visible { display: block; }
+
+.dropdown-option {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown-option:hover {
+  background: #222;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">JetX</div>
+  <div class="header-icons">
+    <i class="ri-home-line"></i>
+    <i class="ri-fullscreen-line" onclick="document.documentElement.requestFullscreen()"></i>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div id="coverArt">
+      <i id="musicIcon" class="ri-music-2-fill"></i>
     </div>
 
-    <div id="modalOverlay">
-      <div id="failModal">
-        <div id="modalContent">Playback is not supported for this track.</div>
-        <div id="modalButtonContainer">
-          <button id="modalButton">OK</button>
-        </div>
-      </div>
+    <div id="songTitle">Not Playing</div>
+    <div id="songArtist">Search for a track</div>
+
+    <input type="range" id="progressBar" value="0" max="100">
+
+    <div class="controls">
+      <i id="prevButton" class="ri-skip-back-fill"></i>
+      <button id="playPauseButton"><i class="ri-play-circle-fill"></i></button>
+      <i id="nextButton" class="ri-skip-forward-fill"></i>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div id="rightBox">
+
+    <div class="top-bar">
+      <input id="searchInput" placeholder="Search music..." />
+      <i id="serviceButtonIcon" class="ri-hd-line"></i>
     </div>
 
-    <div id="dropdownOverlay"></div>
-    <div class="custom-dropdown" id="serviceDropdown">
-      <div
-        class="dropdown-option"
-        data-service="soundcloud"
-        data-icon="ri-soundcloud-line"
-      >
-        <span
-          >SoundCloud
-          <span class="label" style="color: rgba(255, 255, 255, 0.5)"
-            >Faster</span
-          ></span
-        >
-        <i class="ri-soundcloud-line"></i>
-      </div>
-      <div class="dropdown-option" data-service="tidal" data-icon="ri-hd-line">
-        <span
-          >Tidal
-          <span class="label" style="color: rgba(255, 255, 255, 0.5)"
-            >More Songs</span
-          ></span
-        >
-        <i class="ri-hd-line"></i>
-      </div>
-    </div>
-    <script src="/js/music.js"></script>
-    <script>
-      apply_background_effect("html");
-    </script>
-  </body>
+    <div id="searchResults"></div>
+    <div id="loadingMore"></div>
+
+  </div>
+
+</div>
+
+<!-- DROPDOWN -->
+<div id="dropdownOverlay"></div>
+
+<div id="serviceDropdown">
+  <div class="dropdown-option" data-service="tidal">Tidal</div>
+  <div class="dropdown-option" data-service="soundcloud">SoundCloud</div>
+</div>
+
+<!-- YOUR JS -->
+<script src="./js/theme.js"></script>
+<script src="./js/tooltip.js"></script>
+<script src="./js/background.js"></script>
+<script src="script.js"></script>
+
+<script>
+if (typeof apply_background_effect === "function") {
+  apply_background_effect("html");
+}
+</script>
+
+</body>
 </html>
