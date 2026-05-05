@@ -1,241 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>JetX Music</title>
-
-<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>JetX: Lessons</title>
 
 <style>
-:root {
-  --accent: #ff2a2a;
-}
-
 body {
   margin: 0;
-  background: #000;
-  color: white;
-  font-family: sans-serif;
-  overflow: hidden;
+  background: black;
+  font-family: Arial, sans-serif;
 }
 
-/* ===== JetX Header (NORMAL) ===== */
+/* HEADER */
 .header {
   position: fixed;
   top: 0;
-  width: 100%;
-  height: 50px;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(10px);
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #111;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12px;
-  z-index: 999;
+  padding: 0 15px;
+  z-index: 1000;
 }
 
 .logo {
-  color: var(--accent);
+  font-size: 34px;
   font-weight: bold;
-}
-
-.header-icons i {
-  font-size: 22px;
-  margin-left: 12px;
   cursor: pointer;
+  background: linear-gradient(90deg, white, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* ===== Layout ===== */
-#wrapper {
-  position: absolute;
-  top: 50px;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-}
-
-/* LEFT PLAYER */
-.left {
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: #050505;
-}
-
-#coverArt {
-  width: 220px;
-  height: 220px;
-  border-radius: 15px;
-  background: #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#songTitle { font-size: 18px; }
-#songArtist { color: #aaa; }
-
-.controls i {
-  font-size: 28px;
-  cursor: pointer;
-}
-
-#playPauseButton i {
-  font-size: 42px;
-  color: var(--accent);
-}
-
-/* RIGHT */
-#rightBox {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: #0a0a0a;
-}
-
-.top-bar {
-  display: flex;
-  padding: 10px;
-  gap: 10px;
-}
-
-#searchInput {
-  flex: 1;
-  padding: 10px;
-  border-radius: 10px;
+.controls button {
+  margin-left: 10px;
+  padding: 6px 10px;
   border: none;
-  background: #111;
+  background: #6d28d9;
   color: white;
-}
-
-#serviceButtonIcon {
-  font-size: 22px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-/* RESULTS */
-#searchResults {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.result-item {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.result-item:hover {
-  background: rgba(255,255,255,0.05);
-}
-
-.result-art {
-  width: 50px;
-  height: 50px;
-  background: #222;
-  border-radius: 8px;
-}
-
-.result-text {
-  flex: 1;
-}
-
-/* Dropdown */
-#dropdownOverlay {
+/* IFRAME */
+.fullscreen-iframe {
   position: fixed;
-  inset: 0;
-  display: none;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  border: none;
 }
-
-#dropdownOverlay.visible {
-  display: block;
-}
-
-#serviceDropdown {
-  position: fixed;
-  background: #111;
-  border-radius: 10px;
-  padding: 10px;
-  display: none;
-}
-
-#serviceDropdown.visible {
-  display: block;
-}
-
-.dropdown-option {
-  padding: 8px;
-  cursor: pointer;
-}
-
-.dropdown-option:hover {
-  background: #222;
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- ✅ REAL JetX Header -->
+<!-- HEADER -->
 <div class="header">
-  <div class="logo">JetX</div>
-  <div class="header-icons">
-    <i class="ri-home-line"></i>
-    <i class="ri-fullscreen-line" onclick="document.documentElement.requestFullscreen()"></i>
+  <div class="logo" onclick="goHome()">JetX</div>
+
+  <div class="controls">
+    <button onclick="goFullscreen()">Fullscreen</button>
+    <button onclick="goHome()">Home</button>
   </div>
 </div>
 
-<div id="wrapper">
+<!-- IFRAME -->
+<iframe 
+  id="frame"
+  src="https://dfs3rzq44v6as.cloudfront.net/zz/service/hvtrs8%2F-smuldalmuf.aoo%2F"
+  class="fullscreen-iframe">
+</iframe>
 
-  <!-- LEFT PLAYER -->
-  <div class="left">
-    <div id="coverArt">
-      <i id="musicIcon" class="ri-music-2-fill"></i>
-    </div>
+<script>
+function goHome(){
+  window.location.href = "/index.html";
+}
 
-    <div id="songTitle">Nothing Playing</div>
-    <div id="songArtist">Select a track</div>
-
-    <input type="range" id="progressBar" value="0" max="100">
-
-    <div class="controls">
-      <i id="prevButton" class="ri-skip-back-fill"></i>
-      <button id="playPauseButton"><i class="ri-play-circle-fill"></i></button>
-      <i id="nextButton" class="ri-skip-forward-fill"></i>
-    </div>
-  </div>
-
-  <!-- RIGHT -->
-  <div id="rightBox">
-
-    <div class="top-bar">
-      <input id="searchInput" placeholder="Search music..." />
-      <i id="serviceButtonIcon" class="ri-hd-line"></i>
-    </div>
-
-    <div id="searchResults"></div>
-    <div id="loadingMore"></div>
-
-  </div>
-
-</div>
-
-<!-- REQUIRED FOR SEARCH -->
-<div id="dropdownOverlay"></div>
-
-<div id="serviceDropdown">
-  <div class="dropdown-option" data-service="tidal">Tidal</div>
-  <div class="dropdown-option" data-service="soundcloud">SoundCloud</div>
-</div>
-
-<script src="script.js"></script>
+function goFullscreen(){
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+}
+</script>
 
 </body>
 </html>
