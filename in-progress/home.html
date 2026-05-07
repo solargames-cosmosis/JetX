@@ -5,26 +5,35 @@
   <title>JetX</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="icon" type="image/png" href="jet.png" />
+  <link rel="icon" type="image/png" href="jet.png">
 
-  <link rel="stylesheet" href="/style/all.css" />
-  <script src="/js/global.js"></script>
   <script src="/script/theme.js"></script>
+  <script src="/script/three.min.js"></script>
+  <script src="/script/vantafog.min.js"></script>
 
   <style>
-    html,
-    body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #000;
-      font-family: Arial, sans-serif;
-      color: white;
+    :root {
+      --bg: #000;
+      --primary: #6d28d9;
+      --text: #ffffff;
+      --panel: rgba(10,10,10,0.7);
+      --border: rgba(255,255,255,0.08);
     }
 
     * {
       box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      font-family: Arial, sans-serif;
+      color: white;
     }
 
     #vanta-bg {
@@ -32,533 +41,368 @@
       inset: 0;
       z-index: 0;
       opacity: 0;
-      transition: opacity 0.8s ease;
+      transition: opacity .7s ease;
     }
 
-    .vanta-overlay {
+    .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(var(--bc), 0.72);
+      background: rgba(0,0,0,.45);
       backdrop-filter: blur(2px);
       z-index: 1;
     }
 
-    .startup-overlay {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      z-index: 9999;
-      transition: opacity 0.8s ease;
-    }
+    /* TOP BAR */
 
-    .startup-overlay.hide {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* CLOCK */
-
-    #clock {
+    .top-bar {
       position: absolute;
       top: 18px;
-      width: 100%;
-      text-align: center;
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 20;
-
-      opacity: 0;
-      transform: translateY(-10px);
-
-      transition: 0.5s ease 0.5s;
-    }
-
-    #clock.show {
-      opacity: 1;
-      transform: translateY(0);
+      text-align: center;
     }
 
     #time {
       font-size: 34px;
-      font-weight: bold;
-
-      background: linear-gradient(
-        90deg,
-        rgba(255,255,255,1),
-        var(--primary)
-      );
-
+      font-weight: 700;
+      background: linear-gradient(90deg, #ffffff, #6d28d9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-
-      text-shadow: 0 0 18px rgba(109, 40, 217, 0.45);
     }
 
     #date {
+      margin-top: 4px;
+      color: rgba(255,255,255,.7);
       font-size: 14px;
-      color: rgba(var(--cb), 0.65);
-      margin-top: 2px;
     }
 
     /* TOP RIGHT */
 
-    #top-right {
+    .top-right {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      z-index: 20;
-
+      top: 18px;
+      right: 18px;
       display: flex;
-      gap: 8px;
-
-      opacity: 0;
-      transform: translateY(-10px);
-
-      transition: 0.5s ease 0.7s;
+      gap: 10px;
+      z-index: 20;
     }
 
-    #top-right.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .top-btn {
-      background: rgba(var(--cb), 0.06);
-      border: 1px solid rgba(var(--cb), 0.08);
+    .top-right button {
+      background: rgba(0,20,40,.7);
+      border: 1px solid rgba(120,120,255,.2);
       color: white;
-
       padding: 10px 14px;
-
       border-radius: 10px;
-
       cursor: pointer;
-
-      backdrop-filter: blur(12px);
-
-      transition: 0.25s ease;
+      transition: .25s ease;
+      backdrop-filter: blur(10px);
     }
 
-    .top-btn:hover {
+    .top-right button:hover {
       transform: translateY(-2px);
-      border-color: rgba(var(--cb), 0.18);
+      background: rgba(30,30,70,.9);
     }
 
     /* CENTER */
 
     .center {
       position: relative;
-      z-index: 10;
-
+      z-index: 5;
       width: 100%;
-      height: 100vh;
-
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
     }
 
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 22px;
+      animation: fadeUp 1s ease;
     }
 
     #jet {
-      width: 125px;
-
-      opacity: 0;
-      transform: translateX(-160px);
-
-      filter: drop-shadow(0 0 25px rgba(109, 40, 217, 0.45));
-
-      transition: 0.8s ease;
+      width: 135px;
+      filter: drop-shadow(0 0 25px rgba(109,40,217,.45));
+      animation: flyIn 1.5s ease;
     }
 
-    #jet.show {
-      opacity: 1;
-      transform: translateX(0);
+    .logo-text-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
     }
 
     .logo {
-      display: flex;
-
-      font-size: 115px;
+      font-size: 110px;
       font-weight: 900;
-      letter-spacing: -7px;
-      line-height: 1;
-    }
-
-    .logo span {
-      opacity: 0;
-      transform: translateY(20px) scale(0.85);
-
-      transition: 0.45s ease;
-
-      background: linear-gradient(
-        90deg,
-        rgba(255,255,255,1),
-        var(--primary)
-      );
-
+      letter-spacing: -4px;
+      background: linear-gradient(90deg, #ffffff, #6d28d9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px rgba(109,40,217,.4);
     }
 
-    .logo span.show {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    .j {
-      opacity: 0.18 !important;
-    }
-
-    .e {
-      opacity: 0.38 !important;
-    }
-
-    .t {
-      opacity: 0.62 !important;
-    }
-
-    .x {
-      opacity: 1 !important;
-    }
-
-    .subtitle {
-      margin-top: 20px;
-
-      color: rgba(var(--cb), 0.78);
-
-      font-size: 23px;
-      font-weight: 500;
-
-      opacity: 0;
-      transform: translateY(10px);
-
-      transition: 0.5s ease 1s;
-    }
-
-    .subtitle.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .subtitle span {
-      color: var(--primary);
-    }
-
-    .launch-buttons {
-      margin-top: 38px;
-
-      display: flex;
-      gap: 14px;
-
-      opacity: 0;
-      transform: translateY(10px);
-
-      transition: 0.5s ease 1.2s;
-    }
-
-    .launch-buttons.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .launch-btn {
-      padding: 15px 26px;
-
-      border-radius: 14px;
-
-      border: none;
-
-      cursor: pointer;
-
-      font-size: 16px;
+    .version-tag {
+      font-size: 30px;
+      color: rgba(255,255,255,.45);
       font-weight: 700;
-
-      transition: 0.25s ease;
     }
 
-    .launch-btn.primary {
-      background: var(--primary);
-      color: white;
-    }
+    /* SPLASH */
 
-    .launch-btn.secondary {
-      background: rgba(var(--cb), 0.06);
-      border: 1px solid rgba(var(--cb), 0.08);
-      color: white;
-    }
-
-    .launch-btn:hover {
-      transform: translateY(-3px);
+    .splash {
+      position: absolute;
+      top: calc(50% + 90px);
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+      font-size: 24px;
+      color: rgba(255,255,255,.75);
+      animation: fadeIn 1.8s ease;
     }
 
     /* VERSION */
 
-    #version {
+    .version-area {
       position: absolute;
-      bottom: 22px;
+      bottom: 20px;
       width: 100%;
       text-align: center;
       z-index: 20;
-
-      opacity: 0;
-      transform: translateY(10px);
-
-      transition: 0.5s ease 1.3s;
     }
 
-    #version.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    #version button {
-      background: rgba(var(--cb), 0.05);
-      border: 1px solid rgba(var(--cb), 0.08);
-
+    .version-area button {
+      background: rgba(0,20,40,.7);
+      border: 1px solid rgba(120,120,255,.2);
       color: white;
-
       padding: 10px 18px;
-
-      border-radius: 12px;
-
+      border-radius: 10px;
       cursor: pointer;
-
-      backdrop-filter: blur(12px);
-
-      transition: 0.25s ease;
+      transition: .25s ease;
+      backdrop-filter: blur(10px);
     }
 
-    #version button:hover {
+    .version-area button:hover {
       transform: translateY(-2px);
     }
 
     /* MENU */
 
-    #menu-btn {
+    .menu-wrapper {
       position: absolute;
-      bottom: 22px;
-      left: 22px;
+      left: 20px;
+      bottom: 20px;
+      z-index: 50;
+    }
 
-      width: 52px;
-      height: 52px;
-
-      border-radius: 14px;
-
-      border: 1px solid rgba(var(--cb), 0.08);
-
-      background: rgba(var(--cb), 0.06);
-
+    #menu-btn {
+      background: rgba(0,20,40,.75);
+      border: 1px solid rgba(120,120,255,.2);
       color: white;
-
-      font-size: 22px;
-
+      padding: 12px 16px;
+      border-radius: 12px;
       cursor: pointer;
-
-      z-index: 1000;
-
-      backdrop-filter: blur(12px);
-
-      transition: 0.25s ease;
+      backdrop-filter: blur(10px);
+      font-size: 18px;
+      transition: .25s ease;
     }
 
     #menu-btn:hover {
-      transform: translateY(-2px);
+      background: rgba(40,40,90,.95);
     }
 
     #menu {
       position: absolute;
-      bottom: 84px;
-      left: 22px;
-
-      width: 240px;
-
-      padding: 14px;
-
-      border-radius: 18px;
-
-      background: rgba(10, 10, 10, 0.92);
-
-      border: 1px solid rgba(var(--cb), 0.08);
-
-      backdrop-filter: blur(18px);
-
-      display: none;
-
-      z-index: 999;
+      bottom: 60px;
+      left: 0;
+      width: 200px;
+      background: rgba(10,10,10,.95);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: .25s ease;
+      backdrop-filter: blur(14px);
     }
 
-    .menu-title {
-      font-size: 14px;
-      color: rgba(var(--cb), 0.55);
-      margin-bottom: 10px;
-      padding-left: 4px;
+    .menu-wrapper:hover #menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
     }
 
     #menu button {
       width: 100%;
-
       margin-bottom: 8px;
-
-      padding: 13px;
-
-      border-radius: 12px;
-
-      border: 1px solid rgba(var(--cb), 0.06);
-
-      background: rgba(var(--cb), 0.05);
-
+      border: none;
+      background: rgba(255,255,255,.04);
       color: white;
-
-      text-align: left;
-
-      font-size: 15px;
-      font-weight: 600;
-
+      padding: 12px;
+      border-radius: 10px;
       cursor: pointer;
+      text-align: left;
+      transition: .2s ease;
+      font-size: 15px;
+    }
 
-      transition: 0.25s ease;
+    #menu button:last-child {
+      margin-bottom: 0;
     }
 
     #menu button:hover {
+      background: rgba(109,40,217,.25);
       transform: translateX(4px);
-      border-color: rgba(var(--cb), 0.15);
+    }
+
+    @keyframes flyIn {
+      0% {
+        transform: translateX(-250px);
+        opacity: 0;
+      }
+
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     @media (max-width: 768px) {
       .logo {
-        font-size: 72px;
+        font-size: 65px;
+      }
+
+      .version-tag {
+        font-size: 22px;
       }
 
       #jet {
-        width: 80px;
+        width: 90px;
       }
 
-      .subtitle {
+      .splash {
         font-size: 18px;
-        text-align: center;
         padding: 0 20px;
-      }
-
-      .launch-buttons {
-        flex-direction: column;
-        width: 85%;
-      }
-
-      .launch-btn {
-        width: 100%;
-      }
-
-      #menu {
-        width: calc(100% - 44px);
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="startup-overlay" id="startup-overlay"></div>
 
   <div id="vanta-bg"></div>
-  <div class="vanta-overlay"></div>
+  <div class="overlay"></div>
 
   <!-- CLOCK -->
-
-  <div id="clock">
+  <div class="top-bar">
     <div id="time">--:--</div>
     <div id="date">Loading...</div>
   </div>
 
   <!-- TOP RIGHT -->
-
-  <div id="top-right">
-    <button class="top-btn" onclick="alert('Settings coming soon')">
-      ⚙
-    </button>
-
-    <button class="top-btn" onclick="alert('Login coming soon')">
-      Login
-    </button>
+  <div class="top-right">
+    <button onclick="alert('Settings coming soon')">⚙ Settings</button>
+    <button onclick="alert('Login coming soon')">Login</button>
   </div>
 
   <!-- MENU -->
+  <div class="menu-wrapper">
 
-  <div id="menu">
-    <div class="menu-title">JetX Navigation</div>
+    <button id="menu-btn">☰</button>
 
-    <button onclick="go('games.html')">🎮 Games</button>
-    <button onclick="go('apps.html')">📦 Apps</button>
-    <button onclick="go('browser.html')">🌐 Browser</button>
-    <button onclick="go('movies.html')">🎬 Movies</button>
-    <button onclick="go('ai.html')">🤖 AI Chat</button>
-    <button onclick="go('music.html')">🎵 Music</button>
+    <div id="menu">
+      <button onclick="go('games.html')">🎮 Games</button>
+      <button onclick="go('apps.html')">📦 Apps</button>
+      <button onclick="go('browser.html')">🌐 Browser</button>
+      <button onclick="go('movies.html')">🎬 Movies</button>
+      <button onclick="go('ai.html')">🤖 AI Chat</button>
+      <button onclick="go('music.html')">🎵 Music</button>
+    </div>
+
   </div>
-
-  <button id="menu-btn" onclick="toggleMenu()">☰</button>
 
   <!-- CENTER -->
-
   <div class="center">
+
     <div class="logo-container">
-      <img id="jet" src="jet.png" />
 
-      <div class="logo">
-        <span class="j" id="j-char">J</span>
-        <span class="e" id="e-char">E</span>
-        <span class="t" id="t-char">T</span>
-        <span class="x" id="x-char">X</span>
+      <img id="jet" src="jet.png">
+
+      <div class="logo-text-wrap">
+        <div class="logo">JetX</div>
+        <div class="version-tag">v1</div>
       </div>
+
     </div>
 
-    <div class="subtitle" id="subtitle">
-      Games, Movies, Music, AI, and more on
-      <span>JetX</span>
-    </div>
-
-    <div class="launch-buttons" id="launch-buttons">
-      <button class="launch-btn primary" onclick="go('games.html')">
-        Launch
-      </button>
-
-      <button class="launch-btn secondary">
-        Discord
-      </button>
-    </div>
   </div>
 
-  <!-- VERSION -->
+  <!-- SPLASH -->
+  <div class="splash" id="splash"></div>
 
-  <div id="version">
-    <button onclick="alert('JetX v6.0')">
-      v6.0
+  <!-- VERSION -->
+  <div class="version-area">
+    <button onclick="alert('JetX v1.0 - Initial Build')">
+      JetX v1.0
     </button>
   </div>
 
-  <script src="/script/three.min.js"></script>
-  <script src="/script/vantafog.min.js"></script>
-
   <script>
-    function cssVarToInt(varName) {
-      const hex = getComputedStyle(document.documentElement)
-        .getPropertyValue(varName)
-        .trim();
 
-      return hex.match(/^#([0-9a-f]{3}){1,2}$/i)
-        ? parseInt(hex.replace("#", "0x"))
-        : 0x000000;
-    }
+    // SPLASHES
+
+    const splashes = [
+      "the future of unblocked gaming",
+      "powered by jet fuel",
+      "high speed mode enabled",
+      "games apps movies and more",
+      "totally not blocked",
+      "launch sequence started",
+      "faster than school wifi",
+      "built different",
+      "welcome aboard JetX",
+      "v1 is only the beginning"
+    ];
+
+    document.getElementById("splash").innerHTML =
+      splashes[Math.floor(Math.random() * splashes.length)];
 
     // CLOCK
 
     function updateClock() {
+
       const now = new Date();
 
       document.getElementById("time").textContent =
         now.toLocaleTimeString([], {
           hour: "2-digit",
-          minute: "2-digit",
+          minute: "2-digit"
         });
 
       document.getElementById("date").textContent =
@@ -568,88 +412,40 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // MENU
-
-    function toggleMenu() {
-      const menu = document.getElementById("menu");
-
-      menu.style.display =
-        menu.style.display === "block"
-          ? "none"
-          : "block";
-    }
-
     // NAVIGATION
 
     function go(page) {
       window.location.href = page;
     }
 
-    // INTRO
-
-    function revealIntro() {
-      document
-        .getElementById("startup-overlay")
-        .classList.add("hide");
-
-      document.getElementById("clock").classList.add("show");
-      document.getElementById("top-right").classList.add("show");
-
-      setTimeout(() => {
-        document.getElementById("jet").classList.add("show");
-      }, 120);
-
-      setTimeout(() => {
-        document.getElementById("j-char").classList.add("show");
-      }, 180);
-
-      setTimeout(() => {
-        document.getElementById("e-char").classList.add("show");
-      }, 260);
-
-      setTimeout(() => {
-        document.getElementById("t-char").classList.add("show");
-      }, 340);
-
-      setTimeout(() => {
-        document.getElementById("x-char").classList.add("show");
-      }, 420);
-
-      setTimeout(() => {
-        document.getElementById("subtitle").classList.add("show");
-      }, 650);
-
-      setTimeout(() => {
-        document
-          .getElementById("launch-buttons")
-          .classList.add("show");
-
-        document.getElementById("version").classList.add("show");
-      }, 850);
-
-      try {
-        VANTA.FOG({
-          el: "#vanta-bg",
-
-          highlightColor: cssVarToInt("--primary"),
-          midtoneColor: cssVarToInt("--primary"),
-          lowlightColor: cssVarToInt("--bg"),
-          baseColor: cssVarToInt("--button-bg"),
-
-          blurFactor: 0.8,
-          speed: 2,
-          zoom: 0.45,
-        });
-
-        document.getElementById("vanta-bg").style.opacity = 1;
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    // VANTA
 
     window.addEventListener("load", () => {
-      setTimeout(revealIntro, 150);
+
+      try {
+
+        VANTA.FOG({
+          el: "#vanta-bg",
+          highlightColor: 0x6d28d9,
+          midtoneColor: 0x4c1d95,
+          lowlightColor: 0x000000,
+          baseColor: 0x050505,
+          blurFactor: 0.7,
+          speed: 2,
+          zoom: 0.4
+        });
+
+        document.getElementById("vanta-bg").style.opacity = "1";
+
+      } catch (e) {
+
+        console.log("Vanta failed:", e);
+
+      }
+
     });
+
   </script>
+
 </body>
 </html>
