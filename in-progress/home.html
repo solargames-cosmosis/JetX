@@ -1,452 +1,655 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8" />
+  <title>JetX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>JetX</title>
+  <link rel="icon" type="image/png" href="jet.png" />
 
-    <link rel="stylesheet" href="/style/all.css" />
-    <script src="/js/global.js"></script>
-    <script src="/script/theme.js"></script>
+  <link rel="stylesheet" href="/style/all.css" />
+  <script src="/js/global.js"></script>
+  <script src="/script/theme.js"></script>
 
-    <style>
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: var(--bg);
-        font-family: Arial, sans-serif;
-      }
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
 
-      * {
-        box-sizing: border-box;
-      }
+    * {
+      box-sizing: border-box;
+    }
 
-      #vanta-bg {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        opacity: 0;
-        transition: opacity 0.8s ease;
-      }
+    #vanta-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
 
-      .bg-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(var(--bc), 0.72);
-        backdrop-filter: blur(2px);
-        z-index: 1;
-      }
+    .vanta-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(var(--bc), 0.72);
+      backdrop-filter: blur(2px);
+      z-index: 1;
+    }
 
-      .startup-overlay {
-        position: fixed;
-        inset: 0;
-        background: #000;
-        z-index: 999;
-        transition: opacity 0.8s ease;
-      }
+    .startup-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      transition: opacity 0.8s ease;
+    }
 
-      .startup-overlay.hide {
-        opacity: 0;
-        pointer-events: none;
-      }
+    .startup-overlay.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-      .topbar {
-        position: fixed;
-        top: 22px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 20;
+    /* CLOCK */
 
-        display: flex;
-        align-items: center;
-        gap: 22px;
+    #clock {
+      position: absolute;
+      top: 18px;
+      width: 100%;
+      text-align: center;
+      z-index: 20;
 
-        padding: 14px 24px;
+      opacity: 0;
+      transform: translateY(-10px);
 
-        background: rgba(var(--cb), 0.05);
-        border: 1px solid rgba(var(--cb), 0.06);
+      transition: 0.5s ease 0.5s;
+    }
 
-        border-radius: 18px;
+    #clock.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        backdrop-filter: blur(14px);
-      }
+    #time {
+      font-size: 34px;
+      font-weight: bold;
 
-      .topbar-item {
-        color: rgba(var(--cb), 0.8);
-        font-size: 15px;
-        font-weight: 600;
-        white-space: nowrap;
-      }
+      background: linear-gradient(
+        90deg,
+        rgba(255,255,255,1),
+        var(--primary)
+      );
 
-      .divider {
-        width: 1px;
-        height: 18px;
-        background: rgba(var(--cb), 0.1);
-      }
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
 
-      .hero {
-        position: relative;
-        z-index: 10;
+      text-shadow: 0 0 18px rgba(109, 40, 217, 0.45);
+    }
 
-        width: 100%;
-        height: 100%;
+    #date {
+      font-size: 14px;
+      color: rgba(var(--cb), 0.65);
+      margin-top: 2px;
+    }
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-      }
+    /* TOP RIGHT */
 
-      .logo-wrap {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-      }
+    #top-right {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 20;
 
+      display: flex;
+      gap: 8px;
+
+      opacity: 0;
+      transform: translateY(-10px);
+
+      transition: 0.5s ease 0.7s;
+    }
+
+    #top-right.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .top-btn {
+      background: rgba(var(--cb), 0.06);
+      border: 1px solid rgba(var(--cb), 0.08);
+      color: white;
+
+      padding: 10px 14px;
+
+      border-radius: 10px;
+
+      cursor: pointer;
+
+      backdrop-filter: blur(12px);
+
+      transition: 0.25s ease;
+    }
+
+    .top-btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(var(--cb), 0.18);
+    }
+
+    /* CENTER */
+
+    .center {
+      position: relative;
+      z-index: 10;
+
+      width: 100%;
+      height: 100vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    #jet {
+      width: 125px;
+
+      opacity: 0;
+      transform: translateX(-160px);
+
+      filter: drop-shadow(0 0 25px rgba(109, 40, 217, 0.45));
+
+      transition: 0.8s ease;
+    }
+
+    #jet.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .logo {
+      display: flex;
+
+      font-size: 115px;
+      font-weight: 900;
+      letter-spacing: -7px;
+      line-height: 1;
+    }
+
+    .logo span {
+      opacity: 0;
+      transform: translateY(20px) scale(0.85);
+
+      transition: 0.45s ease;
+
+      background: linear-gradient(
+        90deg,
+        rgba(255,255,255,1),
+        var(--primary)
+      );
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo span.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .j {
+      opacity: 0.18 !important;
+    }
+
+    .e {
+      opacity: 0.38 !important;
+    }
+
+    .t {
+      opacity: 0.62 !important;
+    }
+
+    .x {
+      opacity: 1 !important;
+    }
+
+    .subtitle {
+      margin-top: 20px;
+
+      color: rgba(var(--cb), 0.78);
+
+      font-size: 23px;
+      font-weight: 500;
+
+      opacity: 0;
+      transform: translateY(10px);
+
+      transition: 0.5s ease 1s;
+    }
+
+    .subtitle.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .subtitle span {
+      color: var(--primary);
+    }
+
+    .launch-buttons {
+      margin-top: 38px;
+
+      display: flex;
+      gap: 14px;
+
+      opacity: 0;
+      transform: translateY(10px);
+
+      transition: 0.5s ease 1.2s;
+    }
+
+    .launch-buttons.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .launch-btn {
+      padding: 15px 26px;
+
+      border-radius: 14px;
+
+      border: none;
+
+      cursor: pointer;
+
+      font-size: 16px;
+      font-weight: 700;
+
+      transition: 0.25s ease;
+    }
+
+    .launch-btn.primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .launch-btn.secondary {
+      background: rgba(var(--cb), 0.06);
+      border: 1px solid rgba(var(--cb), 0.08);
+      color: white;
+    }
+
+    .launch-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    /* VERSION */
+
+    #version {
+      position: absolute;
+      bottom: 22px;
+      width: 100%;
+      text-align: center;
+      z-index: 20;
+
+      opacity: 0;
+      transform: translateY(10px);
+
+      transition: 0.5s ease 1.3s;
+    }
+
+    #version.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #version button {
+      background: rgba(var(--cb), 0.05);
+      border: 1px solid rgba(var(--cb), 0.08);
+
+      color: white;
+
+      padding: 10px 18px;
+
+      border-radius: 12px;
+
+      cursor: pointer;
+
+      backdrop-filter: blur(12px);
+
+      transition: 0.25s ease;
+    }
+
+    #version button:hover {
+      transform: translateY(-2px);
+    }
+
+    /* MENU */
+
+    #menu-btn {
+      position: absolute;
+      bottom: 22px;
+      left: 22px;
+
+      width: 52px;
+      height: 52px;
+
+      border-radius: 14px;
+
+      border: 1px solid rgba(var(--cb), 0.08);
+
+      background: rgba(var(--cb), 0.06);
+
+      color: white;
+
+      font-size: 22px;
+
+      cursor: pointer;
+
+      z-index: 1000;
+
+      backdrop-filter: blur(12px);
+
+      transition: 0.25s ease;
+    }
+
+    #menu-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    #menu {
+      position: absolute;
+      bottom: 84px;
+      left: 22px;
+
+      width: 240px;
+
+      padding: 14px;
+
+      border-radius: 18px;
+
+      background: rgba(10, 10, 10, 0.92);
+
+      border: 1px solid rgba(var(--cb), 0.08);
+
+      backdrop-filter: blur(18px);
+
+      display: none;
+
+      z-index: 999;
+    }
+
+    .menu-title {
+      font-size: 14px;
+      color: rgba(var(--cb), 0.55);
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+
+    #menu button {
+      width: 100%;
+
+      margin-bottom: 8px;
+
+      padding: 13px;
+
+      border-radius: 12px;
+
+      border: 1px solid rgba(var(--cb), 0.06);
+
+      background: rgba(var(--cb), 0.05);
+
+      color: white;
+
+      text-align: left;
+
+      font-size: 15px;
+      font-weight: 600;
+
+      cursor: pointer;
+
+      transition: 0.25s ease;
+    }
+
+    #menu button:hover {
+      transform: translateX(4px);
+      border-color: rgba(var(--cb), 0.15);
+    }
+
+    @media (max-width: 768px) {
       .logo {
-        font-size: 120px;
-        font-weight: 900;
-        letter-spacing: -8px;
-        line-height: 1;
-
-        display: flex;
+        font-size: 72px;
       }
 
-      .logo span {
-        opacity: 0;
-        transform: translateY(30px) scale(0.85);
-        color: var(--primary);
-
-        transition: 0.5s ease;
-      }
-
-      .logo span.show {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-
-      .logo .j {
-        opacity: 0.18;
-      }
-
-      .logo .e {
-        opacity: 0.34;
-      }
-
-      .logo .t {
-        opacity: 0.52;
-      }
-
-      .logo .x {
-        opacity: 1;
-      }
-
-      .version {
-        color: rgba(var(--cb), 0.7);
-        font-size: 38px;
-        font-weight: 700;
-
-        opacity: 0;
-        transform: translateY(15px);
-
-        transition: 0.5s ease 0.4s;
-      }
-
-      .version.show {
-        opacity: 1;
-        transform: translateY(0);
+      #jet {
+        width: 80px;
       }
 
       .subtitle {
-        margin-top: 26px;
-
-        color: rgba(var(--cb), 0.75);
-        font-size: 24px;
-        font-weight: 500;
+        font-size: 18px;
         text-align: center;
-
-        opacity: 0;
-        transform: translateY(12px);
-
-        transition: 0.5s ease 0.6s;
+        padding: 0 20px;
       }
 
-      .subtitle.show {
-        opacity: 1;
-        transform: translateY(0);
+      .launch-buttons {
+        flex-direction: column;
+        width: 85%;
       }
 
-      .subtitle span {
-        color: var(--primary);
+      .launch-btn {
+        width: 100%;
       }
 
-      .button-row {
-        margin-top: 42px;
-
-        display: flex;
-        gap: 18px;
-
-        opacity: 0;
-        transform: translateY(12px);
-
-        transition: 0.5s ease 0.8s;
+      #menu {
+        width: calc(100% - 44px);
       }
+    }
+  </style>
+</head>
 
-      .button-row.show {
-        opacity: 1;
-        transform: translateY(0);
-      }
+<body>
+  <div class="startup-overlay" id="startup-overlay"></div>
 
-      .main-btn {
-        border: none;
-        outline: none;
+  <div id="vanta-bg"></div>
+  <div class="vanta-overlay"></div>
 
-        padding: 15px 28px;
+  <!-- CLOCK -->
 
-        border-radius: 16px;
+  <div id="clock">
+    <div id="time">--:--</div>
+    <div id="date">Loading...</div>
+  </div>
 
-        font-size: 16px;
-        font-weight: 700;
+  <!-- TOP RIGHT -->
 
-        cursor: pointer;
+  <div id="top-right">
+    <button class="top-btn" onclick="alert('Settings coming soon')">
+      ⚙
+    </button>
 
-        transition: 0.25s ease;
-      }
+    <button class="top-btn" onclick="alert('Login coming soon')">
+      Login
+    </button>
+  </div>
 
-      .main-btn.primary {
-        background: var(--primary);
-        color: #fff;
-      }
+  <!-- MENU -->
 
-      .main-btn.secondary {
-        background: rgba(var(--cb), 0.08);
-        color: rgba(var(--cb), 0.82);
-        border: 1px solid rgba(var(--cb), 0.08);
-      }
+  <div id="menu">
+    <div class="menu-title">JetX Navigation</div>
 
-      .main-btn:hover {
-        transform: translateY(-3px);
-      }
+    <button onclick="go('games.html')">🎮 Games</button>
+    <button onclick="go('apps.html')">📦 Apps</button>
+    <button onclick="go('browser.html')">🌐 Browser</button>
+    <button onclick="go('movies.html')">🎬 Movies</button>
+    <button onclick="go('ai.html')">🤖 AI Chat</button>
+    <button onclick="go('music.html')">🎵 Music</button>
+  </div>
 
-      .footer {
-        position: fixed;
-        bottom: 24px;
-        left: 50%;
-        transform: translateX(-50%);
+  <button id="menu-btn" onclick="toggleMenu()">☰</button>
 
-        z-index: 20;
+  <!-- CENTER -->
 
-        display: flex;
-        align-items: center;
-        gap: 20px;
+  <div class="center">
+    <div class="logo-container">
+      <img id="jet" src="jet.png" />
 
-        padding: 12px 20px;
-
-        border-radius: 16px;
-
-        background: rgba(var(--cb), 0.04);
-        border: 1px solid rgba(var(--cb), 0.06);
-
-        backdrop-filter: blur(14px);
-      }
-
-      .footer-item {
-        color: rgba(var(--cb), 0.72);
-        font-size: 14px;
-        font-weight: 600;
-      }
-
-      .clickable {
-        cursor: pointer;
-        transition: 0.25s ease;
-      }
-
-      .clickable:hover {
-        color: var(--primary);
-      }
-
-      @media (max-width: 768px) {
-        .logo {
-          font-size: 72px;
-          letter-spacing: -4px;
-        }
-
-        .version {
-          font-size: 24px;
-        }
-
-        .subtitle {
-          font-size: 18px;
-          padding: 0 18px;
-        }
-
-        .button-row {
-          flex-direction: column;
-          width: 85%;
-        }
-
-        .main-btn {
-          width: 100%;
-        }
-
-        .topbar,
-        .footer {
-          width: calc(100% - 30px);
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="startup-overlay" id="startup-overlay"></div>
-
-    <div id="vanta-bg"></div>
-    <div class="bg-overlay"></div>
-
-    <div class="topbar">
-      <div class="topbar-item" id="clock">Loading...</div>
-
-      <div class="divider"></div>
-
-      <div class="topbar-item">JetX Network</div>
-
-      <div class="divider"></div>
-
-      <div class="topbar-item">Unblocked Entertainment</div>
+      <div class="logo">
+        <span class="j" id="j-char">J</span>
+        <span class="e" id="e-char">E</span>
+        <span class="t" id="t-char">T</span>
+        <span class="x" id="x-char">X</span>
+      </div>
     </div>
 
-    <main class="hero">
-      <div class="logo-wrap">
-        <div class="logo">
-          <span class="j" id="j-char">J</span>
-          <span class="e" id="e-char">E</span>
-          <span class="t" id="t-char">T</span>
-          <span class="x" id="x-char">X</span>
-        </div>
-
-        <div class="version" id="version-text">v6</div>
-      </div>
-
-      <div class="subtitle" id="subtitle">
-        Games, Movies, TV, Music, and more on <span>JetX</span>
-      </div>
-
-      <div class="button-row" id="button-row">
-        <button class="main-btn primary" onclick="location.href='/app'">
-          Launch JetX
-        </button>
-
-        <button
-          class="main-btn secondary"
-          onclick="window.open('https://discord.gg/', '_blank')"
-        >
-          Discord
-        </button>
-      </div>
-    </main>
-
-    <div class="footer">
-      <div class="footer-item clickable">Changelog</div>
-
-      <div class="divider"></div>
-
-      <div class="footer-item">Made for speed</div>
-
-      <div class="divider"></div>
-
-      <div class="footer-item">JetX © 2026</div>
+    <div class="subtitle" id="subtitle">
+      Games, Movies, Music, AI, and more on
+      <span>JetX</span>
     </div>
 
-    <script src="/script/three.min.js"></script>
-    <script src="/script/vantafog.min.js"></script>
+    <div class="launch-buttons" id="launch-buttons">
+      <button class="launch-btn primary" onclick="go('games.html')">
+        Launch
+      </button>
 
-    <script>
-      function cssVarToInt(varName) {
-        const hex = getComputedStyle(document.documentElement)
-          .getPropertyValue(varName)
-          .trim();
+      <button class="launch-btn secondary">
+        Discord
+      </button>
+    </div>
+  </div>
 
-        return hex.match(/^#([0-9a-f]{3}){1,2}$/i)
-          ? parseInt(hex.replace("#", "0x"))
-          : 0x000000;
+  <!-- VERSION -->
+
+  <div id="version">
+    <button onclick="alert('JetX v6.0')">
+      v6.0
+    </button>
+  </div>
+
+  <script src="/script/three.min.js"></script>
+  <script src="/script/vantafog.min.js"></script>
+
+  <script>
+    function cssVarToInt(varName) {
+      const hex = getComputedStyle(document.documentElement)
+        .getPropertyValue(varName)
+        .trim();
+
+      return hex.match(/^#([0-9a-f]{3}){1,2}$/i)
+        ? parseInt(hex.replace("#", "0x"))
+        : 0x000000;
+    }
+
+    // CLOCK
+
+    function updateClock() {
+      const now = new Date();
+
+      document.getElementById("time").textContent =
+        now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+      document.getElementById("date").textContent =
+        now.toDateString();
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // MENU
+
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+
+      menu.style.display =
+        menu.style.display === "block"
+          ? "none"
+          : "block";
+    }
+
+    // NAVIGATION
+
+    function go(page) {
+      window.location.href = page;
+    }
+
+    // INTRO
+
+    function revealIntro() {
+      document
+        .getElementById("startup-overlay")
+        .classList.add("hide");
+
+      document.getElementById("clock").classList.add("show");
+      document.getElementById("top-right").classList.add("show");
+
+      setTimeout(() => {
+        document.getElementById("jet").classList.add("show");
+      }, 120);
+
+      setTimeout(() => {
+        document.getElementById("j-char").classList.add("show");
+      }, 180);
+
+      setTimeout(() => {
+        document.getElementById("e-char").classList.add("show");
+      }, 260);
+
+      setTimeout(() => {
+        document.getElementById("t-char").classList.add("show");
+      }, 340);
+
+      setTimeout(() => {
+        document.getElementById("x-char").classList.add("show");
+      }, 420);
+
+      setTimeout(() => {
+        document.getElementById("subtitle").classList.add("show");
+      }, 650);
+
+      setTimeout(() => {
+        document
+          .getElementById("launch-buttons")
+          .classList.add("show");
+
+        document.getElementById("version").classList.add("show");
+      }, 850);
+
+      try {
+        VANTA.FOG({
+          el: "#vanta-bg",
+
+          highlightColor: cssVarToInt("--primary"),
+          midtoneColor: cssVarToInt("--primary"),
+          lowlightColor: cssVarToInt("--bg"),
+          baseColor: cssVarToInt("--button-bg"),
+
+          blurFactor: 0.8,
+          speed: 2,
+          zoom: 0.45,
+        });
+
+        document.getElementById("vanta-bg").style.opacity = 1;
+      } catch (e) {
+        console.error(e);
       }
+    }
 
-      function updateClock() {
-        const now = new Date();
-
-        document.getElementById("clock").innerHTML =
-          now.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          });
-      }
-
-      function revealIntro() {
-        document.getElementById("startup-overlay").classList.add("hide");
-
-        setTimeout(() => {
-          document.getElementById("j-char").classList.add("show");
-        }, 100);
-
-        setTimeout(() => {
-          document.getElementById("e-char").classList.add("show");
-        }, 180);
-
-        setTimeout(() => {
-          document.getElementById("t-char").classList.add("show");
-        }, 260);
-
-        setTimeout(() => {
-          document.getElementById("x-char").classList.add("show");
-        }, 340);
-
-        setTimeout(() => {
-          document.getElementById("version-text").classList.add("show");
-        }, 500);
-
-        setTimeout(() => {
-          document.getElementById("subtitle").classList.add("show");
-        }, 650);
-
-        setTimeout(() => {
-          document.getElementById("button-row").classList.add("show");
-        }, 800);
-
-        try {
-          VANTA.FOG({
-            el: "#vanta-bg",
-
-            highlightColor: cssVarToInt("--primary"),
-            midtoneColor: cssVarToInt("--primary"),
-            lowlightColor: cssVarToInt("--bg"),
-            baseColor: cssVarToInt("--button-bg"),
-
-            blurFactor: 0.8,
-            speed: 2.1,
-            zoom: 0.45,
-          });
-
-          document.getElementById("vanta-bg").style.opacity = 1;
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      updateClock();
-
-      setInterval(updateClock, 1000);
-
-      window.addEventListener("load", () => {
-        setTimeout(revealIntro, 150);
-      });
-    </script>
-  </body>
+    window.addEventListener("load", () => {
+      setTimeout(revealIntro, 150);
+    });
+  </script>
+</body>
 </html>
