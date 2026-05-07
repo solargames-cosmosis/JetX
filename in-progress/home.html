@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>JetX</title>
+
+    <link rel="stylesheet" href="/style/all.css" />
+    <script src="/js/global.js"></script>
+    <script src="/script/theme.js"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--bg);
+        font-family: Arial, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      #vanta-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+      }
+
+      .bg-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(var(--bc), 0.72);
+        backdrop-filter: blur(2px);
+        z-index: 1;
+      }
+
+      .startup-overlay {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: 999;
+        transition: opacity 0.8s ease;
+      }
+
+      .startup-overlay.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .topbar {
+        position: fixed;
+        top: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+
+        display: flex;
+        align-items: center;
+        gap: 22px;
+
+        padding: 14px 24px;
+
+        background: rgba(var(--cb), 0.05);
+        border: 1px solid rgba(var(--cb), 0.06);
+
+        border-radius: 18px;
+
+        backdrop-filter: blur(14px);
+      }
+
+      .topbar-item {
+        color: rgba(var(--cb), 0.8);
+        font-size: 15px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .divider {
+        width: 1px;
+        height: 18px;
+        background: rgba(var(--cb), 0.1);
+      }
+
+      .hero {
+        position: relative;
+        z-index: 10;
+
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .logo-wrap {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .logo {
+        font-size: 120px;
+        font-weight: 900;
+        letter-spacing: -8px;
+        line-height: 1;
+
+        display: flex;
+      }
+
+      .logo span {
+        opacity: 0;
+        transform: translateY(30px) scale(0.85);
+        color: var(--primary);
+
+        transition: 0.5s ease;
+      }
+
+      .logo span.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      .logo .j {
+        opacity: 0.18;
+      }
+
+      .logo .e {
+        opacity: 0.34;
+      }
+
+      .logo .t {
+        opacity: 0.52;
+      }
+
+      .logo .x {
+        opacity: 1;
+      }
+
+      .version {
+        color: rgba(var(--cb), 0.7);
+        font-size: 38px;
+        font-weight: 700;
+
+        opacity: 0;
+        transform: translateY(15px);
+
+        transition: 0.5s ease 0.4s;
+      }
+
+      .version.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .subtitle {
+        margin-top: 26px;
+
+        color: rgba(var(--cb), 0.75);
+        font-size: 24px;
+        font-weight: 500;
+        text-align: center;
+
+        opacity: 0;
+        transform: translateY(12px);
+
+        transition: 0.5s ease 0.6s;
+      }
+
+      .subtitle.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .subtitle span {
+        color: var(--primary);
+      }
+
+      .button-row {
+        margin-top: 42px;
+
+        display: flex;
+        gap: 18px;
+
+        opacity: 0;
+        transform: translateY(12px);
+
+        transition: 0.5s ease 0.8s;
+      }
+
+      .button-row.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .main-btn {
+        border: none;
+        outline: none;
+
+        padding: 15px 28px;
+
+        border-radius: 16px;
+
+        font-size: 16px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition: 0.25s ease;
+      }
+
+      .main-btn.primary {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .main-btn.secondary {
+        background: rgba(var(--cb), 0.08);
+        color: rgba(var(--cb), 0.82);
+        border: 1px solid rgba(var(--cb), 0.08);
+      }
+
+      .main-btn:hover {
+        transform: translateY(-3px);
+      }
+
+      .footer {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        z-index: 20;
+
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        padding: 12px 20px;
+
+        border-radius: 16px;
+
+        background: rgba(var(--cb), 0.04);
+        border: 1px solid rgba(var(--cb), 0.06);
+
+        backdrop-filter: blur(14px);
+      }
+
+      .footer-item {
+        color: rgba(var(--cb), 0.72);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .clickable {
+        cursor: pointer;
+        transition: 0.25s ease;
+      }
+
+      .clickable:hover {
+        color: var(--primary);
+      }
+
+      @media (max-width: 768px) {
+        .logo {
+          font-size: 72px;
+          letter-spacing: -4px;
+        }
+
+        .version {
+          font-size: 24px;
+        }
+
+        .subtitle {
+          font-size: 18px;
+          padding: 0 18px;
+        }
+
+        .button-row {
+          flex-direction: column;
+          width: 85%;
+        }
+
+        .main-btn {
+          width: 100%;
+        }
+
+        .topbar,
+        .footer {
+          width: calc(100% - 30px);
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="startup-overlay" id="startup-overlay"></div>
+
+    <div id="vanta-bg"></div>
+    <div class="bg-overlay"></div>
+
+    <div class="topbar">
+      <div class="topbar-item" id="clock">Loading...</div>
+
+      <div class="divider"></div>
+
+      <div class="topbar-item">JetX Network</div>
+
+      <div class="divider"></div>
+
+      <div class="topbar-item">Unblocked Entertainment</div>
+    </div>
+
+    <main class="hero">
+      <div class="logo-wrap">
+        <div class="logo">
+          <span class="j" id="j-char">J</span>
+          <span class="e" id="e-char">E</span>
+          <span class="t" id="t-char">T</span>
+          <span class="x" id="x-char">X</span>
+        </div>
+
+        <div class="version" id="version-text">v6</div>
+      </div>
+
+      <div class="subtitle" id="subtitle">
+        Games, Movies, TV, Music, and more on <span>JetX</span>
+      </div>
+
+      <div class="button-row" id="button-row">
+        <button class="main-btn primary" onclick="location.href='/app'">
+          Launch JetX
+        </button>
+
+        <button
+          class="main-btn secondary"
+          onclick="window.open('https://discord.gg/', '_blank')"
+        >
+          Discord
+        </button>
+      </div>
+    </main>
+
+    <div class="footer">
+      <div class="footer-item clickable">Changelog</div>
+
+      <div class="divider"></div>
+
+      <div class="footer-item">Made for speed</div>
+
+      <div class="divider"></div>
+
+      <div class="footer-item">JetX © 2026</div>
+    </div>
+
+    <script src="/script/three.min.js"></script>
+    <script src="/script/vantafog.min.js"></script>
+
+    <script>
+      function cssVarToInt(varName) {
+        const hex = getComputedStyle(document.documentElement)
+          .getPropertyValue(varName)
+          .trim();
+
+        return hex.match(/^#([0-9a-f]{3}){1,2}$/i)
+          ? parseInt(hex.replace("#", "0x"))
+          : 0x000000;
+      }
+
+      function updateClock() {
+        const now = new Date();
+
+        document.getElementById("clock").innerHTML =
+          now.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+      }
+
+      function revealIntro() {
+        document.getElementById("startup-overlay").classList.add("hide");
+
+        setTimeout(() => {
+          document.getElementById("j-char").classList.add("show");
+        }, 100);
+
+        setTimeout(() => {
+          document.getElementById("e-char").classList.add("show");
+        }, 180);
+
+        setTimeout(() => {
+          document.getElementById("t-char").classList.add("show");
+        }, 260);
+
+        setTimeout(() => {
+          document.getElementById("x-char").classList.add("show");
+        }, 340);
+
+        setTimeout(() => {
+          document.getElementById("version-text").classList.add("show");
+        }, 500);
+
+        setTimeout(() => {
+          document.getElementById("subtitle").classList.add("show");
+        }, 650);
+
+        setTimeout(() => {
+          document.getElementById("button-row").classList.add("show");
+        }, 800);
+
+        try {
+          VANTA.FOG({
+            el: "#vanta-bg",
+
+            highlightColor: cssVarToInt("--primary"),
+            midtoneColor: cssVarToInt("--primary"),
+            lowlightColor: cssVarToInt("--bg"),
+            baseColor: cssVarToInt("--button-bg"),
+
+            blurFactor: 0.8,
+            speed: 2.1,
+            zoom: 0.45,
+          });
+
+          document.getElementById("vanta-bg").style.opacity = 1;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      updateClock();
+
+      setInterval(updateClock, 1000);
+
+      window.addEventListener("load", () => {
+        setTimeout(revealIntro, 150);
+      });
+    </script>
+  </body>
+</html>
