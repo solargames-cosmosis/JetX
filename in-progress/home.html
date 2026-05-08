@@ -24,17 +24,18 @@
       box-sizing: border-box;
     }
 
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: var(--bg);
-      font-family: Arial, sans-serif;
-      color: white;
-    }
+ html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: Arial, sans-serif;
+  color: white;
+  transition: opacity .3s ease;
+}
 
     #vanta-bg {
       position: fixed;
@@ -421,9 +422,15 @@
 
     // NAVIGATION
 
-    function go(page) {
-      window.location.href = page;
-    }
+   function go(page) {
+
+  document.body.style.opacity = "0";
+
+  setTimeout(() => {
+    window.location.href = page;
+  }, 300);
+
+}
 
     // VANTA
 
