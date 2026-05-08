@@ -216,7 +216,7 @@
 
     #menu {
       position: absolute;
-      bottom: 60px;
+      bottom: calc(100% + 8px);
       left: 0;
       width: 200px;
       background: rgba(10,10,10,.95);
@@ -230,7 +230,8 @@
       backdrop-filter: blur(14px);
     }
 
-    .menu-wrapper:hover #menu {
+    .menu-wrapper:hover #menu,
+    #menu:hover {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0);
@@ -337,12 +338,12 @@
     <button id="menu-btn">☰</button>
 
     <div id="menu">
-      <button onclick="go('games.html')">🎮 Games</button>
-      <button onclick="go('apps.html')">📦 Apps</button>
-      <button onclick="go('browser.html')">🌐 Browser</button>
-      <button onclick="go('movies.html')">🎬 Movies</button>
-      <button onclick="go('ai.html')">🤖 AI Chat</button>
-      <button onclick="go('music.html')">🎵 Music</button>
+      <button onclick="go('lessons.html')">🎮 Games</button>
+      <button onclick="go('tools.html')">📦 Apps</button>
+      <button onclick="go('web.html')">🌐 Browser</button>
+      <button onclick="go('watch.html')">🎬 Movies</button>
+      <button onclick="go('intelligence.html')">🤖 AI Chat</button>
+      <button onclick="go('audio.html')">🎵 Music</button>
     </div>
 
   </div>
@@ -378,16 +379,16 @@
     // SPLASHES
 
     const splashes = [
-      "the future of unblocked gaming",
+      "look whos back...",
       "powered by jet fuel",
-      "high speed mode enabled",
-      "games apps movies and more",
+      "i know you diddint do your math homework",
+      "yo do your work bro",
       "totally not blocked",
       "launch sequence started",
-      "faster than school wifi",
+      "slow ahh school wifi",
       "built different",
       "welcome aboard JetX",
-      "v1 is only the beginning"
+      "answer 1 is always B"
     ];
 
     document.getElementById("splash").innerHTML =
@@ -403,6 +404,7 @@
         now.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit"
+          second: "2-digit"
         });
 
       document.getElementById("date").textContent =
