@@ -59,7 +59,7 @@
       top: 18px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 20;
+      z-index: 30;
       text-align: center;
     }
 
@@ -85,7 +85,7 @@
       right: 18px;
       display: flex;
       gap: 10px;
-      z-index: 20;
+      z-index: 30;
     }
 
     .top-right button {
@@ -121,6 +121,8 @@
       align-items: center;
       gap: 22px;
       animation: fadeUp 1s ease;
+      z-index: 20;
+      position: relative;
     }
 
     #jet {
@@ -158,10 +160,11 @@
       top: calc(50% + 90px);
       width: 100%;
       text-align: center;
-      z-index: 10;
+      z-index: 25;
       font-size: 24px;
       color: rgba(255,255,255,.75);
       animation: fadeIn 1.8s ease;
+      pointer-events: none;
     }
 
     /* VERSION */
@@ -171,7 +174,7 @@
       bottom: 20px;
       width: 100%;
       text-align: center;
-      z-index: 20;
+      z-index: 30;
     }
 
     .version-area button {
@@ -295,6 +298,7 @@
     }
 
     @media (max-width: 768px) {
+
       .logo {
         font-size: 65px;
       }
@@ -311,6 +315,7 @@
         font-size: 18px;
         padding: 0 20px;
       }
+
     }
   </style>
 </head>
@@ -322,7 +327,7 @@
 
   <!-- CLOCK -->
   <div class="top-bar">
-    <div id="time">--:--</div>
+    <div id="time">--:--:--</div>
     <div id="date">Loading...</div>
   </div>
 
@@ -353,7 +358,7 @@
 
     <div class="logo-container">
 
-      <img id="jet" src="jet.png">
+      <img id="jet" src="jet.png" alt="JetX Logo">
 
       <div class="logo-text-wrap">
         <div class="logo">JetX</div>
@@ -391,7 +396,7 @@
       "answer 1 is always B"
     ];
 
-    document.getElementById("splash").innerHTML =
+    document.getElementById("splash").textContent =
       splashes[Math.floor(Math.random() * splashes.length)];
 
     // CLOCK
@@ -403,7 +408,7 @@
       document.getElementById("time").textContent =
         now.toLocaleTimeString([], {
           hour: "2-digit",
-          minute: "2-digit"
+          minute: "2-digit",
           second: "2-digit"
         });
 
