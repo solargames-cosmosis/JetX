@@ -1,64 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>JetX</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="jet.png">
 
+  <script src="/script/theme.js"></script>
+  <script src="/script/three.min.js"></script>
+  <script src="/script/vantafog.min.js"></script>
+
   <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: white;
-      font-family: Arial, sans-serif;
+    :root {
+      --bg: #000;
+      --primary: #6d28d9;
+      --text: #ffffff;
+      --panel: rgba(10,10,10,0.7);
+      --border: rgba(255,255,255,0.08);
     }
 
-    /* CLOCK */
-    #clock {
+    * {
+      box-sizing: border-box;
+    }
+
+ html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: Arial, sans-serif;
+  color: white;
+  transition: opacity .3s ease;
+}
+
+    #vanta-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity .7s ease;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(2px);
+      z-index: 1;
+    }
+
+    /* TOP BAR */
+
+    .top-bar {
       position: absolute;
-      top: 20px;
-      width: 100%;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
       text-align: center;
-      z-index: 10;
     }
 
     #time {
-      font-size: 32px;
-      font-weight: bold;
-      background: linear-gradient(90deg, white, #6d28d9);
+      font-size: 34px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ffffff, #6d28d9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     #date {
+      margin-top: 4px;
+      color: rgba(255,255,255,.7);
       font-size: 14px;
-      color: #aaa;
     }
 
     /* TOP RIGHT */
-    #top-right {
+
+    .top-right {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      z-index: 10;
+      top: 18px;
+      right: 18px;
+      display: flex;
+      gap: 10px;
+      z-index: 30;
     }
 
-    #top-right button {
-      background: #001a33;
-      border: 1px solid #003366;
+    .top-right button {
+      background: rgba(0,20,40,.7);
+      border: 1px solid rgba(120,120,255,.2);
       color: white;
-      padding: 8px 12px;
-      margin-left: 6px;
+      padding: 10px 14px;
+      border-radius: 10px;
       cursor: pointer;
-      border-radius: 6px;
+      transition: .25s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .top-right button:hover {
+      transform: translateY(-2px);
+      background: rgba(30,30,70,.9);
     }
 
     /* CENTER */
+
     .center {
-      height: 100vh;
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -67,135 +120,298 @@
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 22px;
+      animation: fadeUp 1s ease;
+      z-index: 20;
+      position: relative;
+    }
+
+    #jet {
+      width: 135px;
+      filter: drop-shadow(0 0 25px rgba(109,40,217,.45));
+      animation: flyIn 1.5s ease;
+    }
+
+    .logo-text-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
     }
 
     .logo {
-      font-size: 100px;
-      font-weight: bold;
-      background: linear-gradient(90deg, white, #6d28d9);
+      font-size: 110px;
+      font-weight: 900;
+      letter-spacing: -4px;
+      background: linear-gradient(90deg, #ffffff, #6d28d9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(109,40,217,0.6);
+      text-shadow: 0 0 25px rgba(109,40,217,.4);
     }
 
-    /* JET */
-    #jet {
-      width: 120px;
-      animation: fly 2s ease-out forwards;
+    .version-tag {
+      font-size: 30px;
+      color: rgba(255,255,255,.45);
+      font-weight: 700;
     }
 
-    @keyframes fly {
-      0% { transform: translateX(-200px); opacity: 0; }
-      100% { transform: translateX(0); opacity: 1; }
+    /* SPLASH */
+
+    .splash {
+      position: absolute;
+      top: calc(50% + 90px);
+      width: 100%;
+      text-align: center;
+      z-index: 25;
+      font-size: 24px;
+      color: rgba(255,255,255,.75);
+      animation: fadeIn 1.8s ease;
+      pointer-events: none;
     }
 
     /* VERSION */
-    #version {
+
+    .version-area {
       position: absolute;
       bottom: 20px;
       width: 100%;
       text-align: center;
-      z-index: 10;
+      z-index: 30;
     }
 
-    #version button {
-      background: #001a33;
-      border: 1px solid #003366;
+    .version-area button {
+      background: rgba(0,20,40,.7);
+      border: 1px solid rgba(120,120,255,.2);
       color: white;
-      padding: 8px 14px;
-      border-radius: 6px;
+      padding: 10px 18px;
+      border-radius: 10px;
       cursor: pointer;
+      transition: .25s ease;
+      backdrop-filter: blur(10px);
     }
 
-    /* FLOAT MENU */
+    .version-area button:hover {
+      transform: translateY(-2px);
+    }
+
+    /* MENU */
+
+    .menu-wrapper {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      z-index: 50;
+    }
+
+    #menu-btn {
+      background: rgba(0,20,40,.75);
+      border: 1px solid rgba(120,120,255,.2);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      font-size: 18px;
+      transition: .25s ease;
+    }
+
+    #menu-btn:hover {
+      background: rgba(40,40,90,.95);
+    }
+
     #menu {
       position: absolute;
-      bottom: 70px;
-      left: 20px;
-      background: rgba(10,10,10,0.95);
-      border: 1px solid #222;
-      padding: 15px;
-      border-radius: 10px;
-      display: none;
-      z-index: 999;
+      bottom: calc(100% + 8px);
+      left: 0;
+      width: 200px;
+      background: rgba(10,10,10,.95);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: .25s ease;
+      backdrop-filter: blur(14px);
+    }
+
+    .menu-wrapper:hover #menu,
+    #menu:hover {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
     }
 
     #menu button {
-      display: block;
-      width: 160px;
+      width: 100%;
       margin-bottom: 8px;
-      padding: 10px;
-      background: #001a33;
-      border: 1px solid #003366;
+      border: none;
+      background: rgba(255,255,255,.04);
       color: white;
-      border-radius: 6px;
+      padding: 12px;
+      border-radius: 10px;
       cursor: pointer;
       text-align: left;
+      transition: .2s ease;
+      font-size: 15px;
     }
 
-    /* MENU BUTTON */
-    #menu-btn {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background: #001a33;
-      border: 1px solid #003366;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      z-index: 1000;
+    #menu button:last-child {
+      margin-bottom: 0;
+    }
+
+    #menu button:hover {
+      background: rgba(109,40,217,.25);
+      transform: translateX(4px);
+    }
+
+    @keyframes flyIn {
+      0% {
+        transform: translateX(-250px);
+        opacity: 0;
+      }
+
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      .logo {
+        font-size: 65px;
+      }
+
+      .version-tag {
+        font-size: 22px;
+      }
+
+      #jet {
+        width: 90px;
+      }
+
+      .splash {
+        font-size: 18px;
+        padding: 0 20px;
+      }
+
     }
   </style>
 </head>
 
 <body>
 
+  <div id="vanta-bg"></div>
+  <div class="overlay"></div>
+
   <!-- CLOCK -->
-  <div id="clock">
-    <div id="time">--:--</div>
+  <div class="top-bar">
+    <div id="time">--:--:--</div>
     <div id="date">Loading...</div>
   </div>
 
   <!-- TOP RIGHT -->
-  <div id="top-right">
-    <button onclick="alert('Settings coming soon')">⚙</button>
+  <div class="top-right">
+    <button onclick="alert('Settings coming soon')">⚙ Settings</button>
     <button onclick="alert('Login coming soon')">Login</button>
   </div>
 
   <!-- MENU -->
-  <div id="menu">
-    <button onclick="go('games.html')">Games</button>
-    <button onclick="go('apps.html')">Apps</button>
-    <button onclick="go('browser.html')">Browser</button>
-    <button onclick="go('movies.html')">Movies</button>
-    <button onclick="go('ai.html')">AI Chat</button>
-    <button onclick="go('music.html')">Music</button>
-  </div>
+  <div class="menu-wrapper">
 
-  <button id="menu-btn" onclick="toggleMenu()">☰</button>
+    <button id="menu-btn">☰</button>
+
+    <div id="menu">
+      <button onclick="go('lessons.html')">🎮 Games</button>
+      <button onclick="go('tools.html')">📦 Apps</button>
+      <button onclick="go('web.html')">🌐 Browser</button>
+      <button onclick="go('watch.html')">🎬 Movies</button>
+      <button onclick="go('intelligence.html')">🤖 AI Chat</button>
+      <button onclick="go('audio.html')">🎵 Music</button>
+    </div>
+
+  </div>
 
   <!-- CENTER -->
   <div class="center">
+
     <div class="logo-container">
-      <img id="jet" src="jet.png">
-      <div class="logo">JetX</div>
+
+      <img id="jet" src="jet.png" alt="JetX Logo">
+
+      <div class="logo-text-wrap">
+        <div class="logo">JetX</div>
+        <div class="version-tag">v1</div>
+      </div>
+
     </div>
+
   </div>
 
+  <!-- SPLASH -->
+  <div class="splash" id="splash"></div>
+
   <!-- VERSION -->
-  <div id="version">
-    <button onclick="alert('JetX v1.0 - Initial Build')">v1.0</button>
+  <div class="version-area">
+    <button onclick="alert('JetX v1.0 - Initial Build')">
+      JetX v1.0
+    </button>
   </div>
 
   <script>
+
+    // SPLASHES
+
+    const splashes = [
+      "look whos back...",
+      "powered by jet fuel",
+      "i know you diddint do your math homework",
+      "yo do your work bro",
+      "totally not blocked",
+      "launch sequence started",
+      "slow ahh school wifi",
+      "built different",
+      "welcome aboard JetX",
+      "answer 1 is always B"
+    ];
+
+    document.getElementById("splash").textContent =
+      splashes[Math.floor(Math.random() * splashes.length)];
+
     // CLOCK
+
     function updateClock() {
+
       const now = new Date();
 
       document.getElementById("time").textContent =
-        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        });
 
       document.getElementById("date").textContent =
         now.toDateString();
@@ -204,16 +420,45 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // MENU
-    function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
-    }
-
     // NAVIGATION
-    function go(page) {
-      window.location.href = page;
-    }
+
+   function go(page) {
+
+  document.body.style.opacity = "0";
+
+  setTimeout(() => {
+    window.location.href = page;
+  }, 300);
+
+}
+
+    // VANTA
+
+    window.addEventListener("load", () => {
+
+      try {
+
+        VANTA.FOG({
+          el: "#vanta-bg",
+          highlightColor: 0x6d28d9,
+          midtoneColor: 0x4c1d95,
+          lowlightColor: 0x000000,
+          baseColor: 0x050505,
+          blurFactor: 0.7,
+          speed: 2,
+          zoom: 0.4
+        });
+
+        document.getElementById("vanta-bg").style.opacity = "1";
+
+      } catch (e) {
+
+        console.log("Vanta failed:", e);
+
+      }
+
+    });
+
   </script>
 
 </body>
